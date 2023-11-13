@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.users.query.interfaces;
+package com.boriworld.boriPaw.accountService.query.interfaces;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
