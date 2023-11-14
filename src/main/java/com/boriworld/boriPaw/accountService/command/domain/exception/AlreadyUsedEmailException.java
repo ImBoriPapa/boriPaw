@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.accountService.command.domain;
+package com.boriworld.boriPaw.accountService.command.domain.exception;
 
 public class AlreadyUsedEmailException extends RuntimeException {
     private final String message;
