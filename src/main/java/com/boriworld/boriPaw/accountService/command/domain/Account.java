@@ -1,6 +1,7 @@
 package com.boriworld.boriPaw.accountService.command.domain;
 
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
+import com.boriworld.boriPaw.accountService.command.domain.dto.AccountInitialize;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountStatus;
 import com.boriworld.boriPaw.accountService.command.domain.value.Authority;
@@ -55,7 +56,7 @@ public final class Account {
      * createdAt -> 계정 생성 시간
      * updatedAt -> 계정 업데이트 시간
      *
-     * @param accountCreate:   Account 생성을 위한 정보 전달 DTO
+     * @param accountCreate:          Account 생성을 위한 정보 전달 DTO
      * @param accountPasswordEncoder: 계정 비밀번호 생성기
      * @return Account
      */
@@ -72,6 +73,32 @@ public final class Account {
                 .passwordStatus(PasswordStatus.STEADY)
                 .authority(Authority.USER)
                 .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    /**
+     * 사용시 주의!
+     * 계정 객체 초기화 메서드로 아래 용도이외 에는 사용하지 않아야 합니다.
+     * 데이터베이스에 Entity 혹은 Document 정보로 Account 객체를 초기화할 때 사용하는 메서드
+     * Account 객체의 모든 필드를 복사
+     *
+     * @param initialize
+     * @return Account
+     */
+    public static Account initialize(AccountInitialize initialize) {
+
+        return Account.builder()
+                .accountId(initialize.accountId())
+                .email(initialize.email())
+                .accountName(initialize.accountName())
+                .password(initialize.password())
+                .nickname(initialize.nickname())
+                .profileImage(initialize.profileImage())
+                .accountStatus(initialize.accountStatus())
+                .passwordStatus(initialize.passwordStatus())
+                .authority(initialize.authority())
+                .createdAt(initialize.createdAt())
+                .updatedAt(initialize.updatedAt())
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package com.boriworld.boriPaw.accountService.command.application;
 
 import com.boriworld.boriPaw.accountService.command.domain.*;
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
+import com.boriworld.boriPaw.accountService.command.domain.exception.AlreadyUsedAccountNameException;
 import com.boriworld.boriPaw.accountService.command.domain.exception.AlreadyUsedEmailException;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
@@ -25,6 +26,7 @@ public class AccountCreateService {
     public AccountId createAccount(AccountCreate accountCreate) {
 
         checkDuplicateEmail(accountCreate.email());
+        checkDuplicateAccountName(accountCreate.accountName());
 
         Account savedAccount = accountRepository.save(Account.from(accountCreate, accountPasswordEncoder));
 
@@ -41,10 +43,19 @@ public class AccountCreateService {
     }
 
     private void checkDuplicateEmail(String email) {
-        boolean isExists = accountRepository.existsByEmail(email);
+        boolean exists = accountRepository.existsByEmail(email);
 
-        if (isExists) {
-            throw new AlreadyUsedEmailException("이미 사용 중인 이메일입니다.");
+        if (exists) {
+            throw new AlreadyUsedEmailException("이미 사용중인 이메일입니다.");
+        }
+    }
+
+    private void checkDuplicateAccountName(String accountName) {
+
+        boolean exists = accountRepository.existsByAccountName(accountName);
+
+        if (exists) {
+            throw new AlreadyUsedAccountNameException("이미 사용중인 계정명입니다.");
         }
     }
 }

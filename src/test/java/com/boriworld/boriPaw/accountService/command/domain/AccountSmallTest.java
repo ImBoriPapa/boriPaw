@@ -13,7 +13,7 @@ class AccountSmallTest {
     AccountPasswordEncoder accountPasswordEncoder = new FakeAccountPasswordEncoder();
 
     @Test
-    void createAccount_AccountPasswordEncoder_가_Null_일때_NullPointerException_발생() throws Exception {
+    void AccountPasswordEncoder_가_Null_일때_NullPointerException_발생() throws Exception {
         //given
 
         //when
@@ -24,7 +24,7 @@ class AccountSmallTest {
     }
 
     @Test
-    void createAccount_매개변수가_Null_일때_NullPointerException_발생() throws Exception {
+    void AccountCreate_매개변수가_Null_일때_NullPointerException_발생() throws Exception {
         //given
         final String email = "boriPapa@google.com";
         final String accountName = "boriPapaDa";
@@ -40,7 +40,7 @@ class AccountSmallTest {
     }
 
     @Test
-    void createAccount_메서드를_사용해서_Account_객체_생성() throws Exception {
+    void AccountCreate_를_AccountPasswordEncoder_를_사용해서_Account_객체_생성() throws Exception {
         //given
         final String email = "boriPapa@google.com";
         final String accountName = "boriPapaDa";

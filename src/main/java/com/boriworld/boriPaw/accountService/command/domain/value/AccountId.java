@@ -10,6 +10,10 @@ public final class AccountId {
         this.id = id;
     }
 
+    public static AccountId of(long id) {
+        return new AccountId(id);
+    }
+
     public Long getId() {
         return this.id;
     }
