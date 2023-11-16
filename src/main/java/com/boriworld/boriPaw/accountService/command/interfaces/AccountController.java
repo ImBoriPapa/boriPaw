@@ -19,11 +19,10 @@ import java.net.URI;
 @Slf4j
 public class AccountController {
     private final AccountCreateService accountCreateService;
-
     @PostMapping("/accounts")
     public ResponseEntity<AccountCreateResponse> createAccount(@RequestBody AccountCreate accountCreate) {
-
-        AccountId accountId = accountCreateService.createAccount(accountCreate);
+        log.info("Controller Call");
+        AccountId accountId = accountCreateService.processAccountCreation(accountCreate);
 
         return ResponseEntity
                 .created(URI.create("/accounts/" + accountId.getId()))

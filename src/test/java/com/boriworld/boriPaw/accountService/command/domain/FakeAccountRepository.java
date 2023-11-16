@@ -5,6 +5,7 @@ import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRep
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -50,5 +51,13 @@ public class FakeAccountRepository implements AccountRepository {
         return store.values()
                 .stream()
                 .anyMatch(account -> account.getAccountName().equals(accountName));
+    }
+
+    @Override
+    public Optional<Account> findById(AccountId accountId) {
+        return store.values()
+                .stream()
+                .filter(data -> data.getAccountId().equals(accountId))
+                .findFirst();
     }
 }

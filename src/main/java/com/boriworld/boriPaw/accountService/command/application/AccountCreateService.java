@@ -23,7 +23,7 @@ public class AccountCreateService {
     private final EmailAuthenticationCodeRepository emailAuthenticationCodeRepository;
 
     @Transactional
-    public AccountId createAccount(AccountCreate accountCreate) {
+    public AccountId processAccountCreation(AccountCreate accountCreate) {
 
         checkDuplicateEmail(accountCreate.email());
         checkDuplicateAccountName(accountCreate.accountName());

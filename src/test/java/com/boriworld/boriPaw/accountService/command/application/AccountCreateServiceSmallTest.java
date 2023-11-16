@@ -6,13 +6,12 @@ import com.boriworld.boriPaw.accountService.command.domain.exception.AlreadyUsed
 import com.boriworld.boriPaw.accountService.command.domain.exception.AlreadyUsedEmailException;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class AccountCreateServiceTest {
+class AccountCreateServiceSmallTest {
 
     private AccountCreateService accountCreateService;
     private AccountRepository accountRepository;
@@ -58,7 +57,7 @@ class AccountCreateServiceTest {
         //when
 
         //then
-        assertThatThrownBy(() -> accountCreateService.createAccount(accountCreate))
+        assertThatThrownBy(() -> accountCreateService.processAccountCreation(accountCreate))
                 .isInstanceOf(AlreadyUsedEmailException.class);
     }
 
@@ -73,7 +72,7 @@ class AccountCreateServiceTest {
         //when
 
         //then
-        assertThatThrownBy(() -> accountCreateService.createAccount(accountCreate))
+        assertThatThrownBy(() -> accountCreateService.processAccountCreation(accountCreate))
                 .isInstanceOf(AlreadyUsedAccountNameException.class);
     }
 
@@ -86,7 +85,7 @@ class AccountCreateServiceTest {
         final String nickname = "boriPapa";
         AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
         //when
-        AccountId account = accountCreateService.createAccount(accountCreate);
+        AccountId account = accountCreateService.processAccountCreation(accountCreate);
         //then
         assertThat(account.getId()).isEqualTo(2L);
 
