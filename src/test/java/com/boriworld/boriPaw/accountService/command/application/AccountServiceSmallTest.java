@@ -2,10 +2,15 @@ package com.boriworld.boriPaw.accountService.command.application;
 
 import com.boriworld.boriPaw.accountService.command.domain.*;
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
-import com.boriworld.boriPaw.accountService.command.domain.exception.AlreadyUsedAccountNameException;
-import com.boriworld.boriPaw.accountService.command.domain.exception.AlreadyUsedEmailException;
+import com.boriworld.boriPaw.accountService.command.domain.model.Account;
+import com.boriworld.boriPaw.accountService.command.domain.service.AccountEventPublisher;
+import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
+import com.boriworld.boriPaw.accountService.command.domain.service.AccountValidator;
+import com.boriworld.boriPaw.accountService.command.exception.AlreadyUsedAccountNameException;
+import com.boriworld.boriPaw.accountService.command.exception.AlreadyUsedEmailException;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.common.validator.RequestObjectValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,23 +22,23 @@ class AccountCreateServiceSmallTest {
     private AccountRepository accountRepository;
     private AccountPasswordEncoder accountPasswordEncoder;
     private AccountEventPublisher accountEventPublisher;
-    private EmailAuthenticationCodeGenerator emailAuthenticationCodeGenerator;
-    private EmailAuthenticationCodeRepository emailAuthenticationCodeRepository;
+    private RequestObjectValidator requestObjectValidator;
+    private AccountValidator accountValidator;
 
     @BeforeEach
     void beforeEach() {
         accountRepository = new FakeAccountRepository();
         accountPasswordEncoder = new FakeAccountPasswordEncoder();
         accountEventPublisher = new FakeAccountEventPublisher();
-        emailAuthenticationCodeGenerator = new FakeEmailAuthenticationCodeGenerator();
-        emailAuthenticationCodeRepository = new FakeEmailAuthenticationCodeRepository();
 
-        accountCreateService = new AccountCreateService(
+
+        accountCreateService = new AccountCreateServiceImpl(
                 accountRepository,
                 accountPasswordEncoder,
                 accountEventPublisher,
-                emailAuthenticationCodeGenerator,
-                emailAuthenticationCodeRepository
+                requestObjectValidator,
+                accountValidator
+
         );
 
         final String email = "duplicate@email.com";

@@ -1,6 +1,7 @@
 package com.boriworld.boriPaw.accountService.command.domain;
 
-import com.boriworld.boriPaw.accountService.command.application.EmailAuthenticationCodeRepository;
+import com.boriworld.boriPaw.accountService.command.domain.repository.EmailAuthenticationCodeRepository;
+import com.boriworld.boriPaw.accountService.command.domain.model.EmailAuthenticationCode;
 
 import java.util.Map;
 import java.util.UUID;

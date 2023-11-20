@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.accountService.command.domain;
 
-import com.boriworld.boriPaw.accountService.command.domain.EmailAuthenticationCodeGenerator;
+import com.boriworld.boriPaw.accountService.command.domain.service.EmailAuthenticationCodeGenerator;
 
 public class FakeEmailAuthenticationCodeGenerator implements EmailAuthenticationCodeGenerator {
     @Override

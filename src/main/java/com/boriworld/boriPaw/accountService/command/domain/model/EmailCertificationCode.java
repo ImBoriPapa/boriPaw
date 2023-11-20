@@ -1,5 +1,6 @@
-package com.boriworld.boriPaw.accountService.command.domain;
+package com.boriworld.boriPaw.accountService.command.domain.model;
 
+import com.boriworld.boriPaw.accountService.command.domain.service.EmailAuthenticationCodeGenerator;
 import lombok.Getter;
 
 @Getter
