@@ -1,16 +1,14 @@
 package com.boriworld.boriPaw.accountService.command.infrastructure.persistence;
 
-import com.boriworld.boriPaw.accountService.command.domain.Account;
-import com.boriworld.boriPaw.accountService.command.domain.AccountPasswordEncoder;
-import com.boriworld.boriPaw.accountService.command.domain.FakeAccountPasswordEncoder;
+import com.boriworld.boriPaw.accountService.command.domain.model.Account;
+import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
+import com.boriworld.boriPaw.testContanier.FakeAccountPasswordEncoder;
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
-import com.boriworld.testConfig.MySQLTestContainerRun;
-import org.assertj.core.api.Assertions;
+import com.boriworld.boriPaw.testConfig.MySQLTestContainerRun;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -37,8 +35,6 @@ class AccountRepositoryImplMediumTest extends MySQLTestContainerRun {
         //then
         assertThat(saved.getAccountId()).isNotNull();
         assertThat(findById.getAccountId()).isEqualTo(saved.getAccountId());
-
-
     }
 
 }

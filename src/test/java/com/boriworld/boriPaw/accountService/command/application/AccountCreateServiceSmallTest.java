@@ -16,9 +16,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class AccountServiceSmallTest {
+class AccountCreateServiceSmallTest {
 
-    private AccountService accountService;
+    private AccountCreateService accountCreateService;
     private AccountRepository accountRepository;
     private AccountPasswordEncoder accountPasswordEncoder;
     private AccountEventPublisher accountEventPublisher;
@@ -33,7 +33,7 @@ class AccountServiceSmallTest {
         requestObjectValidator = new FakeRequestObjectValidator();
         accountValidator = new FakeAccountValidator(accountRepository);
 
-        accountService = new AccountServiceImpl(
+        accountCreateService = new AccountCreateServiceImpl(
                 accountRepository,
                 accountPasswordEncoder,
                 accountEventPublisher,
@@ -63,7 +63,7 @@ class AccountServiceSmallTest {
         //when
 
         //then
-        assertThatThrownBy(() -> accountService.processAccountCreation(accountCreate))
+        assertThatThrownBy(() -> accountCreateService.processAccountCreation(accountCreate))
                 .isInstanceOf(AlreadyUsedEmailException.class);
     }
 
@@ -78,7 +78,7 @@ class AccountServiceSmallTest {
         //when
 
         //then
-        assertThatThrownBy(() -> accountService.processAccountCreation(accountCreate))
+        assertThatThrownBy(() -> accountCreateService.processAccountCreation(accountCreate))
                 .isInstanceOf(AlreadyUsedAccountNameException.class);
     }
 
@@ -91,7 +91,7 @@ class AccountServiceSmallTest {
         final String nickname = "boriPapa";
         AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
         //when
-        AccountId account = accountService.processAccountCreation(accountCreate);
+        AccountId account = accountCreateService.processAccountCreation(accountCreate);
         //then
         assertThat(account.getId()).isEqualTo(2L);
 

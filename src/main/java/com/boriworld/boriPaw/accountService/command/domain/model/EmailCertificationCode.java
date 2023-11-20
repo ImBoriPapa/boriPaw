@@ -1,16 +1,16 @@
 package com.boriworld.boriPaw.accountService.command.domain.model;
 
-import com.boriworld.boriPaw.accountService.command.domain.service.EmailAuthenticationCodeGenerator;
+import com.boriworld.boriPaw.accountService.command.domain.service.EmailCertificationCodeGenerator;
 import lombok.Getter;
 
 @Getter
-public final class EmailAuthenticationCode {
+public final class EmailCertificationCode {
     private final String id;
     private final String email;
     private final String code;
     private final Long expirationTime;
 
-    private EmailAuthenticationCode(String id, String email, String code, Long expirationTime) {
+    private EmailCertificationCode(String id, String email, String code, Long expirationTime) {
         this.id = id;
         this.email = email;
         this.code = code;
@@ -22,13 +22,13 @@ public final class EmailAuthenticationCode {
      * responsibility: 이메일 인증 코드 생성과 검증 및 저장소에 저장하기 위한 데이터 정의
      *
      * @param email:                            user email
-     * @param emailAuthenticationCodeGenerator: 인증 코드 생성기
+     * @param emailCertificationCodeGenerator: 인증 코드 생성기
      * @return EmailAuthenticationCode: !!!
      */
-    public static EmailAuthenticationCode create(final String email, EmailAuthenticationCodeGenerator emailAuthenticationCodeGenerator) {
-        String code = emailAuthenticationCodeGenerator.generate();
+    public static EmailCertificationCode create(final String email, EmailCertificationCodeGenerator emailCertificationCodeGenerator) {
+        String code = emailCertificationCodeGenerator.generate();
         final long AUTHENTICATION_CODE_EXPIRATION_SECOND = 3600L;
-        return new EmailAuthenticationCode(null, email, code, AUTHENTICATION_CODE_EXPIRATION_SECOND);
+        return new EmailCertificationCode(null, email, code, AUTHENTICATION_CODE_EXPIRATION_SECOND);
     }
 
     /**
@@ -43,7 +43,7 @@ public final class EmailAuthenticationCode {
      * @param expirationTime:
      * @return Account
      */
-    public static EmailAuthenticationCode initialize(final String id, final String email, final String code, final long expirationTime) {
-        return new EmailAuthenticationCode(id, email, code, expirationTime);
+    public static EmailCertificationCode initialize(final String id, final String email, final String code, final long expirationTime) {
+        return new EmailCertificationCode(id, email, code, expirationTime);
     }
 }

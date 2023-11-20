@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.accountService.command.domain.repository;
 
-import com.boriworld.boriPaw.accountService.command.domain.model.EmailAuthenticationCode;
+import com.boriworld.boriPaw.accountService.command.domain.model.EmailCertificationCode;
 
-public interface EmailAuthenticationCodeRepository {
-    EmailAuthenticationCode save(EmailAuthenticationCode emailAuthenticationCode);
+public interface EmailCertificationCodeRepository {
+    EmailCertificationCode save(EmailCertificationCode emailCertificationCode);
 }

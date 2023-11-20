@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.accountService.command.domain.repository;
 
-import com.boriworld.boriPaw.accountService.command.domain.Account;
+import com.boriworld.boriPaw.accountService.command.domain.model.Account;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
 
 import java.util.Optional;

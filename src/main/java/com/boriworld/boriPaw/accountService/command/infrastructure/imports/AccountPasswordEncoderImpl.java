@@ -1,7 +1,6 @@
 package com.boriworld.boriPaw.accountService.command.infrastructure.imports;
 
-import com.boriworld.boriPaw.accountService.command.domain.AccountPasswordEncoder;
-import lombok.RequiredArgsConstructor;
+import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.boriworld.testConfig;
+package com.boriworld.boriPaw.testConfig;
 
 
 import org.junit.jupiter.api.Disabled;

@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.accountService.command.infrastructure.event;
 
-import com.boriworld.boriPaw.accountService.command.domain.AccountCreateEvent;
-import com.boriworld.boriPaw.accountService.command.domain.AccountEventPublisher;
+import com.boriworld.boriPaw.accountService.command.domain.event.AccountCreateEvent;
+import com.boriworld.boriPaw.accountService.command.domain.service.AccountEventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

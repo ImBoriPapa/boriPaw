@@ -2,10 +2,13 @@ package com.boriworld.boriPaw.accountService.command.domain;
 
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountInitialize;
+import com.boriworld.boriPaw.accountService.command.domain.model.Account;
+import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountStatus;
 import com.boriworld.boriPaw.accountService.command.domain.value.Authority;
 import com.boriworld.boriPaw.accountService.command.domain.value.PasswordStatus;
+import com.boriworld.boriPaw.testContanier.FakeAccountPasswordEncoder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -15,7 +18,6 @@ import static org.assertj.core.api.Assertions.*;
 class AccountSmallTest {
 
     AccountPasswordEncoder accountPasswordEncoder = new FakeAccountPasswordEncoder();
-
     @Test
     void AccountPasswordEncoder_가_Null_일때_NullPointerException_발생() throws Exception {
         //given
@@ -26,7 +28,6 @@ class AccountSmallTest {
         assertThatThrownBy(() -> Account.from(null, accountPasswordEncoder))
                 .isInstanceOf(NullPointerException.class);
     }
-
     @Test
     void AccountCreate_매개변수가_Null_일때_NullPointerException_발생() throws Exception {
         //given

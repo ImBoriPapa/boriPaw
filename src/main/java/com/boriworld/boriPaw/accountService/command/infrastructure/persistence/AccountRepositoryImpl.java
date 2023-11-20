@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.accountService.command.infrastructure.persistence;
 
-import com.boriworld.boriPaw.accountService.command.domain.Account;
+import com.boriworld.boriPaw.accountService.command.domain.model.Account;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;

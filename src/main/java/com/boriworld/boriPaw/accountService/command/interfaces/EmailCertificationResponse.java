@@ -1,2 +1,4 @@
-package com.boriworld.boriPaw.accountService.command.interfaces;public class EmailCertificationResponse {
+package com.boriworld.boriPaw.accountService.command.interfaces;
+
+public class EmailCertificationResponse {
 }

@@ -1,7 +1,6 @@
-package com.boriworld.boriPaw.accountService.command.application;
+package com.boriworld.boriPaw.common.validator;
 
-import com.boriworld.boriPaw.common.validator.CustomValidationException;
-import com.boriworld.boriPaw.common.validator.RequestObjectValidator;
+
 import jakarta.validation.ConstraintViolation;
 
 import jakarta.validation.Validator;

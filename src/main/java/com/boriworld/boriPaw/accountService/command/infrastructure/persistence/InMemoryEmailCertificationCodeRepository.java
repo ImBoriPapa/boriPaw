@@ -1,13 +1,13 @@
 package com.boriworld.boriPaw.accountService.command.infrastructure.persistence;
 
-import com.boriworld.boriPaw.accountService.command.domain.repository.EmailAuthenticationCodeRepository;
-import com.boriworld.boriPaw.accountService.command.domain.model.EmailAuthenticationCode;
+import com.boriworld.boriPaw.accountService.command.domain.repository.EmailCertificationCodeRepository;
+import com.boriworld.boriPaw.accountService.command.domain.model.EmailCertificationCode;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InMemoryEmailAuthenticationCodeRepository implements EmailAuthenticationCodeRepository {
+public class InMemoryEmailCertificationCodeRepository implements EmailCertificationCodeRepository {
     @Override
-    public EmailAuthenticationCode save(EmailAuthenticationCode emailAuthenticationCode) {
+    public EmailCertificationCode save(EmailCertificationCode emailCertificationCode) {
         return null;
     }
 }
