@@ -21,10 +21,10 @@ import java.io.File;
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public abstract class MySQLTestContainerRun {
-    final static DockerComposeContainer compose;
+    final static DockerComposeContainer<?> compose;
 
     static {
-        compose = new DockerComposeContainer(new File("src/test/resources/docker-compose.yml"));
+        compose = new DockerComposeContainer(new File("src/test/resources/docker-compose-mysql.yml"));
         compose.withExposedService("mysql", 3306);
         compose.start();
     }

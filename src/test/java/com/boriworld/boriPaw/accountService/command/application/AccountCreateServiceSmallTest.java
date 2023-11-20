@@ -1,6 +1,5 @@
 package com.boriworld.boriPaw.accountService.command.application;
 
-import com.boriworld.boriPaw.accountService.command.domain.*;
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
 import com.boriworld.boriPaw.accountService.command.domain.model.Account;
 import com.boriworld.boriPaw.accountService.command.domain.service.AccountEventPublisher;
@@ -11,14 +10,15 @@ import com.boriworld.boriPaw.accountService.command.exception.AlreadyUsedEmailEx
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
 import com.boriworld.boriPaw.common.validator.RequestObjectValidator;
+import com.boriworld.boriPaw.testContanier.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class AccountCreateServiceSmallTest {
+class AccountServiceSmallTest {
 
-    private AccountCreateService accountCreateService;
+    private AccountService accountService;
     private AccountRepository accountRepository;
     private AccountPasswordEncoder accountPasswordEncoder;
     private AccountEventPublisher accountEventPublisher;
@@ -30,9 +30,10 @@ class AccountCreateServiceSmallTest {
         accountRepository = new FakeAccountRepository();
         accountPasswordEncoder = new FakeAccountPasswordEncoder();
         accountEventPublisher = new FakeAccountEventPublisher();
+        requestObjectValidator = new FakeRequestObjectValidator();
+        accountValidator = new FakeAccountValidator(accountRepository);
 
-
-        accountCreateService = new AccountCreateServiceImpl(
+        accountService = new AccountServiceImpl(
                 accountRepository,
                 accountPasswordEncoder,
                 accountEventPublisher,
@@ -62,7 +63,7 @@ class AccountCreateServiceSmallTest {
         //when
 
         //then
-        assertThatThrownBy(() -> accountCreateService.processAccountCreation(accountCreate))
+        assertThatThrownBy(() -> accountService.processAccountCreation(accountCreate))
                 .isInstanceOf(AlreadyUsedEmailException.class);
     }
 
@@ -77,7 +78,7 @@ class AccountCreateServiceSmallTest {
         //when
 
         //then
-        assertThatThrownBy(() -> accountCreateService.processAccountCreation(accountCreate))
+        assertThatThrownBy(() -> accountService.processAccountCreation(accountCreate))
                 .isInstanceOf(AlreadyUsedAccountNameException.class);
     }
 
@@ -90,7 +91,7 @@ class AccountCreateServiceSmallTest {
         final String nickname = "boriPapa";
         AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
         //when
-        AccountId account = accountCreateService.processAccountCreation(accountCreate);
+        AccountId account = accountService.processAccountCreation(accountCreate);
         //then
         assertThat(account.getId()).isEqualTo(2L);
 

@@ -1,7 +1,6 @@
 package com.boriworld.boriPaw.accountService.command.domain;
 
-import com.boriworld.boriPaw.accountService.command.domain.AccountCreateEvent;
-import com.boriworld.boriPaw.accountService.command.domain.AccountEventPublisher;
+import com.boriworld.boriPaw.accountService.command.domain.service.AccountEventPublisher;
 
 public class FakeAccountEventPublisher implements AccountEventPublisher {
     @Override

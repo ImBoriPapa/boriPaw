@@ -13,12 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AccountCreateServiceImpl implements AccountCreateService{
-
+public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AccountPasswordEncoder accountPasswordEncoder;
     private final AccountEventPublisher accountEventPublisher;
@@ -54,3 +52,4 @@ public class AccountCreateServiceImpl implements AccountCreateService{
         accountEventPublisher.publish(new AccountCreateEvent(savedAccount.getAccountId(), savedAccount.getEmail()));
     }
 }
+

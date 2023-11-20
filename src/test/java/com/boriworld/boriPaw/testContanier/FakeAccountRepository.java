@@ -1,6 +1,7 @@
 package com.boriworld.boriPaw.accountService.command.domain;
 
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountInitialize;
+import com.boriworld.boriPaw.accountService.command.domain.model.Account;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
 
