@@ -44,7 +44,6 @@ class AccountControllerSmallTest {
 
         //when
         ResponseEntity<AccountCreateResponse> response = accountController.createAccount(accountCreateRequest);
-
         //then
         assertThat(response.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(201)));
         assertThat(response.getBody().id()).isEqualTo(1L);
