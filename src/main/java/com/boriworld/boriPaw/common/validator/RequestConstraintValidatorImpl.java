@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -13,14 +14,17 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class RequestObjectValidatorImpl<T> implements RequestObjectValidator<T> {
+@Slf4j
+public class RequestConstraintValidatorImpl<T> implements RequestConstraintValidator<T> {
     private final Validator validator;
 
     public void validate(T t) {
         Set<String> errorMessages = extractConstraintErrorMessages(t);
 
         if (!errorMessages.isEmpty()) {
-            throw new CustomValidationException(String.join("\n", errorMessages));
+            String requestObjectName = t.getClass().getSimpleName();
+            log.error("Constraint validate failed for Object: {}", requestObjectName);
+            throw new CustomValidationFailException(String.join("\n", errorMessages));
         }
     }
 

@@ -16,9 +16,9 @@ public class AccountCertificationController {
 
     private final AccountCertificationService accountCertificationService;
     @PostMapping("/accounts/email-certification")
-    public ResponseEntity certify(@RequestBody EmailCertificationRequest emailCertificationRequest) {
+    public ResponseEntity<EmailCertificationResponse> certify(@RequestBody EmailCertificationRequest emailCertificationRequest) {
 
-        boolean certifyEmail = accountCertificationService.certifyEmail(emailCertificationRequest.toEmailCertification());
+        accountCertificationService.sendCertificationEmail(emailCertificationRequest.toEmailCertification());
 
         return ResponseEntity
                 .ok()

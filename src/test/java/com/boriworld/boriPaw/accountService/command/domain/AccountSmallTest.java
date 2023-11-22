@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
 
-class AccountSmallTest {
+class AccountSmallTest{
 
     AccountPasswordEncoder accountPasswordEncoder = new FakeAccountPasswordEncoder();
     @Test

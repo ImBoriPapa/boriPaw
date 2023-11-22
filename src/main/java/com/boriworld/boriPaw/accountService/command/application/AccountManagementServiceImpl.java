@@ -8,7 +8,7 @@ import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswo
 import com.boriworld.boriPaw.accountService.command.domain.service.AccountValidator;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
-import com.boriworld.boriPaw.common.validator.RequestObjectValidator;
+import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,22 +17,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AccountCreateServiceImpl implements AccountCreateService {
+public class AccountManagementServiceImpl implements AccountManagementService {
     private final AccountRepository accountRepository;
     private final AccountPasswordEncoder accountPasswordEncoder;
     private final AccountEventPublisher accountEventPublisher;
-    private final RequestObjectValidator<AccountCreate> requestObjectValidator;
+    private final RequestConstraintValidator<AccountCreate> requestConstraintValidator;
     private final AccountValidator accountValidator;
 
     @Transactional
     public AccountId processAccountCreation(AccountCreate accountCreate) {
-
+        log.info("Start account creation process.");
         validateRequestedData(accountCreate);
 
         Account savedAccount = saveAccount(accountCreate);
 
         publishCreateEvent(savedAccount);
-
+        log.info("Finish account creation process successfully. AccountId: {}", savedAccount.getAccountId().getId());
         return savedAccount.getAccountId();
 
     }
@@ -42,7 +42,7 @@ public class AccountCreateServiceImpl implements AccountCreateService {
     }
 
     private void validateRequestedData(AccountCreate accountCreate) {
-        requestObjectValidator.validate(accountCreate);
+        requestConstraintValidator.validate(accountCreate);
 
         accountValidator.validateDuplicateEmail(accountCreate.email());
 

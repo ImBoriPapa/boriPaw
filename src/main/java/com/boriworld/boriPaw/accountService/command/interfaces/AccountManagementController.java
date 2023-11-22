@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.accountService.command.interfaces;
 
-import com.boriworld.boriPaw.accountService.command.application.AccountCreateService;
+import com.boriworld.boriPaw.accountService.command.application.AccountManagementService;
 
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
 import com.boriworld.boriPaw.accountService.command.interfaces.request.AccountCreateRequest;
@@ -18,12 +18,12 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class AccountController {
-    private final AccountCreateService accountCreateService;
+public class AccountManagementController {
+    private final AccountManagementService accountManagementService;
     @PostMapping("/accounts")
     public ResponseEntity<AccountCreateResponse> createAccount(@RequestBody AccountCreateRequest accountCreateRequest) {
-        log.info("Controller Call");
-        AccountId accountId = accountCreateService.processAccountCreation(accountCreateRequest.toAccountCreate());
+        log.error("Account create Request");
+        AccountId accountId = accountManagementService.processAccountCreation(accountCreateRequest.toAccountCreate());
 
         return ResponseEntity
                 .created(URI.create("/accounts/" + accountId.getId()))

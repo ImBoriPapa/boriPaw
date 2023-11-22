@@ -1,8 +1,7 @@
 package com.boriworld.boriPaw.accountService.command.interfaces;
 
-import com.boriworld.boriPaw.accountService.command.application.AccountCreateService;
-import com.boriworld.boriPaw.accountService.command.application.AccountCreateServiceImpl;
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
+import com.boriworld.boriPaw.accountService.command.application.AccountManagementService;
+import com.boriworld.boriPaw.accountService.command.application.AccountManagementServiceImpl;
 import com.boriworld.boriPaw.accountService.command.interfaces.request.AccountCreateRequest;
 import com.boriworld.boriPaw.accountService.command.interfaces.response.AccountCreateResponse;
 import com.boriworld.boriPaw.testContanier.*;
@@ -13,23 +12,23 @@ import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.*;
 
-class AccountControllerSmallTest {
+class AccountManagementControllerSmallTest {
 
-    private AccountController accountController;
-    private AccountCreateService accountCreateService;
+    private AccountManagementController accountManagementController;
+    private AccountManagementService accountManagementService;
 
     @BeforeEach
     void beforeEach() {
 
-        accountCreateService = new AccountCreateServiceImpl(
+        accountManagementService = new AccountManagementServiceImpl(
                 new FakeAccountRepository(),
                 new FakeAccountPasswordEncoder(),
                 new FakeAccountEventPublisher(),
-                new FakeRequestObjectValidator(),
+                new FakeRequestConstraintValidator(),
                 new FakeAccountValidator(new FakeAccountRepository())
         );
 
-        accountController = new AccountController(accountCreateService);
+        accountManagementController = new AccountManagementController(accountManagementService);
     }
 
     @Test
@@ -43,7 +42,7 @@ class AccountControllerSmallTest {
         AccountCreateRequest accountCreateRequest = new AccountCreateRequest(email, accountName, password, nickname);
 
         //when
-        ResponseEntity<AccountCreateResponse> response = accountController.createAccount(accountCreateRequest);
+        ResponseEntity<AccountCreateResponse> response = accountManagementController.createAccount(accountCreateRequest);
         //then
         assertThat(response.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(201)));
         assertThat(response.getBody().id()).isEqualTo(1L);

@@ -20,7 +20,7 @@ import java.io.File;
 @Transactional
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public abstract class MySQLTestContainerRun {
+public abstract class MySQLTestContainerRuner {
     final static DockerComposeContainer<?> compose;
 
     static {

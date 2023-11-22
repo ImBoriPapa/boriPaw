@@ -5,14 +5,14 @@ import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswo
 import com.boriworld.boriPaw.testContanier.FakeAccountPasswordEncoder;
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
-import com.boriworld.boriPaw.testConfig.MySQLTestContainerRun;
+import com.boriworld.boriPaw.testConfig.MySQLTestContainerRuner;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 import static org.assertj.core.api.Assertions.*;
 
-class AccountRepositoryImplMediumTest extends MySQLTestContainerRun {
+class AccountRepositoryImplMediumTest extends MySQLTestContainerRuner {
     @Autowired
     private AccountRepository accountRepository;
     private AccountPasswordEncoder passwordEncoder;
