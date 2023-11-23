@@ -1,13 +1,11 @@
-package com.boriworld.boriPaw.accountService.command.mediumTest.restdocsTest;
+package com.boriworld.boriPaw.testContainer.testcontainer;
 
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
+import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,6 +28,8 @@ import java.io.File;
 import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
@@ -37,10 +39,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public abstract class RestDocsTest {
+public abstract class RestDocsMediumTest {
     protected MockMvc mockMvc;
     protected final ObjectMapper objectMapper = new ObjectMapper();
     static DockerComposeContainer<?> dockerComposeContainer;
+
+    public static OperationRequestPreprocessor getDocumentRequest() {
+        return preprocessRequest(
+                modifyUris().removePort(),
+                prettyPrint()
+        );
+    }
+
+    public static OperationResponsePreprocessor getDocumentResponse() {
+        return preprocessResponse(
+                modifyUris().removePort(),
+                prettyPrint());
+    }
 
     static {
         File mysql = new File("src/test/resources/docker-compose-mysql.yml");

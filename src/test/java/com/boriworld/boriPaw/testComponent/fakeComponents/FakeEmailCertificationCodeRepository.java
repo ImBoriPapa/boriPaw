@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.testContanier;
+package com.boriworld.boriPaw.testComponent.fakeComponents;
 
 import com.boriworld.boriPaw.accountService.command.domain.repository.EmailCertificationCodeRepository;
 import com.boriworld.boriPaw.accountService.command.domain.model.EmailCertificationCode;

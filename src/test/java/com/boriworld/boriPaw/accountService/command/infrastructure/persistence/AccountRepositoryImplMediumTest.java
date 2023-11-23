@@ -2,17 +2,17 @@ package com.boriworld.boriPaw.accountService.command.infrastructure.persistence;
 
 import com.boriworld.boriPaw.accountService.command.domain.model.Account;
 import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
-import com.boriworld.boriPaw.testContanier.FakeAccountPasswordEncoder;
+import com.boriworld.boriPaw.testComponent.fakeComponents.FakeAccountPasswordEncoder;
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
-import com.boriworld.boriPaw.testConfig.MySQLTestContainerRuner;
+import com.boriworld.boriPaw.testContainer.testcontainer.MySQLTestContainerRunner;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 import static org.assertj.core.api.Assertions.*;
 
-class AccountRepositoryImplMediumTest extends MySQLTestContainerRuner {
+class AccountRepositoryImplMediumTest extends MySQLTestContainerRunner {
     @Autowired
     private AccountRepository accountRepository;
     private AccountPasswordEncoder passwordEncoder;

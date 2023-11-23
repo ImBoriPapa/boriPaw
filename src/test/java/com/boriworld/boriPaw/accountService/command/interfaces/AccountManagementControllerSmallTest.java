@@ -1,10 +1,8 @@
 package com.boriworld.boriPaw.accountService.command.interfaces;
 
-import com.boriworld.boriPaw.accountService.command.application.AccountManagementService;
-import com.boriworld.boriPaw.accountService.command.application.AccountManagementServiceImpl;
 import com.boriworld.boriPaw.accountService.command.interfaces.request.AccountCreateRequest;
 import com.boriworld.boriPaw.accountService.command.interfaces.response.AccountCreateResponse;
-import com.boriworld.boriPaw.testContanier.*;
+import com.boriworld.boriPaw.testComponent.TestComponentContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;
@@ -13,22 +11,10 @@ import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.*;
 
 class AccountManagementControllerSmallTest {
-
     private AccountManagementController accountManagementController;
-    private AccountManagementService accountManagementService;
-
     @BeforeEach
     void beforeEach() {
-
-        accountManagementService = new AccountManagementServiceImpl(
-                new FakeAccountRepository(),
-                new FakeAccountPasswordEncoder(),
-                new FakeAccountEventPublisher(),
-                new FakeRequestConstraintValidator(),
-                new FakeAccountValidator(new FakeAccountRepository())
-        );
-
-        accountManagementController = new AccountManagementController(accountManagementService);
+        accountManagementController = new TestComponentContainer().accountManagementController;
     }
 
     @Test

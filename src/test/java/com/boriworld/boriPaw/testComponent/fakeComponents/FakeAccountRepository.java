@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.testContanier;
+package com.boriworld.boriPaw.testComponent.fakeComponents;
 
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountInitialize;
 import com.boriworld.boriPaw.accountService.command.domain.model.Account;

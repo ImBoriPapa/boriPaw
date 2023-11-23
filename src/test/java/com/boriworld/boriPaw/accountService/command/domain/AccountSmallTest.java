@@ -8,7 +8,7 @@ import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountStatus;
 import com.boriworld.boriPaw.accountService.command.domain.value.Authority;
 import com.boriworld.boriPaw.accountService.command.domain.value.PasswordStatus;
-import com.boriworld.boriPaw.testContanier.FakeAccountPasswordEncoder;
+import com.boriworld.boriPaw.testComponent.fakeComponents.FakeAccountPasswordEncoder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

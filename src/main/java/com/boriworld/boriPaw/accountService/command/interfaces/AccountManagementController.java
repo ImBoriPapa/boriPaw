@@ -15,14 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
+import static com.boriworld.boriPaw.common.constant.ApiEndpoints.ACCOUNTS_ROOT_PATH;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class AccountManagementController {
     private final AccountManagementService accountManagementService;
-    @PostMapping("/accounts")
+
+    @PostMapping(ACCOUNTS_ROOT_PATH)
     public ResponseEntity<AccountCreateResponse> createAccount(@RequestBody AccountCreateRequest accountCreateRequest) {
-        log.error("Account create Request");
+        log.info("Account create Request");
         AccountId accountId = accountManagementService.processAccountCreation(accountCreateRequest.toAccountCreate());
 
         return ResponseEntity

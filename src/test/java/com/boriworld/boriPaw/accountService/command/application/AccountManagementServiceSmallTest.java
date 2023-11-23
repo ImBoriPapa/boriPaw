@@ -2,16 +2,17 @@ package com.boriworld.boriPaw.accountService.command.application;
 
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
 import com.boriworld.boriPaw.accountService.command.domain.model.Account;
-import com.boriworld.boriPaw.accountService.command.domain.service.AccountEventPublisher;
-import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
-import com.boriworld.boriPaw.accountService.command.domain.service.AccountValidator;
-import com.boriworld.boriPaw.accountService.command.exception.AlreadyUsedAccountNameException;
-import com.boriworld.boriPaw.accountService.command.exception.AlreadyUsedEmailException;
+
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
-import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
-import com.boriworld.boriPaw.testContanier.*;
+
+import com.boriworld.boriPaw.accountService.command.domain.value.AccountStatus;
+import com.boriworld.boriPaw.accountService.command.exception.AlreadyUsedAccountNameException;
+import com.boriworld.boriPaw.accountService.command.exception.AlreadyUsedEmailException;
+import com.boriworld.boriPaw.common.validator.CustomValidationFailException;
+import com.boriworld.boriPaw.testComponent.TestComponentContainer;
 import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -20,28 +21,12 @@ class AccountManagementServiceSmallTest {
 
     private AccountManagementService accountManagementService;
     private AccountRepository accountRepository;
-    private AccountPasswordEncoder accountPasswordEncoder;
-    private AccountEventPublisher accountEventPublisher;
-    private RequestConstraintValidator requestConstraintValidator;
-    private AccountValidator accountValidator;
 
     @BeforeEach
     void beforeEach() {
-        accountRepository = new FakeAccountRepository();
-        accountPasswordEncoder = new FakeAccountPasswordEncoder();
-        accountEventPublisher = new FakeAccountEventPublisher();
-        requestConstraintValidator = new FakeRequestConstraintValidator();
-        accountValidator = new FakeAccountValidator(accountRepository);
-
-        accountManagementService = new AccountManagementServiceImpl(
-                accountRepository,
-                accountPasswordEncoder,
-                accountEventPublisher,
-                requestConstraintValidator,
-                accountValidator
-
-        );
-
+        TestComponentContainer componentContainer = new TestComponentContainer();
+        accountRepository = componentContainer.accountRepository;
+        accountManagementService = componentContainer.accountManagementService;
         final String email = "duplicate@email.com";
         final String accountName = "duplicateName";
         final String password = "password1234";
@@ -49,7 +34,34 @@ class AccountManagementServiceSmallTest {
 
         AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
 
-        accountRepository.save(Account.from(accountCreate, accountPasswordEncoder));
+        accountRepository.save(Account.from(accountCreate, componentContainer.accountPasswordEncoder));
+    }
+
+    @Test
+    void AccountCreate_객체가_null_이면_CustomValidationFailException_예외가_발생한다() throws Exception {
+        //given
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> accountManagementService.processAccountCreation(null))
+                .isInstanceOf(CustomValidationFailException.class);
+
+    }
+
+    @Test
+    void 이메일형식이_아닐_경우() throws Exception {
+        //given
+        final String email = "emailEmail.com";
+        final String accountName = "accountName";
+        final String password = "password1234";
+        final String nickname = "nickname";
+        //when
+        AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
+
+        //then
+        assertThatThrownBy(() -> accountManagementService.processAccountCreation(accountCreate))
+                .isInstanceOf(CustomValidationFailException.class);
     }
 
     @Test
@@ -82,8 +94,9 @@ class AccountManagementServiceSmallTest {
                 .isInstanceOf(AlreadyUsedAccountNameException.class);
     }
 
+
     @Test
-    void AccountCreate_로_계정생성이_가능하다() throws Exception{
+    void AccountCreate_로_계정생성이_가능하다() throws Exception {
         //given
         final String email = "email@email.com";
         final String accountName = "boriPapaDa";
@@ -91,11 +104,11 @@ class AccountManagementServiceSmallTest {
         final String nickname = "boriPapa";
         AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
         //when
-        AccountId account = accountManagementService.processAccountCreation(accountCreate);
+        AccountId accountId = accountManagementService.processAccountCreation(accountCreate);
+        Account account = accountRepository.findById(accountId).orElseThrow();
         //then
-        assertThat(account.getId()).isEqualTo(2L);
-
-
+        assertThat(accountId.getId()).isEqualTo(2L);
+        assertThat(account.getAccountStatus()).isEqualTo(AccountStatus.PENDING);
     }
 
 }

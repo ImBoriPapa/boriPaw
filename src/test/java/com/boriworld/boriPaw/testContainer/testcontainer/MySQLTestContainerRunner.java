@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.testConfig;
+package com.boriworld.boriPaw.testContainer.testcontainer;
 
 
 import org.junit.jupiter.api.Disabled;
@@ -20,11 +20,11 @@ import java.io.File;
 @Transactional
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public abstract class MySQLTestContainerRuner {
+public abstract class MySQLTestContainerRunner {
     final static DockerComposeContainer<?> compose;
 
     static {
-        compose = new DockerComposeContainer(new File("src/test/resources/docker-compose-mysql.yml"));
+        compose = new DockerComposeContainer<>(new File("src/test/resources/docker-compose-mysql.yml"));
         compose.withExposedService("mysql", 3306);
         compose.start();
     }
