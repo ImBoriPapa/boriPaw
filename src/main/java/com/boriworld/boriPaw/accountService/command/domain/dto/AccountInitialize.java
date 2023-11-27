@@ -22,5 +22,6 @@ public record AccountInitialize(
         PasswordStatus passwordStatus,
         Authority authority,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt) {
+        LocalDateTime updatedAt,
+        LocalDateTime lastLoginAt) {
 }

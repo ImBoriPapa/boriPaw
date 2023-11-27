@@ -4,6 +4,7 @@ import com.boriworld.boriPaw.accountService.command.domain.dto.AccountInitialize
 import com.boriworld.boriPaw.accountService.command.domain.model.Account;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.accountService.command.domain.value.AccountStatus;
 
 import java.util.Map;
 import java.util.Optional;
@@ -60,5 +61,10 @@ public class FakeAccountRepository implements AccountRepository {
                 .stream()
                 .filter(data -> data.getAccountId().equals(accountId))
                 .findFirst();
+    }
+
+    @Override
+    public Optional<Account> findByEmail(String email) {
+        return Optional.empty();
     }
 }

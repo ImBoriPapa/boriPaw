@@ -4,6 +4,7 @@ import com.boriworld.boriPaw.accountService.command.domain.model.Account;
 import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 
 import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.accountService.command.domain.value.AccountStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -34,5 +35,10 @@ public class AccountRepositoryImpl implements AccountRepository {
     public Optional<Account> findById(AccountId accountId) {
         return accountJpaRepository.findById(accountId.getId())
                 .map(AccountEntity::toDomain);
+    }
+
+    @Override
+    public Optional<Account> findByEmail(String email) {
+        return Optional.empty();
     }
 }

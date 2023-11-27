@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.accountService.command.interfaces;
 
-import com.boriworld.boriPaw.accountService.command.application.AccountCertificationService;
+import com.boriworld.boriPaw.accountService.command.application.AccountAuthenticationService;
 import com.boriworld.boriPaw.accountService.command.interfaces.request.EmailCertificationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AccountCertificationController {
 
-    private final AccountCertificationService accountCertificationService;
+    private final AccountAuthenticationService accountAuthenticationService;
     @PostMapping("/accounts/email-certification")
     public ResponseEntity<EmailCertificationResponse> certify(@RequestBody EmailCertificationRequest emailCertificationRequest) {
 
-        accountCertificationService.sendCertificationEmail(emailCertificationRequest.toEmailCertification());
+        accountAuthenticationService.sendCertificationEmail(emailCertificationRequest.toEmailCertification());
 
         return ResponseEntity
                 .ok()

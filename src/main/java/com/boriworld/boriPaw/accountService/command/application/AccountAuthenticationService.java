@@ -1,27 +1,47 @@
 package com.boriworld.boriPaw.accountService.command.application;
 
-import com.boriworld.boriPaw.accountService.command.domain.dto.SendCertificationEmail;
+import com.boriworld.boriPaw.accountService.command.domain.model.Account;
 import com.boriworld.boriPaw.accountService.command.domain.model.EmailCertificationCode;
+import com.boriworld.boriPaw.accountService.command.domain.model.JwtToken;
+import com.boriworld.boriPaw.accountService.command.domain.model.RefreshToken;
+import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
 import com.boriworld.boriPaw.accountService.command.domain.repository.EmailCertificationCodeRepository;
+import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
 import com.boriworld.boriPaw.accountService.command.domain.service.CertificationMailSender;
 import com.boriworld.boriPaw.accountService.command.domain.service.EmailCertificationCodeGenerator;
+import com.boriworld.boriPaw.accountService.command.domain.value.AccountStatus;
 import com.boriworld.boriPaw.accountService.command.interfaces.request.EmailCertification;
-import com.boriworld.boriPaw.accountService.command.interfaces.request.EmailCertificationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AccountCertificationService {
+public class AccountAuthenticationService {
+
+    private final AccountRepository accountRepository;
+    private final AccountPasswordEncoder accountPasswordEncoder;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final EmailCertificationCodeGenerator emailCertificationCodeGenerator;
     private final EmailCertificationCodeRepository emailCertificationCodeRepository;
     private final CertificationMailSender certificationMailSender;
+
+    @Transactional
+    public void loginProcess(String email, String password) {
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new LoginFailException("이메일을 확인을 해봐요"));
+
+        Account login = account.login(password, accountPasswordEncoder);
+
+        JwtToken jwtToken = JwtToken.generate(login);
+
+        RefreshToken refreshToken = RefreshToken.of(jwtToken.getRefreshToken(), 36000);
+        refreshTokenRepository.save(refreshToken);
+    }
 
     @Transactional
     public void sendCertificationEmail(EmailCertification certification) {
@@ -44,4 +64,6 @@ public class AccountCertificationService {
             throw new IllegalArgumentException("이메일 발송 실패");
         }
     }
+
+
 }

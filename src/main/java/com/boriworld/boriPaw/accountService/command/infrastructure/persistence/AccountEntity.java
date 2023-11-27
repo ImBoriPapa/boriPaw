@@ -34,9 +34,10 @@ public class AccountEntity {
     private Authority authority;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private LocalDateTime lastLoginAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private AccountEntity(Long accountId, String email, String accountName, String password, String nickname, String profileImage, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private AccountEntity(Long accountId, String email, String accountName, String password, String nickname, String profileImage, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
         this.accountId = accountId;
         this.email = email;
         this.accountName = accountName;
@@ -48,6 +49,7 @@ public class AccountEntity {
         this.authority = authority;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.lastLoginAt = lastLoginAt;
     }
 
     public static AccountEntity fromDomain(Account account) {
@@ -63,6 +65,7 @@ public class AccountEntity {
                 .authority(account.getAuthority())
                 .createdAt(account.getCreatedAt())
                 .updatedAt(account.getUpdatedAt())
+                .lastLoginAt(account.getLastLoginAt())
                 .build();
     }
 
@@ -79,6 +82,7 @@ public class AccountEntity {
                 .authority(this.authority)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
+                .lastLoginAt(this.lastLoginAt)
                 .build();
         return Account.initialize(initialize);
     }

@@ -1,5 +1,6 @@
 package com.boriworld.boriPaw.accountService.command.domain.model;
 
+import com.boriworld.boriPaw.accountService.command.application.LoginFailException;
 import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
 import com.boriworld.boriPaw.accountService.command.domain.dto.AccountInitialize;
@@ -28,9 +29,10 @@ public final class Account {
     private final Authority authority;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
+    private final LocalDateTime lastLoginAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Account(AccountId accountId, String email, String accountName, String password, String nickname, String profileImage, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private Account(AccountId accountId, String email, String accountName, String password, String nickname, String profileImage, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
         this.accountId = accountId;
         this.email = email;
         this.accountName = accountName;
@@ -42,6 +44,7 @@ public final class Account {
         this.authority = authority;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.lastLoginAt = lastLoginAt;
     }
 
     /**
@@ -102,4 +105,36 @@ public final class Account {
                 .updatedAt(initialize.updatedAt())
                 .build();
     }
+
+    public Account login(final String password, AccountPasswordEncoder accountPasswordEncoder) {
+        preventLoginByAccountStatus(this.accountStatus);
+        checkPassword(password, accountPasswordEncoder);
+        return Account.builder()
+                .accountId(this.accountId)
+                .email(this.email)
+                .accountName(this.accountName)
+                .password(this.password)
+                .nickname(this.nickname)
+                .profileImage(this.profileImage)
+                .accountStatus(this.accountStatus)
+                .passwordStatus(this.passwordStatus)
+                .authority(this.authority)
+                .createdAt(this.createdAt)
+                .updatedAt(this.updatedAt)
+                .lastLoginAt(LocalDateTime.now())
+                .build();
+    }
+
+    private void checkPassword(String password, AccountPasswordEncoder accountPasswordEncoder) {
+        if (accountPasswordEncoder.isMatch(this.password, password)) {
+            throw new LoginFailException("잘못된 이메일 혹은 잘못된 비밀번호입니다.");
+        }
+    }
+
+    public void preventLoginByAccountStatus(AccountStatus accountStatus) {
+        if (accountStatus != AccountStatus.ACTIVE) {
+            throw new LoginFailException(accountStatus.getErrorMessage());
+        }
+    }
+
 }
