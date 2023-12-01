@@ -1,5 +1,8 @@
-package com.boriworld.boriPaw.accountService.command.domain.value;
+package com.boriworld.boriPaw.userAccountService.command.domain.value;
 
+import lombok.Getter;
+
+@Getter
 public final class UserProfile {
     private final String nickname;
     private final String profileImage;

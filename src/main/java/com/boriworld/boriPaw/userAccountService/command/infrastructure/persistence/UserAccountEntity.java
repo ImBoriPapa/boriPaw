@@ -1,11 +1,11 @@
-package com.boriworld.boriPaw.accountService.command.infrastructure.persistence;
+package com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence;
 
-import com.boriworld.boriPaw.accountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountInitialize;
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountStatus;
-import com.boriworld.boriPaw.accountService.command.domain.value.Authority;
-import com.boriworld.boriPaw.accountService.command.domain.value.PasswordStatus;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.AccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountStatus;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.PasswordStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class AccountEntity {
+public class UserAccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountId;
@@ -37,7 +37,7 @@ public class AccountEntity {
     private LocalDateTime lastLoginAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private AccountEntity(Long accountId, String email, String accountName, String password, String nickname, String profileImage, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
+    private UserAccountEntity(Long accountId, String email, String accountName, String password, String nickname, String profileImage, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
         this.accountId = accountId;
         this.email = email;
         this.accountName = accountName;
@@ -52,14 +52,14 @@ public class AccountEntity {
         this.lastLoginAt = lastLoginAt;
     }
 
-    public static AccountEntity fromDomain(UserAccount userAccount) {
-        return AccountEntity.builder()
+    public static UserAccountEntity fromDomain(UserAccount userAccount) {
+        return UserAccountEntity.builder()
                 .accountId(userAccount.getAccountId() == null ? null : userAccount.getAccountId().getId())
                 .email(userAccount.getEmail())
                 .accountName(userAccount.getAccountName())
                 .password(userAccount.getPassword())
-                .nickname(userAccount.getNickname())
-                .profileImage(userAccount.getProfileImage())
+                .nickname(userAccount.getUserProfile().getNickname())
+                .profileImage(userAccount.getUserProfile().getProfileImage())
                 .accountStatus(userAccount.getAccountStatus())
                 .passwordStatus(userAccount.getPasswordStatus())
                 .authority(userAccount.getAuthority())

@@ -1,21 +1,21 @@
-package com.boriworld.boriPaw.followService.command.domain;
+package com.boriworld.boriPaw.followService.command.infrastructure.persistence;
+
+import com.boriworld.boriPaw.followService.command.domain.FollowServiceUserEntity;
+import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public final class Follow {
-    private String id;
-    private FollowServiceUser followedUser;
-    private FollowServiceUser followerUser;
+@Entity
+@NoArgsConstructor
+public class FollowEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    private FollowServiceUserEntity followedUser;
+    @ManyToOne
+    private FollowServiceUserEntity followerUser;
     private LocalDateTime followedAt;
 
-    private Follow(String id, FollowServiceUser followedUser, FollowServiceUser followerUser, LocalDateTime followedAt) {
-        this.id = id;
-        this.followedUser = followedUser;
-        this.followerUser = followerUser;
-        this.followedAt = followedAt;
-    }
-
-    public static Follow of() {
-        return new Follow(null, null, null, null);
-    }
 }

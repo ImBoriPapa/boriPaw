@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.accountService.command.domain.value;
+package com.boriworld.boriPaw.userAccountService.command.domain.value;
 
 public enum AccountStatus {
     PENDING("이메일 인증이 필요합니다."),

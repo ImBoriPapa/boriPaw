@@ -1,13 +1,14 @@
-package com.boriworld.boriPaw.accountService.command.domain.model;
+package com.boriworld.boriPaw.userAccountService.command.domain.model;
 
-import com.boriworld.boriPaw.accountService.command.application.LoginFailException;
-import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountInitialize;
-import com.boriworld.boriPaw.accountService.command.domain.value.*;
+import com.boriworld.boriPaw.userAccountService.command.application.LoginFailException;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.AccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -55,18 +56,18 @@ public final class UserAccount {
      * createdAt -> 계정 생성 시간
      * updatedAt -> 계정 업데이트 시간
      *
-     * @param accountCreate:          Account 생성을 위한 정보 전달 DTO
-     * @param accountPasswordEncoder: 계정 비밀번호 생성기
+     * @param userAccountCreate:          Account 생성을 위한 정보 전달 DTO
+     * @param userAccountPasswordEncoder: 계정 비밀번호 생성기
      * @return Account
      */
-    public static UserAccount from(AccountCreate accountCreate, AccountPasswordEncoder accountPasswordEncoder) {
-        Objects.requireNonNull(accountCreate, "createAccount() 메서드에 매개 변수 'accountCreate' 는 NULL 이 될수 없습니다..");
-        Objects.requireNonNull(accountPasswordEncoder, "createAccount() 메서드에 매개 변수 'accountPasswordEncoder' 는 NULL 이 될수 없습니다.");
-        UserProfile profile = UserProfile.of(accountCreate.nickname(), null);
+    public static UserAccount from(UserAccountCreate userAccountCreate, UserAccountPasswordEncoder userAccountPasswordEncoder) {
+        Objects.requireNonNull(userAccountCreate, "createAccount() 메서드에 매개 변수 'accountCreate' 는 NULL 이 될수 없습니다..");
+        Objects.requireNonNull(userAccountPasswordEncoder, "createAccount() 메서드에 매개 변수 'accountPasswordEncoder' 는 NULL 이 될수 없습니다.");
+        UserProfile profile = UserProfile.of(userAccountCreate.nickname(), null);
         return UserAccount.builder()
-                .email(accountCreate.email())
-                .accountName(accountCreate.accountName())
-                .password(accountPasswordEncoder.encode(accountCreate.password()))
+                .email(userAccountCreate.email())
+                .accountName(userAccountCreate.accountName())
+                .password(userAccountPasswordEncoder.encode(userAccountCreate.password()))
                 .userProfile(profile)
                 .accountStatus(AccountStatus.PENDING)
                 .passwordStatus(PasswordStatus.STEADY)
@@ -85,13 +86,12 @@ public final class UserAccount {
      * @return Account
      */
     public static UserAccount initialize(AccountInitialize initialize) {
-
         return UserAccount.builder()
                 .accountId(initialize.accountId())
                 .email(initialize.email())
                 .accountName(initialize.accountName())
                 .password(initialize.password())
-                .userProfile(initialize.userProfile())
+                .userProfile(UserProfile.of(initialize.nickname(), initialize.profileImage()))
                 .accountStatus(initialize.accountStatus())
                 .passwordStatus(initialize.passwordStatus())
                 .authority(initialize.authority())
@@ -100,16 +100,15 @@ public final class UserAccount {
                 .build();
     }
 
-    public UserAccount login(final String password, AccountPasswordEncoder accountPasswordEncoder) {
+    public UserAccount login(final String password, UserAccountPasswordEncoder userAccountPasswordEncoder) {
         preventLoginByAccountStatus(this.accountStatus);
-        checkPassword(password, accountPasswordEncoder);
+        checkPassword(password, userAccountPasswordEncoder);
         return UserAccount.builder()
                 .accountId(this.accountId)
                 .email(this.email)
                 .accountName(this.accountName)
                 .password(this.password)
-                .nickname(this.nickname)
-                .profileImage(this.profileImage)
+                .userProfile(this.userProfile)
                 .accountStatus(this.accountStatus)
                 .passwordStatus(this.passwordStatus)
                 .authority(this.authority)
@@ -119,8 +118,8 @@ public final class UserAccount {
                 .build();
     }
 
-    private void checkPassword(String password, AccountPasswordEncoder accountPasswordEncoder) {
-        if (accountPasswordEncoder.isMatch(this.password, password)) {
+    private void checkPassword(String password, UserAccountPasswordEncoder userAccountPasswordEncoder) {
+        if (userAccountPasswordEncoder.isMatch(this.password, password)) {
             throw new LoginFailException("잘못된 이메일 혹은 잘못된 비밀번호입니다.");
         }
     }

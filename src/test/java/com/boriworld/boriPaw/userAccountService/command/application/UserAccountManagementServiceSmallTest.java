@@ -1,14 +1,14 @@
-package com.boriworld.boriPaw.accountService.command.application;
+package com.boriworld.boriPaw.userAccountService.command.application;
 
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
-import com.boriworld.boriPaw.accountService.command.domain.model.UserAccount;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 
-import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
 
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountStatus;
-import com.boriworld.boriPaw.accountService.command.exception.AlreadyUsedAccountNameException;
-import com.boriworld.boriPaw.accountService.command.exception.AlreadyUsedEmailException;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountStatus;
+import com.boriworld.boriPaw.userAccountService.command.exception.AlreadyUsedAccountNameException;
+import com.boriworld.boriPaw.userAccountService.command.exception.AlreadyUsedEmailException;
 import com.boriworld.boriPaw.common.validator.CustomValidationFailException;
 import com.boriworld.boriPaw.testComponent.TestComponentContainer;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,21 +20,21 @@ import static org.assertj.core.api.Assertions.*;
 class UserAccountManagementServiceSmallTest {
 
     private AccountManagementService accountManagementService;
-    private AccountRepository accountRepository;
+    private UserAccountRepository userAccountRepository;
 
     @BeforeEach
     void beforeEach() {
         TestComponentContainer componentContainer = new TestComponentContainer();
-        accountRepository = componentContainer.accountRepository;
+        userAccountRepository = componentContainer.userAccountRepository;
         accountManagementService = componentContainer.accountManagementService;
         final String email = "duplicate@email.com";
         final String accountName = "duplicateName";
         final String password = "password1234";
         final String nickname = "boriPapa";
 
-        AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
+        UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
 
-        accountRepository.save(UserAccount.from(accountCreate, componentContainer.accountPasswordEncoder));
+        userAccountRepository.save(UserAccount.from(userAccountCreate, componentContainer.userAccountPasswordEncoder));
     }
 
     @Test
@@ -44,7 +44,7 @@ class UserAccountManagementServiceSmallTest {
         //when
 
         //then
-        assertThatThrownBy(() -> accountManagementService.processAccountCreation(null))
+        assertThatThrownBy(() -> accountManagementService.processUserAccountCreation(null))
                 .isInstanceOf(CustomValidationFailException.class);
 
     }
@@ -57,10 +57,10 @@ class UserAccountManagementServiceSmallTest {
         final String password = "password1234";
         final String nickname = "nickname";
         //when
-        AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
+        UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
 
         //then
-        assertThatThrownBy(() -> accountManagementService.processAccountCreation(accountCreate))
+        assertThatThrownBy(() -> accountManagementService.processUserAccountCreation(userAccountCreate))
                 .isInstanceOf(CustomValidationFailException.class);
     }
 
@@ -71,11 +71,11 @@ class UserAccountManagementServiceSmallTest {
         final String accountName = "boriPapaDa";
         final String password = "password1234";
         final String nickname = "boriPapa";
-        AccountCreate accountCreate = new AccountCreate(duplicateEmail, accountName, password, nickname);
+        UserAccountCreate userAccountCreate = new UserAccountCreate(duplicateEmail, accountName, password, nickname);
         //when
 
         //then
-        assertThatThrownBy(() -> accountManagementService.processAccountCreation(accountCreate))
+        assertThatThrownBy(() -> accountManagementService.processUserAccountCreation(userAccountCreate))
                 .isInstanceOf(AlreadyUsedEmailException.class);
     }
 
@@ -86,11 +86,11 @@ class UserAccountManagementServiceSmallTest {
         final String duplicateAccountName = "duplicateName";
         final String password = "password1234";
         final String nickname = "boriPapa";
-        AccountCreate accountCreate = new AccountCreate(email, duplicateAccountName, password, nickname);
+        UserAccountCreate userAccountCreate = new UserAccountCreate(email, duplicateAccountName, password, nickname);
         //when
 
         //then
-        assertThatThrownBy(() -> accountManagementService.processAccountCreation(accountCreate))
+        assertThatThrownBy(() -> accountManagementService.processUserAccountCreation(userAccountCreate))
                 .isInstanceOf(AlreadyUsedAccountNameException.class);
     }
 
@@ -102,10 +102,10 @@ class UserAccountManagementServiceSmallTest {
         final String accountName = "boriPapaDa";
         final String password = "password1234";
         final String nickname = "boriPapa";
-        AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
+        UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
         //when
-        AccountId accountId = accountManagementService.processAccountCreation(accountCreate);
-        UserAccount userAccount = accountRepository.findById(accountId).orElseThrow();
+        AccountId accountId = accountManagementService.processUserAccountCreation(userAccountCreate);
+        UserAccount userAccount = userAccountRepository.findById(accountId).orElseThrow();
         //then
         assertThat(accountId.getId()).isEqualTo(2L);
         assertThat(userAccount.getAccountStatus()).isEqualTo(AccountStatus.PENDING);

@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.accountService.command.interfaces.request;
+package com.boriworld.boriPaw.userAccountService.command.interfaces.request;
 
 public record EmailCertification(String email) {
 }

@@ -1,2 +1,4 @@
-package com.boriworld.boriPaw.followService.command.domain;public class FollowingCreate {
+package com.boriworld.boriPaw.followService.command.domain;
+
+public record FollowingCreate(UserInformation userInformation) {
 }

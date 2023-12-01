@@ -1,6 +1,6 @@
-package com.boriworld.boriPaw.accountService.command.domain.service;
+package com.boriworld.boriPaw.userAccountService.command.domain.service;
 
-public interface AccountValidator {
+public interface UserAccountValidator {
     void validateDuplicateEmail(String email);
     void validateDuplicateAccountName(String accountName);
 }

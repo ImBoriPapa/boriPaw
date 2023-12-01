@@ -1,8 +1,7 @@
-package com.boriworld.boriPaw.accountService.command.domain.dto;
+package com.boriworld.boriPaw.userAccountService.command.domain.dto;
 
-import com.boriworld.boriPaw.accountService.command.domain.value.*;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 

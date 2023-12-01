@@ -1,7 +1,7 @@
-package com.boriworld.boriPaw.accountService.command.interfaces;
+package com.boriworld.boriPaw.userAccountService.command.interfaces;
 
-import com.boriworld.boriPaw.accountService.command.application.AccountAuthenticationService;
-import com.boriworld.boriPaw.accountService.command.interfaces.request.EmailCertificationRequest;
+import com.boriworld.boriPaw.userAccountService.command.application.AccountAuthenticationService;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.request.EmailCertificationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

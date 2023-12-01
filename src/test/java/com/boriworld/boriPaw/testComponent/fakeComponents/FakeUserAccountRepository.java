@@ -1,16 +1,16 @@
 package com.boriworld.boriPaw.testComponent.fakeComponents;
 
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountInitialize;
-import com.boriworld.boriPaw.accountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.AccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
+import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class FakeAccountRepository implements AccountRepository {
+public class FakeUserAccountRepository implements UserAccountRepository {
     private final AtomicLong SEQUENCE = new AtomicLong(0L);
     private final Map<Long, UserAccount> store = new ConcurrentHashMap<>();
 

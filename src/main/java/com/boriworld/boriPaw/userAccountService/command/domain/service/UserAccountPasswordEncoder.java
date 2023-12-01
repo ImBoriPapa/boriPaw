@@ -1,6 +1,6 @@
-package com.boriworld.boriPaw.accountService.command.domain.service;
+package com.boriworld.boriPaw.userAccountService.command.domain.service;
 
-public interface AccountPasswordEncoder {
+public interface UserAccountPasswordEncoder {
     String encode(String password);
     boolean isMatch(String encodedPassword, String rawPassword);
 }

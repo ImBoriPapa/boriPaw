@@ -1,7 +1,7 @@
-package com.boriworld.boriPaw.accountService.command.interfaces;
+package com.boriworld.boriPaw.userAccountService.command.interfaces;
 
-import com.boriworld.boriPaw.accountService.command.interfaces.request.AccountCreateRequest;
-import com.boriworld.boriPaw.accountService.command.interfaces.response.AccountCreateResponse;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.request.AccountCreateRequest;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.response.AccountCreateResponse;
 import com.boriworld.boriPaw.testComponent.TestComponentContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

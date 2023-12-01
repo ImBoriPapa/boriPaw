@@ -1,14 +1,14 @@
-package com.boriworld.boriPaw.accountService.command.domain;
+package com.boriworld.boriPaw.userAccountService.command.domain;
 
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountInitialize;
-import com.boriworld.boriPaw.accountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountStatus;
-import com.boriworld.boriPaw.accountService.command.domain.value.Authority;
-import com.boriworld.boriPaw.accountService.command.domain.value.PasswordStatus;
-import com.boriworld.boriPaw.testComponent.fakeComponents.FakeAccountPasswordEncoder;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.AccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountStatus;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.PasswordStatus;
+import com.boriworld.boriPaw.testComponent.fakeComponents.FakeUserAccountPasswordEncoder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 
 class UserAccountSmallTest {
 
-    AccountPasswordEncoder accountPasswordEncoder = new FakeAccountPasswordEncoder();
+    UserAccountPasswordEncoder userAccountPasswordEncoder = new FakeUserAccountPasswordEncoder();
     @Test
     void AccountPasswordEncoder_가_Null_일때_NullPointerException_발생() throws Exception {
         //given
@@ -25,7 +25,7 @@ class UserAccountSmallTest {
         //when
 
         //then
-        assertThatThrownBy(() -> UserAccount.from(null, accountPasswordEncoder))
+        assertThatThrownBy(() -> UserAccount.from(null, userAccountPasswordEncoder))
                 .isInstanceOf(NullPointerException.class);
     }
     @Test
@@ -36,11 +36,11 @@ class UserAccountSmallTest {
         final String password = "password1234!@";
         final String nickname = "boriPapa";
 
-        AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
+        UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
         //when
 
         //then
-        assertThatThrownBy(() -> UserAccount.from(accountCreate, null))
+        assertThatThrownBy(() -> UserAccount.from(userAccountCreate, null))
                 .isInstanceOf(NullPointerException.class);
     }
 
@@ -52,10 +52,10 @@ class UserAccountSmallTest {
         final String password = "password1234!@";
         final String nickname = "boriPapa";
 
-        AccountCreate accountCreate = new AccountCreate(email, accountName, password, nickname);
+        UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
 
         //when
-        UserAccount userAccount = UserAccount.from(accountCreate, accountPasswordEncoder);
+        UserAccount userAccount = UserAccount.from(userAccountCreate, userAccountPasswordEncoder);
         //then
         assertThat(userAccount.getAccountId()).isNull();
         assertThat(userAccount.getEmail()).isEqualTo(email);

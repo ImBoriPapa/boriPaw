@@ -1,7 +1,7 @@
-package com.boriworld.boriPaw.accountService.command.domain.service;
+package com.boriworld.boriPaw.userAccountService.command.domain.service;
 
-import com.boriworld.boriPaw.accountService.command.domain.event.AccountEvent;
+import com.boriworld.boriPaw.userAccountService.command.domain.event.AccountEvent;
 
-public interface AccountEventPublisher {
+public interface UserAccountEventPublisher {
     void publish(AccountEvent accountEvent);
 }

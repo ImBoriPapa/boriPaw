@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.accountService.command.domain.model;
+package com.boriworld.boriPaw.userAccountService.command.domain.model;
 
 import lombok.Getter;
 

@@ -1,9 +1,9 @@
 package com.boriworld.boriPaw.followService.command.domain;
 
-public final class FollowUserId {
+public final class UserInformationId {
     private final Long id;
 
-    public FollowUserId(Long id) {
+    public UserInformationId(Long id) {
         this.id = id;
     }
 }

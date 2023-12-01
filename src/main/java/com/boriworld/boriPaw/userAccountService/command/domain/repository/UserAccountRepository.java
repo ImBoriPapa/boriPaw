@@ -1,11 +1,11 @@
-package com.boriworld.boriPaw.accountService.command.domain.repository;
+package com.boriworld.boriPaw.userAccountService.command.domain.repository;
 
-import com.boriworld.boriPaw.accountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
 
 import java.util.Optional;
 
-public interface AccountRepository {
+public interface UserAccountRepository {
     UserAccount save(UserAccount userAccount);
     boolean existsByEmail(String email);
     boolean existsByAccountName(String accountName);

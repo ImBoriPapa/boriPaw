@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.accountService.command.exception;
+package com.boriworld.boriPaw.userAccountService.command.exception;
 
 public class AlreadyUsedAccountNameException extends RuntimeException {
     private final String message;

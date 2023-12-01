@@ -1,6 +1,6 @@
-package com.boriworld.boriPaw.accountService.command.interfaces.request;
+package com.boriworld.boriPaw.userAccountService.command.interfaces.request;
 
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ public class AccountCreateRequest {
     private String password;
     private String nickname;
 
-    public AccountCreate toAccountCreate() {
-        return new AccountCreate(email, accountName, password, nickname);
+    public UserAccountCreate toAccountCreate() {
+        return new UserAccountCreate(email, accountName, password, nickname);
     }
 }

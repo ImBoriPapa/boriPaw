@@ -1,8 +1,8 @@
 package com.boriworld.boriPaw.testComponent.fakeComponents;
 
-import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 
-public class FakeAccountPasswordEncoder implements AccountPasswordEncoder {
+public class FakeUserAccountPasswordEncoder implements UserAccountPasswordEncoder {
 
     private final String FAKE_ENCODE_PREFIX = "(ENCODED)";
 

@@ -1,6 +1,6 @@
-package com.boriworld.boriPaw.accountService.command.infrastructure.imports;
+package com.boriworld.boriPaw.userAccountService.command.infrastructure.imports;
 
-import com.boriworld.boriPaw.accountService.command.domain.service.EmailCertificationCodeGenerator;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.EmailCertificationCodeGenerator;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

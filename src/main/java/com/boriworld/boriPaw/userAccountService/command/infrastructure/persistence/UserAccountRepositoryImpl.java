@@ -1,9 +1,9 @@
-package com.boriworld.boriPaw.accountService.command.infrastructure.persistence;
+package com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence;
 
-import com.boriworld.boriPaw.accountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
+import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,12 +12,12 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class AccountRepositoryImpl implements AccountRepository {
+public class UserAccountRepositoryImpl implements UserAccountRepository {
     private final AccountJpaRepository accountJpaRepository;
 
     @Override
     public UserAccount save(UserAccount userAccount) {
-        return accountJpaRepository.save(AccountEntity.fromDomain(userAccount)).toDomain();
+        return accountJpaRepository.save(UserAccountEntity.fromDomain(userAccount)).toDomain();
     }
 
     @Override
@@ -33,7 +33,7 @@ public class AccountRepositoryImpl implements AccountRepository {
     @Override
     public Optional<UserAccount> findById(AccountId accountId) {
         return accountJpaRepository.findById(accountId.getId())
-                .map(AccountEntity::toDomain);
+                .map(UserAccountEntity::toDomain);
     }
 
     @Override

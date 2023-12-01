@@ -1,10 +1,10 @@
-package com.boriworld.boriPaw.accountService.command.infrastructure.persistence;
+package com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence;
 
-import com.boriworld.boriPaw.accountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
-import com.boriworld.boriPaw.testComponent.fakeComponents.FakeAccountPasswordEncoder;
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
-import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
+import com.boriworld.boriPaw.testComponent.fakeComponents.FakeUserAccountPasswordEncoder;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.testContainer.testcontainer.MySQLTestContainerRunner;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.*;
 
-class UserAccountRepositoryImplMediumTest extends MySQLTestContainerRunner {
+class UserUserAccountRepositoryImplMediumTest extends MySQLTestContainerRunner {
     @Autowired
-    private AccountRepository accountRepository;
-    private AccountPasswordEncoder passwordEncoder;
+    private UserAccountRepository userAccountRepository;
+    private UserAccountPasswordEncoder passwordEncoder;
 
     @Test
     void test() throws Exception {
@@ -24,13 +24,13 @@ class UserAccountRepositoryImplMediumTest extends MySQLTestContainerRunner {
         final String accountName = "accountName";
         final String password = "password1234!@";
         final String nickname = "boriPapa";
-        passwordEncoder = new FakeAccountPasswordEncoder();
-        AccountCreate create = new AccountCreate(email, accountName, nickname, password);
+        passwordEncoder = new FakeUserAccountPasswordEncoder();
+        UserAccountCreate create = new UserAccountCreate(email, accountName, nickname, password);
         UserAccount userAccount = UserAccount.from(create, passwordEncoder);
 
         //when
-        UserAccount saved = accountRepository.save(userAccount);
-        UserAccount findById = accountRepository.findById(saved.getAccountId())
+        UserAccount saved = userAccountRepository.save(userAccount);
+        UserAccount findById = userAccountRepository.findById(saved.getAccountId())
                 .orElseThrow();
         //then
         assertThat(saved.getAccountId()).isNotNull();

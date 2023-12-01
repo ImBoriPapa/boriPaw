@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.testComponent.fakeComponents;
 
-import com.boriworld.boriPaw.accountService.command.domain.service.EmailCertificationCodeGenerator;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.EmailCertificationCodeGenerator;
 
 public class FakeEmailCertificationCodeGenerator implements EmailCertificationCodeGenerator {
     @Override

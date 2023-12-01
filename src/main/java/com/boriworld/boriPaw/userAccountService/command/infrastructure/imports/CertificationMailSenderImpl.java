@@ -1,6 +1,6 @@
-package com.boriworld.boriPaw.accountService.command.infrastructure.imports;
+package com.boriworld.boriPaw.userAccountService.command.infrastructure.imports;
 
-import com.boriworld.boriPaw.accountService.command.domain.service.CertificationMailSender;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.CertificationMailSender;
 import org.springframework.stereotype.Component;
 
 @Component

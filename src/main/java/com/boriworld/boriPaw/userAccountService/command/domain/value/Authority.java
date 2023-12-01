@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.accountService.command.domain.value;
+package com.boriworld.boriPaw.userAccountService.command.domain.value;
 
 public enum Authority {
 

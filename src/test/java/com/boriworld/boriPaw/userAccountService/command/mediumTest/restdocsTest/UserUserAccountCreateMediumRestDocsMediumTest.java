@@ -1,6 +1,6 @@
-package com.boriworld.boriPaw.accountService.command.mediumTest.restdocsTest;
+package com.boriworld.boriPaw.userAccountService.command.mediumTest.restdocsTest;
 
-import com.boriworld.boriPaw.accountService.command.interfaces.request.AccountCreateRequest;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.request.AccountCreateRequest;
 
 import com.boriworld.boriPaw.common.constant.ApiEndpoints;
 import com.boriworld.boriPaw.testContainer.testcontainer.RestDocsMediumTest;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class UserAccountCreateMediumRestDocsMediumTest extends RestDocsMediumTest {
+public class UserUserAccountCreateMediumRestDocsMediumTest extends RestDocsMediumTest {
     @Test
     @DisplayName("회원 생성 통합 테스트: 회원 생성 요청 성공 통합 테스트")
     void 회원생성_요청_성공() throws Exception {

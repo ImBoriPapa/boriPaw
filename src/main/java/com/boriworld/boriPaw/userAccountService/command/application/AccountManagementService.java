@@ -1,8 +1,8 @@
-package com.boriworld.boriPaw.accountService.command.application;
+package com.boriworld.boriPaw.userAccountService.command.application;
 
-import com.boriworld.boriPaw.accountService.command.domain.dto.AccountCreate;
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
 
 public interface AccountManagementService {
-    AccountId processAccountCreation(AccountCreate accountCreate);
+    AccountId processUserAccountCreation(UserAccountCreate userAccountCreate);
 }

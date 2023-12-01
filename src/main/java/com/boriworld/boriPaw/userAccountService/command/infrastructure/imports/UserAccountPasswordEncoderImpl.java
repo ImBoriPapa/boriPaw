@@ -1,12 +1,12 @@
-package com.boriworld.boriPaw.accountService.command.infrastructure.imports;
+package com.boriworld.boriPaw.userAccountService.command.infrastructure.imports;
 
-import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountPasswordEncoderImpl implements AccountPasswordEncoder {
+public class UserAccountPasswordEncoderImpl implements UserAccountPasswordEncoder {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Override
     public String encode(String password) {

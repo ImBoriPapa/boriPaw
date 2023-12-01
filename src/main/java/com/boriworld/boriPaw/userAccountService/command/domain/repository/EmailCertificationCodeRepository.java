@@ -1,6 +1,6 @@
-package com.boriworld.boriPaw.accountService.command.domain.repository;
+package com.boriworld.boriPaw.userAccountService.command.domain.repository;
 
-import com.boriworld.boriPaw.accountService.command.domain.model.EmailCertificationCode;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.EmailCertificationCode;
 
 public interface EmailCertificationCodeRepository {
     EmailCertificationCode save(EmailCertificationCode emailCertificationCode);

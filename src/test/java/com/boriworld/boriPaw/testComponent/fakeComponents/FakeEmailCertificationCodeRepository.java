@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.testComponent.fakeComponents;
 
-import com.boriworld.boriPaw.accountService.command.domain.repository.EmailCertificationCodeRepository;
-import com.boriworld.boriPaw.accountService.command.domain.model.EmailCertificationCode;
+import com.boriworld.boriPaw.userAccountService.command.domain.repository.EmailCertificationCodeRepository;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.EmailCertificationCode;
 
 import java.util.Map;
 import java.util.UUID;

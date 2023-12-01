@@ -1,7 +1,7 @@
-package com.boriworld.boriPaw.accountService.command.domain.event;
+package com.boriworld.boriPaw.userAccountService.command.domain.event;
 
 
-import com.boriworld.boriPaw.accountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

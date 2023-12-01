@@ -1,15 +1,14 @@
-package com.boriworld.boriPaw.accountService.command.infrastructure.event;
+package com.boriworld.boriPaw.userAccountService.command.infrastructure.event;
 
-import com.boriworld.boriPaw.accountService.command.domain.event.AccountCreateEvent;
-import com.boriworld.boriPaw.accountService.command.domain.event.AccountEvent;
-import com.boriworld.boriPaw.accountService.command.domain.service.AccountEventPublisher;
+import com.boriworld.boriPaw.userAccountService.command.domain.event.AccountEvent;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountEventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class InMemoryEventPublisher implements AccountEventPublisher {
+public class InMemoryEventPublisherUser implements UserAccountEventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 

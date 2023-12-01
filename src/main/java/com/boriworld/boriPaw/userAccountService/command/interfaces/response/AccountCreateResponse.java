@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.accountService.command.interfaces.response;
+package com.boriworld.boriPaw.userAccountService.command.interfaces.response;
 
 public record AccountCreateResponse(long id) {
 

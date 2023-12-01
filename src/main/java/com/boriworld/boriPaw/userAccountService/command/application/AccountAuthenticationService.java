@@ -1,15 +1,15 @@
-package com.boriworld.boriPaw.accountService.command.application;
+package com.boriworld.boriPaw.userAccountService.command.application;
 
-import com.boriworld.boriPaw.accountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.accountService.command.domain.model.EmailCertificationCode;
-import com.boriworld.boriPaw.accountService.command.domain.model.JwtToken;
-import com.boriworld.boriPaw.accountService.command.domain.model.RefreshToken;
-import com.boriworld.boriPaw.accountService.command.domain.repository.AccountRepository;
-import com.boriworld.boriPaw.accountService.command.domain.repository.EmailCertificationCodeRepository;
-import com.boriworld.boriPaw.accountService.command.domain.service.AccountPasswordEncoder;
-import com.boriworld.boriPaw.accountService.command.domain.service.CertificationMailSender;
-import com.boriworld.boriPaw.accountService.command.domain.service.EmailCertificationCodeGenerator;
-import com.boriworld.boriPaw.accountService.command.interfaces.request.EmailCertification;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.EmailCertificationCode;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.JwtToken;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.RefreshToken;
+import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
+import com.boriworld.boriPaw.userAccountService.command.domain.repository.EmailCertificationCodeRepository;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.CertificationMailSender;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.EmailCertificationCodeGenerator;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.request.EmailCertification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,8 +22,8 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class AccountAuthenticationService {
 
-    private final AccountRepository accountRepository;
-    private final AccountPasswordEncoder accountPasswordEncoder;
+    private final UserAccountRepository userAccountRepository;
+    private final UserAccountPasswordEncoder userAccountPasswordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
     private final EmailCertificationCodeGenerator emailCertificationCodeGenerator;
     private final EmailCertificationCodeRepository emailCertificationCodeRepository;
@@ -31,10 +31,10 @@ public class AccountAuthenticationService {
 
     @Transactional
     public void loginProcess(String email, String password) {
-        UserAccount userAccount = accountRepository.findByEmail(email)
+        UserAccount userAccount = userAccountRepository.findByEmail(email)
                 .orElseThrow(() -> new LoginFailException("이메일을 확인을 해봐요"));
 
-        UserAccount login = userAccount.login(password, accountPasswordEncoder);
+        UserAccount login = userAccount.login(password, userAccountPasswordEncoder);
 
         JwtToken jwtToken = JwtToken.generate(login);
 
