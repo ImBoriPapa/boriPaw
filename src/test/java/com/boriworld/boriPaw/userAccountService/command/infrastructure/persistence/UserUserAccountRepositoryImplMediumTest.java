@@ -30,11 +30,11 @@ class UserUserAccountRepositoryImplMediumTest extends MySQLTestContainerRunner {
 
         //when
         UserAccount saved = userAccountRepository.save(userAccount);
-        UserAccount findById = userAccountRepository.findById(saved.getAccountId())
+        UserAccount findById = userAccountRepository.findById(saved.getUserAccountId())
                 .orElseThrow();
         //then
-        assertThat(saved.getAccountId()).isNotNull();
-        assertThat(findById.getAccountId()).isEqualTo(saved.getAccountId());
+        assertThat(saved.getUserAccountId()).isNotNull();
+        assertThat(findById.getUserAccountId()).isEqualTo(saved.getUserAccountId());
     }
 
 }

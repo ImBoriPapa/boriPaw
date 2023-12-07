@@ -1,10 +1,10 @@
 package com.boriworld.boriPaw.testComponent;
 
-import com.boriworld.boriPaw.userAccountService.command.application.AccountManagementService;
-import com.boriworld.boriPaw.userAccountService.command.application.AccountManagementServiceImpl;
+import com.boriworld.boriPaw.userAccountService.command.application.UserAccountManagementService;
+import com.boriworld.boriPaw.userAccountService.command.application.UserAccountManagementServiceImpl;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.EmailCertificationCodeRepository;
-import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountEventPublisher;
+import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountValidator;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.EmailCertificationCodeGenerator;
@@ -25,7 +25,7 @@ public class TestComponentContainer {
     public final EmailCertificationCodeGenerator emailCertificationCodeGenerator;
     public final EmailCertificationCodeRepository emailCertificationCodeRepository;
     public final RequestConstraintValidator requestConstraintValidator;
-    public final AccountManagementService accountManagementService;
+    public final UserAccountManagementService userAccountManagementService;
     public final AccountManagementController accountManagementController;
     private final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = validatorFactory.getValidator();
@@ -37,14 +37,14 @@ public class TestComponentContainer {
         this.emailCertificationCodeGenerator = new FakeEmailCertificationCodeGenerator();
         this.emailCertificationCodeRepository = new FakeEmailCertificationCodeRepository();
         this.requestConstraintValidator = new RequestConstraintValidatorImpl(validator);
-        this.accountManagementService = new AccountManagementServiceImpl(
+        this.userAccountManagementService = new UserAccountManagementServiceImpl(
                 this.userAccountRepository,
                 this.userAccountPasswordEncoder,
                 this.userAccountEventPublisher,
                 this.requestConstraintValidator,
                 this.userAccountValidator
         );
-        accountManagementController = new AccountManagementController(accountManagementService);
+        accountManagementController = new AccountManagementController(userAccountManagementService);
     }
 
 

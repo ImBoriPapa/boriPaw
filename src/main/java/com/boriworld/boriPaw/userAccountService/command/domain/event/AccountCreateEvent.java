@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.domain.event;
 
 
-import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountCreateEvent implements AccountEvent {
-    private AccountId accountId;
+    private UserAccountId userAccountId;
     private String email;
 
 }

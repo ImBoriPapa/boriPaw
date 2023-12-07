@@ -7,13 +7,12 @@ import java.time.LocalDateTime;
 
 
 @Builder
-public record AccountInitialize(
-        AccountId accountId,
+public record UserAccountInitialize(
+        UserAccountId userAccountId,
         String email,
         String accountName,
         String password,
-        String nickname,
-        String profileImage,
+        UserProfile userProfile,
         AccountStatus accountStatus,
         PasswordStatus passwordStatus,
         Authority authority,

@@ -1,11 +1,8 @@
 package com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.AccountInitialize;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountStatus;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.PasswordStatus;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,12 +17,13 @@ import java.time.LocalDateTime;
 public class UserAccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long accountId;
+    private Long userAccountId;
     private String email;
     private String accountName;
     private String password;
-    private String nickname;
-    private String profileImage;
+    @Embedded
+    private UserProfileValue userProfileValue;
+
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
     @Enumerated(EnumType.STRING)
@@ -37,13 +35,12 @@ public class UserAccountEntity {
     private LocalDateTime lastLoginAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private UserAccountEntity(Long accountId, String email, String accountName, String password, String nickname, String profileImage, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
-        this.accountId = accountId;
+    protected UserAccountEntity(Long userAccountId, String email, String accountName, String password, UserProfileValue userProfileValue, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
+        this.userAccountId = userAccountId;
         this.email = email;
         this.accountName = accountName;
         this.password = password;
-        this.nickname = nickname;
-        this.profileImage = profileImage;
+        this.userProfileValue = userProfileValue;
         this.accountStatus = accountStatus;
         this.passwordStatus = passwordStatus;
         this.authority = authority;
@@ -52,14 +49,13 @@ public class UserAccountEntity {
         this.lastLoginAt = lastLoginAt;
     }
 
-    public static UserAccountEntity fromDomain(UserAccount userAccount) {
+    public static UserAccountEntity fromModel(UserAccount userAccount) {
         return UserAccountEntity.builder()
-                .accountId(userAccount.getAccountId() == null ? null : userAccount.getAccountId().getId())
+                .userAccountId(userAccount.getUserAccountId() == null ? null : userAccount.getUserAccountId().getId())
                 .email(userAccount.getEmail())
                 .accountName(userAccount.getAccountName())
                 .password(userAccount.getPassword())
-                .nickname(userAccount.getUserProfile().getNickname())
-                .profileImage(userAccount.getUserProfile().getProfileImage())
+                .userProfileValue(UserProfileValue.from(userAccount.getUserProfile()))
                 .accountStatus(userAccount.getAccountStatus())
                 .passwordStatus(userAccount.getPasswordStatus())
                 .authority(userAccount.getAuthority())
@@ -69,14 +65,13 @@ public class UserAccountEntity {
                 .build();
     }
 
-    public UserAccount toDomain() {
-        AccountInitialize initialize = AccountInitialize.builder()
-                .accountId(AccountId.of(this.accountId))
+    public UserAccount toModel() {
+        UserAccountInitialize initialize = UserAccountInitialize.builder()
+                .userAccountId(UserAccountId.of(this.userAccountId))
                 .email(this.email)
                 .accountName(this.accountName)
                 .password(this.password)
-                .nickname(this.nickname)
-                .profileImage(this.profileImage)
+                .userProfile(this.userProfileValue.to())
                 .accountStatus(this.accountStatus)
                 .passwordStatus(this.passwordStatus)
                 .authority(this.authority)

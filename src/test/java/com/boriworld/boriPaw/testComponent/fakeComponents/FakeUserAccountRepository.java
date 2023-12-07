@@ -1,9 +1,11 @@
 package com.boriworld.boriPaw.testComponent.fakeComponents;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.AccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.UserProfile;
+import com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence.UserProfileValue;
 
 import java.util.Map;
 import java.util.Optional;
@@ -18,14 +20,13 @@ public class FakeUserAccountRepository implements UserAccountRepository {
     public UserAccount save(UserAccount userAccount) {
 
         long incrementAndGet = SEQUENCE.incrementAndGet();
-
-        AccountInitialize accountInitialize = AccountInitialize.builder()
-                .accountId(AccountId.of(incrementAndGet))
+        UserProfile userProfile = UserProfile.of(userAccount.getUserProfile().getNickname(), userAccount.getUserProfile().getProfileImage());
+        UserAccountInitialize accountInitialize = UserAccountInitialize.builder()
+                .userAccountId(UserAccountId.of(incrementAndGet))
                 .email(userAccount.getEmail())
                 .accountName(userAccount.getAccountName())
                 .password(userAccount.getPassword())
-                .nickname(userAccount.getNickname())
-                .profileImage(userAccount.getProfileImage())
+                .userProfile(userProfile)
                 .accountStatus(userAccount.getAccountStatus())
                 .passwordStatus(userAccount.getPasswordStatus())
                 .authority(userAccount.getAuthority())
@@ -39,6 +40,8 @@ public class FakeUserAccountRepository implements UserAccountRepository {
 
         return initializedUserAccount;
     }
+
+
 
     @Override
     public boolean existsByEmail(String email) {
@@ -55,10 +58,10 @@ public class FakeUserAccountRepository implements UserAccountRepository {
     }
 
     @Override
-    public Optional<UserAccount> findById(AccountId accountId) {
+    public Optional<UserAccount> findById(UserAccountId userAccountId) {
         return store.values()
                 .stream()
-                .filter(data -> data.getAccountId().equals(accountId))
+                .filter(data -> data.getUserAccountId().equals(userAccountId))
                 .findFirst();
     }
 

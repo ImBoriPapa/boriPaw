@@ -3,7 +3,7 @@ package com.boriworld.boriPaw.userAccountService.command.infrastructure.persiste
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +17,7 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
 
     @Override
     public UserAccount save(UserAccount userAccount) {
-        return accountJpaRepository.save(UserAccountEntity.fromDomain(userAccount)).toDomain();
+        return accountJpaRepository.save(UserAccountEntity.fromModel(userAccount)).toModel();
     }
 
     @Override
@@ -31,9 +31,9 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
     }
 
     @Override
-    public Optional<UserAccount> findById(AccountId accountId) {
-        return accountJpaRepository.findById(accountId.getId())
-                .map(UserAccountEntity::toDomain);
+    public Optional<UserAccount> findById(UserAccountId userAccountId) {
+        return accountJpaRepository.findById(userAccountId.getId())
+                .map(UserAccountEntity::toModel);
     }
 
     @Override

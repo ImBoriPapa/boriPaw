@@ -3,7 +3,7 @@ package com.boriworld.boriPaw.userAccountService.command.domain.model;
 import com.boriworld.boriPaw.userAccountService.command.application.LoginFailException;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.AccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @Getter
 public final class UserAccount {
-    private final AccountId accountId;
+    private final UserAccountId userAccountId;
     private final String email;
     private final String accountName;
     private final String password;
@@ -29,8 +29,8 @@ public final class UserAccount {
     private final LocalDateTime lastLoginAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private UserAccount(AccountId accountId, String email, String accountName, String password, UserProfile userProfile, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
-        this.accountId = accountId;
+    private UserAccount(UserAccountId userAccountId, String email, String accountName, String password, UserProfile userProfile, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
+        this.userAccountId = userAccountId;
         this.email = email;
         this.accountName = accountName;
         this.password = password;
@@ -50,7 +50,7 @@ public final class UserAccount {
      * email -> 평문 저장
      * password -> AccountPasswordEncoder 를 사용해서 암호화
      * nickname -> 평문 저장
-     * AccountStatus -> 이메일 인증이 완료 전까지 PENDING
+     * AccountStatus -> 이메일 인증이 완료 전까지 PENDING -> 메일링 서비스 개발 전까지 ACTIVE
      * PasswordStatus -> STEADY(정상 상태)
      * Authority -> 최초 가입시 USER 권한
      * createdAt -> 계정 생성 시간
@@ -69,7 +69,7 @@ public final class UserAccount {
                 .accountName(userAccountCreate.accountName())
                 .password(userAccountPasswordEncoder.encode(userAccountCreate.password()))
                 .userProfile(profile)
-                .accountStatus(AccountStatus.PENDING)
+                .accountStatus(AccountStatus.ACTIVE)
                 .passwordStatus(PasswordStatus.STEADY)
                 .authority(Authority.USER)
                 .createdAt(LocalDateTime.now())
@@ -85,13 +85,13 @@ public final class UserAccount {
      * @param initialize
      * @return Account
      */
-    public static UserAccount initialize(AccountInitialize initialize) {
+    public static UserAccount initialize(UserAccountInitialize initialize) {
         return UserAccount.builder()
-                .accountId(initialize.accountId())
+                .userAccountId(initialize.userAccountId())
                 .email(initialize.email())
                 .accountName(initialize.accountName())
                 .password(initialize.password())
-                .userProfile(UserProfile.of(initialize.nickname(), initialize.profileImage()))
+                .userProfile(initialize.userProfile())
                 .accountStatus(initialize.accountStatus())
                 .passwordStatus(initialize.passwordStatus())
                 .authority(initialize.authority())
@@ -100,11 +100,11 @@ public final class UserAccount {
                 .build();
     }
 
-    public UserAccount login(final String password, UserAccountPasswordEncoder userAccountPasswordEncoder) {
+    public UserAccount updateLastLogin(final String password, UserAccountPasswordEncoder userAccountPasswordEncoder) {
         preventLoginByAccountStatus(this.accountStatus);
         checkPassword(password, userAccountPasswordEncoder);
         return UserAccount.builder()
-                .accountId(this.accountId)
+                .userAccountId(this.userAccountId)
                 .email(this.email)
                 .accountName(this.accountName)
                 .password(this.password)

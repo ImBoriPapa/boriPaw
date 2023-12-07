@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.testComponent.fakeComponents;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.event.AccountEvent;
-import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountEventPublisher;
+import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
 
 public class FakeUserAccountEventPublisher implements UserAccountEventPublisher {
     @Override

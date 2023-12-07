@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.userAccountService.command.domain.service;
+package com.boriworld.boriPaw.userAccountService.command.domain.event;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.event.AccountEvent;
 

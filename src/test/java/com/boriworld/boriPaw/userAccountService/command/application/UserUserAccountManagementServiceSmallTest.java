@@ -4,7 +4,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCr
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountStatus;
 import com.boriworld.boriPaw.userAccountService.command.exception.AlreadyUsedAccountNameException;
@@ -17,16 +17,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class UserAccountManagementServiceSmallTest {
+class UserUserAccountManagementServiceSmallTest {
 
-    private AccountManagementService accountManagementService;
+    private UserAccountManagementService userAccountManagementService;
     private UserAccountRepository userAccountRepository;
 
     @BeforeEach
     void beforeEach() {
         TestComponentContainer componentContainer = new TestComponentContainer();
         userAccountRepository = componentContainer.userAccountRepository;
-        accountManagementService = componentContainer.accountManagementService;
+        userAccountManagementService = componentContainer.userAccountManagementService;
         final String email = "duplicate@email.com";
         final String accountName = "duplicateName";
         final String password = "password1234";
@@ -44,7 +44,7 @@ class UserAccountManagementServiceSmallTest {
         //when
 
         //then
-        assertThatThrownBy(() -> accountManagementService.processUserAccountCreation(null))
+        assertThatThrownBy(() -> userAccountManagementService.processUserAccountCreation(null))
                 .isInstanceOf(CustomValidationFailException.class);
 
     }
@@ -60,7 +60,7 @@ class UserAccountManagementServiceSmallTest {
         UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
 
         //then
-        assertThatThrownBy(() -> accountManagementService.processUserAccountCreation(userAccountCreate))
+        assertThatThrownBy(() -> userAccountManagementService.processUserAccountCreation(userAccountCreate))
                 .isInstanceOf(CustomValidationFailException.class);
     }
 
@@ -75,7 +75,7 @@ class UserAccountManagementServiceSmallTest {
         //when
 
         //then
-        assertThatThrownBy(() -> accountManagementService.processUserAccountCreation(userAccountCreate))
+        assertThatThrownBy(() -> userAccountManagementService.processUserAccountCreation(userAccountCreate))
                 .isInstanceOf(AlreadyUsedEmailException.class);
     }
 
@@ -90,7 +90,7 @@ class UserAccountManagementServiceSmallTest {
         //when
 
         //then
-        assertThatThrownBy(() -> accountManagementService.processUserAccountCreation(userAccountCreate))
+        assertThatThrownBy(() -> userAccountManagementService.processUserAccountCreation(userAccountCreate))
                 .isInstanceOf(AlreadyUsedAccountNameException.class);
     }
 
@@ -104,10 +104,10 @@ class UserAccountManagementServiceSmallTest {
         final String nickname = "boriPapa";
         UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
         //when
-        AccountId accountId = accountManagementService.processUserAccountCreation(userAccountCreate);
-        UserAccount userAccount = userAccountRepository.findById(accountId).orElseThrow();
+        UserAccountId userAccountId = userAccountManagementService.processUserAccountCreation(userAccountCreate);
+        UserAccount userAccount = userAccountRepository.findById(userAccountId).orElseThrow();
         //then
-        assertThat(accountId.getId()).isEqualTo(2L);
+        assertThat(userAccountId.getId()).isEqualTo(2L);
         assertThat(userAccount.getAccountStatus()).isEqualTo(AccountStatus.PENDING);
     }
 

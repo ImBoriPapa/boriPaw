@@ -3,11 +3,11 @@ package com.boriworld.boriPaw.userAccountService.command.application;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.event.AccountCreateEvent;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountEventPublisher;
+import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountValidator;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AccountManagementServiceImpl implements AccountManagementService {
+public class UserAccountManagementServiceImpl implements UserAccountManagementService {
     private final UserAccountRepository userAccountRepository;
     private final UserAccountPasswordEncoder userAccountPasswordEncoder;
     private final UserAccountEventPublisher userAccountEventPublisher;
@@ -25,15 +25,15 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     private final UserAccountValidator userAccountValidator;
 
     @Transactional
-    public AccountId processUserAccountCreation(UserAccountCreate userAccountCreate) {
+    public UserAccountId processUserAccountCreation(UserAccountCreate userAccountCreate) {
         log.info("Start user account creation process.");
         validateRequestedData(userAccountCreate);
 
         UserAccount savedUserAccount = saveAccount(userAccountCreate);
 
         publishCreateEvent(savedUserAccount);
-        log.info("Finish user account creation process successfully. AccountId: {}", savedUserAccount.getAccountId().getId());
-        return savedUserAccount.getAccountId();
+        log.info("Finish user account creation process successfully. AccountId: {}", savedUserAccount.getUserAccountId().getId());
+        return savedUserAccount.getUserAccountId();
 
     }
 
@@ -50,7 +50,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     }
 
     private void publishCreateEvent(UserAccount savedUserAccount) {
-        userAccountEventPublisher.publish(new AccountCreateEvent(savedUserAccount.getAccountId(), savedUserAccount.getEmail()));
+        userAccountEventPublisher.publish(new AccountCreateEvent(savedUserAccount.getUserAccountId(), savedUserAccount.getEmail()));
     }
 }
 

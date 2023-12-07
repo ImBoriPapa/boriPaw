@@ -1,6 +1,8 @@
 package com.boriworld.boriPaw.userAccountService.command.domain.value;
 
+
 import lombok.Getter;
+
 
 @Getter
 public final class UserProfile {
