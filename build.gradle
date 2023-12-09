@@ -13,6 +13,7 @@ java {
 }
 
 configurations {
+    asciidoctorExtensions
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -48,20 +49,46 @@ dependencies {
     testImplementation 'org.testcontainers:mysql:1.16.0'
 	// Redis 의존성
     testImplementation "com.redis.testcontainers:testcontainers-redis-junit:1.6.4"
-	// Kafka 의존성
-    testImplementation("org.testcontainers:kafka:1.17.6")
+	//asi
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor:3.0.0'
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
 }
 
 tasks.named('bootBuildImage') {
     builder = 'paketobuildpacks/builder-jammy-base:latest'
 }
 
-tasks.named('test') {
-    outputs.dir snippetsDir
+bootJar {
+    dependsOn asciidoctor
+    copy {
+        from "${asciidoctor.outputDir}"
+        into 'BOOT-INF/classes/static/docs'
+    }
+}
+
+asciidoctor {
+    dependsOn test
+    inputs.dir snippetsDir
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+test {
     useJUnitPlatform()
 }
 
-tasks.named('asciidoctor') {
-    inputs.dir snippetsDir
-    dependsOn test
+build {
+    dependsOn copyDocument
 }
+
