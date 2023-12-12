@@ -4,8 +4,8 @@ package com.boriworld.boriPaw.userAccountService.command.exception;
 
 import org.springframework.security.core.AuthenticationException;
 
-public class AccessTokenAuthenticationException extends AuthenticationException {
-    public AccessTokenAuthenticationException(String msg) {
+public class AuthenticationTokenException extends AuthenticationException {
+    public AuthenticationTokenException(String msg) {
         super(msg);
     }
 }

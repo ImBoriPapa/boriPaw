@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.testComponent.fakeComponents;
+package com.boriworld.boriPaw.fakeTestComponent.fakeComponents;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.event.AccountEvent;
 import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;

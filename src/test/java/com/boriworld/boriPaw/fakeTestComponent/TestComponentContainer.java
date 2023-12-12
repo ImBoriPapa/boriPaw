@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.testComponent;
+package com.boriworld.boriPaw.fakeTestComponent;
 
 import com.boriworld.boriPaw.userAccountService.command.application.UserAccountManagementService;
 import com.boriworld.boriPaw.userAccountService.command.application.UserAccountManagementServiceImpl;
@@ -11,7 +11,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.service.EmailCert
 import com.boriworld.boriPaw.userAccountService.command.interfaces.AccountManagementController;
 import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
 import com.boriworld.boriPaw.common.validator.RequestConstraintValidatorImpl;
-import com.boriworld.boriPaw.testComponent.fakeComponents.*;
+import com.boriworld.boriPaw.fakeTestComponent.fakeComponents.*;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;

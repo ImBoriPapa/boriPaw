@@ -22,3 +22,7 @@ spring:
       host: localhost
       port: 6363
       database: 0 # Redis 데이터베이스 인덱스
+logging:
+  level:
+    root: trace
+

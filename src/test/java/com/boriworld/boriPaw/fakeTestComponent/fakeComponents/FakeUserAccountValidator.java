@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.testComponent.fakeComponents;
+package com.boriworld.boriPaw.fakeTestComponent.fakeComponents;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountValidator;

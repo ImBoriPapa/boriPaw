@@ -3,11 +3,8 @@ package com.boriworld.boriPaw.userAccountService.command.domain.model;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationTokenCredentials;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenPayloadEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenService;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.AccessTokenStatus;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.AuthenticationTokenType;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.RefreshTokenId;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
-import com.boriworld.boriPaw.userAccountService.command.exception.UserAccountMismatchException;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
+import lombok.Getter;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -16,6 +13,7 @@ import java.util.Map;
 /**
  * Domain Model
  */
+@Getter
 public final class RefreshToken {
     private final RefreshTokenId refreshTokenId;
     private final String token;
@@ -28,36 +26,45 @@ public final class RefreshToken {
     }
 
     public static RefreshToken create(UserAccount userAccount, AuthenticationTokenService service, AuthenticationTokenPayloadEncoder encoder) {
-        String generateToken = service.generateToken(createTokenCredentials(userAccount, getEncodedAuthority(userAccount, encoder)), AuthenticationTokenType.REFRESH_TOKEN);
+        UserAccountId userAccountId = userAccount.getUserAccountId();
+        String encodedAuthority = encoder.encode(userAccount.getAuthority().name());
+        AuthenticationTokenCredentials credentials = createTokenCredentials(userAccountId, encodedAuthority);
+        String generateToken = service.generateTokenString(credentials, AuthenticationTokenType.REFRESH_TOKEN);
         Instant expirationTime = service.getExpiredDate(generateToken).toInstant();
-        return new RefreshToken(RefreshTokenId.of(userAccount.getUserAccountId()), generateToken, calculateTimeToLive(expirationTime));
+        return new RefreshToken(RefreshTokenId.of(userAccountId), generateToken, calculateTimeToLive(expirationTime));
     }
 
-    private static AuthenticationTokenCredentials createTokenCredentials(UserAccount userAccount, String encodeAuthority) {
-        return new AuthenticationTokenCredentials(userAccount.getUserAccountId(), Map.of("authority", encodeAuthority));
+    private static AuthenticationTokenCredentials createTokenCredentials(UserAccountId userAccountId, String encodedAuthority) {
+        return new AuthenticationTokenCredentials(userAccountId.getId().toString(), Map.of("authority", encodedAuthority));
     }
 
-    private static String getEncodedAuthority(UserAccount userAccount, AuthenticationTokenPayloadEncoder encoder) {
-        return encoder.encode(userAccount.getAuthority().name());
+    public RefreshToken reissue(AuthenticationTokenService tokenService, AuthenticationTokenPayloadEncoder encoder) {
+        AuthenticationTokenStatus authenticationTokenStatus = tokenService.validateToken(this.token);
+
+        if (authenticationTokenStatus != AuthenticationTokenStatus.ACCESS) {
+            authenticationTokenStatus.throwAccessTokenErrorException();
+        }
+
+        UserAccountId userAccountId = UserAccountId.of(Long.parseLong(tokenService.getSubject(this.token)));
+        String encodedAuthority = tokenService.getClaim(this.token, "authority").toString();
+        AuthenticationTokenCredentials tokenCredentials = createTokenCredentials(userAccountId, encodedAuthority);
+
+        String generateToken = tokenService.generateTokenString(tokenCredentials, AuthenticationTokenType.REFRESH_TOKEN);
+        Instant expirationTime = tokenService.getExpiredDate(generateToken).toInstant();
+
+        return new RefreshToken(RefreshTokenId.of(userAccountId), generateToken, calculateTimeToLive(expirationTime));
     }
+
+    public static RefreshToken fromTokenString(final String tokenString, AuthenticationTokenService service) {
+        UserAccountId userAccountId = UserAccountId.of(Long.parseLong(service.getSubject(tokenString)));
+        long calculateTimeToLive = calculateTimeToLive(service.getExpiredDate(tokenString).toInstant());
+        return new RefreshToken(RefreshTokenId.of(userAccountId), tokenString, calculateTimeToLive);
+    }
+
 
     private static long calculateTimeToLive(Instant expirationTime) {
         return Duration.between(Instant.now(), expirationTime).toMillis();
     }
 
 
-    public RefreshToken reissue(String tokenString, UserAccount userAccount, AuthenticationTokenService authenticationTokenService, AuthenticationTokenPayloadEncoder authenticationTokenPayloadEncoder) {
-        AccessTokenStatus accessTokenStatus = authenticationTokenService.validateToken(tokenString);
-
-        if (accessTokenStatus != AccessTokenStatus.ACCESS) {
-            accessTokenStatus.throwAccessTokenErrorException();
-        }
-
-        UserAccountId userAccountId = UserAccountId.of(Long.parseLong(authenticationTokenService.getSubject(tokenString)));
-        if (!userAccount.getUserAccountId().equals(userAccountId)) {
-            throw new UserAccountMismatchException("토큰이 사용자 계정과 일치하지 않습니다");
-        }
-
-        return create(userAccount, authenticationTokenService, authenticationTokenPayloadEncoder);
-    }
 }

@@ -27,4 +27,9 @@ public class SecurityContextManagerImpl implements SecurityContextManager {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
     }
+
+    @Override
+    public Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
 }

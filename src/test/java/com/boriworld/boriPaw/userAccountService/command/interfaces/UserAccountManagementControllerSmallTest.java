@@ -2,7 +2,7 @@ package com.boriworld.boriPaw.userAccountService.command.interfaces;
 
 import com.boriworld.boriPaw.userAccountService.command.interfaces.request.AccountCreateRequest;
 import com.boriworld.boriPaw.userAccountService.command.interfaces.response.AccountCreateResponse;
-import com.boriworld.boriPaw.testComponent.TestComponentContainer;
+import com.boriworld.boriPaw.fakeTestComponent.TestComponentContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;
