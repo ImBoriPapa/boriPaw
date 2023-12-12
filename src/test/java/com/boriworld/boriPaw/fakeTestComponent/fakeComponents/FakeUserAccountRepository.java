@@ -1,11 +1,10 @@
-package com.boriworld.boriPaw.testComponent.fakeComponents;
+package com.boriworld.boriPaw.fakeTestComponent.fakeComponents;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserProfile;
-import com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence.UserProfileValue;
 
 import java.util.Map;
 import java.util.Optional;

@@ -10,7 +10,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountStat
 import com.boriworld.boriPaw.userAccountService.command.exception.AlreadyUsedAccountNameException;
 import com.boriworld.boriPaw.userAccountService.command.exception.AlreadyUsedEmailException;
 import com.boriworld.boriPaw.common.validator.CustomValidationFailException;
-import com.boriworld.boriPaw.testComponent.TestComponentContainer;
+import com.boriworld.boriPaw.fakeTestComponent.TestComponentContainer;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.junit.jupiter.api.Test;

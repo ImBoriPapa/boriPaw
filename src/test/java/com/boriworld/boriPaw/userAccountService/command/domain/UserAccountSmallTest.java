@@ -5,7 +5,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountIn
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
-import com.boriworld.boriPaw.testComponent.fakeComponents.FakeUserAccountPasswordEncoder;
+import com.boriworld.boriPaw.fakeTestComponent.fakeComponents.FakeUserAccountPasswordEncoder;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

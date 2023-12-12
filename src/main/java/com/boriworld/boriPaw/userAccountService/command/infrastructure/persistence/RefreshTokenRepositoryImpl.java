@@ -17,7 +17,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     }
 
     @Override
-    public Optional<RefreshToken> findById(RefreshTokenId refreshTokenId) {
+    public Optional<RefreshToken> findRefreshTokenId(RefreshTokenId refreshTokenId) {
         return Optional.empty();
     }
 }
