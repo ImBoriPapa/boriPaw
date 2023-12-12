@@ -23,14 +23,16 @@ public final class CipherAuthenticationTokenPayloadEncoder implements Authentica
     private final EncodeAlgorithm algorithm; // 암호화 및 해독에 사용될 알고리즘
     private final SecretKey secretKey; // 암호화 및 해독에 사용될 비밀키
     private final IvParameterSpec ivParameterSpec; //initialization Vector
+    private final Cipher cipher;
 
     private CipherAuthenticationTokenPayloadEncoder(Builder builder) {
-        Objects.requireNonNull(builder.encodeAlgorithm); // EncodeAlgorithm 를 최우선 null 확인 필요합니다.
-        Objects.requireNonNull(builder.secretKey);
-        Objects.requireNonNull(builder.initializationVector);
+        Objects.requireNonNull(builder.encodeAlgorithm, "EncodeAlgorithm must not null"); // EncodeAlgorithm 를 최우선 null 확인 필요합니다.
+        Objects.requireNonNull(builder.secretKey, "secretKey must not null");
+        Objects.requireNonNull(builder.initializationVector, "initializationVector must not null");
         this.algorithm = setAlgorithm(builder.encodeAlgorithm);
-        this.secretKey = setSecreteKey(builder.secretKey);
+        this.secretKey = setSecretKey(builder.secretKey);
         this.ivParameterSpec = new IvParameterSpec(setInitializationVector(builder.initializationVector));
+        this.cipher = getInstance();
     }
 
     public static Builder builder() {
@@ -41,9 +43,9 @@ public final class CipherAuthenticationTokenPayloadEncoder implements Authentica
         return encodeAlgorithm;
     }
 
-    private SecretKey setSecreteKey(String key) {
+    private SecretKey setSecretKey(String key) {
         if (key.length() < algorithm.secretKeyLength()) {
-            throw new AuthenticationTokenPayloadEncoderException("secrete key length must longer then 32");
+            throw new AuthenticationTokenPayloadEncoderException("secrete key length must longer then " + algorithm.secretKeyLength());
         }
         return new SecretKeySpec(key.substring(0, algorithm.secretKeyLength()).getBytes(algorithm.charsets()), this.algorithm.algorithm());
     }
@@ -51,7 +53,7 @@ public final class CipherAuthenticationTokenPayloadEncoder implements Authentica
     private byte[] setInitializationVector(String iv) {
 
         if (iv.length() < algorithm.ivLength()) {
-            throw new AuthenticationTokenPayloadEncoderException("initialization Vector length must longer then 32");
+            throw new AuthenticationTokenPayloadEncoderException("initialization Vector length must longer then " + algorithm.ivLength());
         }
 
         return iv.substring(0, algorithm.ivLength()).getBytes(algorithm.charsets());
@@ -59,7 +61,6 @@ public final class CipherAuthenticationTokenPayloadEncoder implements Authentica
 
     @Override
     public String encode(String payloadValue) {
-        Cipher cipher = getInstance();
         selectMode(cipher, Cipher.ENCRYPT_MODE);
         byte[] encrypted = getEncrypted(payloadValue, cipher);
         return Base64.getEncoder().encodeToString(encrypted);
@@ -68,7 +69,6 @@ public final class CipherAuthenticationTokenPayloadEncoder implements Authentica
 
     @Override
     public String decode(String payloadValue) {
-        Cipher cipher = getInstance();
         selectMode(cipher, Cipher.DECRYPT_MODE);
         byte[] decoded = getDecoded(payloadValue, cipher);
         return new String(decoded, StandardCharsets.UTF_8);
