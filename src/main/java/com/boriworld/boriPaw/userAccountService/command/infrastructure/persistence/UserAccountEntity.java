@@ -19,11 +19,10 @@ public class UserAccountEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userAccountId;
     private String email;
-    private String accountName;
+    private String userName;
     private String password;
     @Embedded
     private UserProfileValue userProfileValue;
-
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
     @Enumerated(EnumType.STRING)
@@ -35,10 +34,10 @@ public class UserAccountEntity {
     private LocalDateTime lastLoginAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    protected UserAccountEntity(Long userAccountId, String email, String accountName, String password, UserProfileValue userProfileValue, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
+    protected UserAccountEntity(Long userAccountId, String email, String userName, String password, UserProfileValue userProfileValue, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
         this.userAccountId = userAccountId;
         this.email = email;
-        this.accountName = accountName;
+        this.userName = userName;
         this.password = password;
         this.userProfileValue = userProfileValue;
         this.accountStatus = accountStatus;
@@ -53,7 +52,7 @@ public class UserAccountEntity {
         return UserAccountEntity.builder()
                 .userAccountId(userAccount.getUserAccountId() == null ? null : userAccount.getUserAccountId().getId())
                 .email(userAccount.getEmail())
-                .accountName(userAccount.getAccountName())
+                .userName(userAccount.getUserName())
                 .password(userAccount.getPassword())
                 .userProfileValue(UserProfileValue.from(userAccount.getUserProfile()))
                 .accountStatus(userAccount.getAccountStatus())
@@ -69,7 +68,7 @@ public class UserAccountEntity {
         UserAccountInitialize initialize = UserAccountInitialize.builder()
                 .userAccountId(UserAccountId.of(this.userAccountId))
                 .email(this.email)
-                .accountName(this.accountName)
+                .userName(this.userName)
                 .password(this.password)
                 .userProfile(this.userProfileValue.to())
                 .accountStatus(this.accountStatus)

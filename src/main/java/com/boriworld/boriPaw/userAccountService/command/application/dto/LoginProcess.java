@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.application.dto;
 
-public record LoginProcessRequest(
+public record LoginProcess(
         String email,
         String password
 ) {

@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.userAccountService.command.domain.dto;
+package com.boriworld.boriPaw.userAccountService.command.domain.useCase;
 
 
 import jakarta.validation.constraints.Email;
@@ -9,7 +9,7 @@ public record UserAccountCreate(
         @Email(message = "올바른 이메일 형식이어야 합니다.")
         String email,
         @NotBlank(message = "계정 이름은 비어있을 수 없습니다.")
-        String accountName,
+        String userName,
         @Size(min = 8, message = "비밀번호는 최소 8자 이상이어야 합니다.")
         String password,
         @NotBlank(message = "별명은 비어있을 수 없습니다.")

@@ -3,7 +3,7 @@ package com.boriworld.boriPaw.userAccountService.command.infrastructure.persiste
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.fakeTestComponent.fakeComponents.FakeUserAccountPasswordEncoder;
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.testContainer.testcontainer.MySQLTestContainerRunner;
 import org.junit.jupiter.api.Test;

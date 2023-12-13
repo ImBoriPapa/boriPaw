@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.application;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;

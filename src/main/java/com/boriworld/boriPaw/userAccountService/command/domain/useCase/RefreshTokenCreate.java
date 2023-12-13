@@ -1,10 +1,17 @@
-package com.boriworld.boriPaw.userAccountService.command.domain.dto;
+package com.boriworld.boriPaw.userAccountService.command.domain.useCase;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 
-public record AccessTokenCreate(
+/**
+ * UseCase
+ * @param userAccountId
+ * @param authority
+ */
+public record RefreshTokenCreate(
         UserAccountId userAccountId,
         Authority authority
-) {
+        ) {
+
+
 }

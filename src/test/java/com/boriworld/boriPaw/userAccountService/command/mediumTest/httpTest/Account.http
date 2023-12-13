@@ -1,9 +1,0 @@
-POST localhost:8080/accounts
-Content-Type: application/json
-
-{
-  "email": "duplicate@email.com",
-  "accountName": "duplicateName",
-  "password": "password1234",
-  "nickname": "boriPapa"
-}

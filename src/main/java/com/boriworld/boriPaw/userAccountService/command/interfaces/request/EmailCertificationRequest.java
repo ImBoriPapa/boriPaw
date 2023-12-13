@@ -1,5 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.interfaces.request;
 
+import com.boriworld.boriPaw.userAccountService.command.application.dto.EmailCertification;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

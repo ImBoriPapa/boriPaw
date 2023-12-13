@@ -2,7 +2,7 @@ package com.boriworld.boriPaw.userAccountService.command.domain.model;
 
 import com.boriworld.boriPaw.userAccountService.command.application.LoginFailException;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import lombok.AccessLevel;
@@ -18,7 +18,7 @@ import java.util.Objects;
 public final class UserAccount {
     private final UserAccountId userAccountId;
     private final String email;
-    private final String accountName;
+    private final String userName;
     private final String password;
     private final UserProfile userProfile;
     private final AccountStatus accountStatus;
@@ -29,10 +29,10 @@ public final class UserAccount {
     private final LocalDateTime lastLoginAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private UserAccount(UserAccountId userAccountId, String email, String accountName, String password, UserProfile userProfile, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
+    private UserAccount(UserAccountId userAccountId, String email, String userName, String password, UserProfile userProfile, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
         this.userAccountId = userAccountId;
         this.email = email;
-        this.accountName = accountName;
+        this.userName = userName;
         this.password = password;
         this.userProfile = userProfile;
         this.accountStatus = accountStatus;
@@ -66,7 +66,7 @@ public final class UserAccount {
         UserProfile profile = UserProfile.of(userAccountCreate.nickname(), null);
         return UserAccount.builder()
                 .email(userAccountCreate.email())
-                .accountName(userAccountCreate.accountName())
+                .userName(userAccountCreate.userName())
                 .password(userAccountPasswordEncoder.encode(userAccountCreate.password()))
                 .userProfile(profile)
                 .accountStatus(AccountStatus.ACTIVE)
@@ -89,7 +89,7 @@ public final class UserAccount {
         return UserAccount.builder()
                 .userAccountId(initialize.userAccountId())
                 .email(initialize.email())
-                .accountName(initialize.accountName())
+                .userName(initialize.userName())
                 .password(initialize.password())
                 .userProfile(initialize.userProfile())
                 .accountStatus(initialize.accountStatus())
@@ -106,7 +106,7 @@ public final class UserAccount {
         return UserAccount.builder()
                 .userAccountId(this.userAccountId)
                 .email(this.email)
-                .accountName(this.accountName)
+                .userName(this.userName)
                 .password(this.password)
                 .userProfile(this.userProfile)
                 .accountStatus(this.accountStatus)
@@ -119,7 +119,7 @@ public final class UserAccount {
     }
 
     private void checkPassword(String password, UserAccountPasswordEncoder userAccountPasswordEncoder) {
-        if (userAccountPasswordEncoder.isMatch(this.password, password)) {
+        if (!userAccountPasswordEncoder.isMatch(password, this.password)) {
             throw new LoginFailException("잘못된 이메일 혹은 잘못된 비밀번호입니다.");
         }
     }

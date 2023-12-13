@@ -1,17 +1,18 @@
 package com.boriworld.boriPaw.userAccountService.command.application;
 
 
-import com.boriworld.boriPaw.userAccountService.command.application.dto.LoginProcessRequest;
+import com.boriworld.boriPaw.userAccountService.command.application.dto.LoginProcess;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.AccessTokenCreate;
-import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.userAccountService.command.domain.model.AuthenticationToken;
+import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.AccessTokenCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationToken;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.*;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.RefreshTokenRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.*;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.value.AccessToken;
-import com.boriworld.boriPaw.userAccountService.command.domain.model.RefreshToken;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.AccessTokenReissue;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.RefreshTokenCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,40 +28,43 @@ public class UserAccountAuthenticationService {
     private final AuthenticationTokenService authenticationTokenService;
     private final AuthenticationTokenPayloadEncoder authenticationTokenPayloadEncoder;
     private final SecurityContextManager securityContextManager;
+    private final UserAccountEventPublisher eventPublisher;
 
     @Transactional
-    public AuthenticationToken processLogin(LoginProcessRequest loginProcessRequest) {
+    public AuthenticationToken processLogin(LoginProcess loginProcess) {
         log.info("login process");
-        UserAccount userAccount = userAccountRepository.findByEmail(loginProcessRequest.email())
+        UserAccount userAccount = userAccountRepository.findByEmail(loginProcess.email())
                 .orElseThrow(() -> new LoginFailException("이메일을 확인을 해봐요"))
-                .updateLastLogin(loginProcessRequest.password(), userAccountPasswordEncoder);
+                .updateLastLogin(loginProcess.password(), userAccountPasswordEncoder);
 
         AccessTokenCreate accessTokenCreate = new AccessTokenCreate(userAccount.getUserAccountId(), userAccount.getAuthority());
+        AccessToken accessToken = AccessToken.createFrom(accessTokenCreate, authenticationTokenService, authenticationTokenPayloadEncoder);
 
-        AccessToken accessToken = AccessToken.from(accessTokenCreate, authenticationTokenService, authenticationTokenPayloadEncoder);
-
-        RefreshToken refreshToken = RefreshToken.create(userAccount, authenticationTokenService, authenticationTokenPayloadEncoder);
+        RefreshToken refreshToken = RefreshToken.createFrom(
+                new RefreshTokenCreate(userAccount.getUserAccountId(), userAccount.getAuthority()), authenticationTokenService,
+                authenticationTokenPayloadEncoder);
         refreshTokenRepository.save(refreshToken);
-
         return new AuthenticationToken(accessToken, refreshToken);
     }
 
     @Transactional
     public AuthenticationToken processReissueToken(final String refreshToken) {
-        RefreshToken refreshTokenFromString = RefreshToken.fromTokenString(refreshToken, authenticationTokenService);
+        RefreshToken refreshTokenFromString = RefreshToken.createFromTokenString(refreshToken, authenticationTokenService);
         RefreshToken reissuedRefreshToken = refreshTokenRepository.findRefreshTokenId(refreshTokenFromString.getRefreshTokenId())
                 .orElseThrow()
                 .reissue(authenticationTokenService, authenticationTokenPayloadEncoder);
 
         refreshTokenRepository.save(reissuedRefreshToken);
-
-        return new AuthenticationToken(AccessToken.reissueFromRefresh(reissuedRefreshToken), reissuedRefreshToken);
+        AccessTokenReissue accessTokenReissue = new AccessTokenReissue();
+        return new AuthenticationToken(AccessToken.reissueFromRefresh(accessTokenReissue), reissuedRefreshToken);
     }
 
-    public void processAuthenticationByAccessToken(String token) {
-        AccessToken accessToken = AccessToken.createFromTokenString(token);
-        accessToken.processingAuthentication(authenticationTokenService, authenticationTokenPayloadEncoder, securityContextManager);
+    @Transactional
+    public void processLogout(Long userAccountId) {
+
     }
 
-
+    public void processAuthenticationByAccessToken(final String tokenString) {
+        AccessToken.processingAuthenticationFromTokenString(tokenString, authenticationTokenService, authenticationTokenPayloadEncoder, securityContextManager);
+    }
 }

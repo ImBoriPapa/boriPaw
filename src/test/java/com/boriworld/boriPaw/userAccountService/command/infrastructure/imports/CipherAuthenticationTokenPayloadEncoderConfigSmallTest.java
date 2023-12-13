@@ -1,13 +1,13 @@
 package com.boriworld.boriPaw.userAccountService.command.infrastructure.imports;
 
+import com.boriworld.boriPaw.common.constant.EncodeAlgorithm;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenPayloadEncoder;
-import lombok.Builder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class CipherAuthenticationTokenPayloadEncoderConfigSmallTest {
+class CipherAuthenticationTokenPayloadEncoderConfigSmallTest{
     @Test
     @DisplayName("EncodeAlgorithm null: NullPointException")
     void test1() throws Exception {

@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.userAccountService.command.infrastructure.imports;
+package com.boriworld.boriPaw.common.constant;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

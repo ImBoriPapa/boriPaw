@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public record UserAccountInitialize(
         UserAccountId userAccountId,
         String email,
-        String accountName,
+        String userName,
         String password,
         UserProfile userProfile,
         AccountStatus accountStatus,

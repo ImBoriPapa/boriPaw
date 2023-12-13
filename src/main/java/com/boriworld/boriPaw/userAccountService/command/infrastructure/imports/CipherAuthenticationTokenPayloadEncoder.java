@@ -1,6 +1,9 @@
 package com.boriworld.boriPaw.userAccountService.command.infrastructure.imports;
 
+
+import com.boriworld.boriPaw.common.constant.EncodeAlgorithm;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenPayloadEncoder;
+
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -11,6 +14,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Objects;
+
 
 /**
  * Cipher 를 이용한 String payload 를 암호화 및 해독
@@ -59,7 +63,7 @@ public final class CipherAuthenticationTokenPayloadEncoder implements Authentica
         return iv.substring(0, algorithm.ivLength()).getBytes(algorithm.charsets());
     }
 
-    @Override
+
     public String encode(String payloadValue) {
         selectMode(cipher, Cipher.ENCRYPT_MODE);
         byte[] encrypted = getEncrypted(payloadValue, cipher);
@@ -67,7 +71,7 @@ public final class CipherAuthenticationTokenPayloadEncoder implements Authentica
 
     }
 
-    @Override
+
     public String decode(String payloadValue) {
         selectMode(cipher, Cipher.DECRYPT_MODE);
         byte[] decoded = getDecoded(payloadValue, cipher);
@@ -137,5 +141,4 @@ public final class CipherAuthenticationTokenPayloadEncoder implements Authentica
             return new CipherAuthenticationTokenPayloadEncoder(this);
         }
     }
-
 }

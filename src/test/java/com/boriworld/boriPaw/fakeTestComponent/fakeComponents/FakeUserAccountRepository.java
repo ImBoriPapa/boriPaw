@@ -23,7 +23,7 @@ public class FakeUserAccountRepository implements UserAccountRepository {
         UserAccountInitialize accountInitialize = UserAccountInitialize.builder()
                 .userAccountId(UserAccountId.of(incrementAndGet))
                 .email(userAccount.getEmail())
-                .accountName(userAccount.getAccountName())
+                .userName(userAccount.getUserName())
                 .password(userAccount.getPassword())
                 .userProfile(userProfile)
                 .accountStatus(userAccount.getAccountStatus())
@@ -50,10 +50,10 @@ public class FakeUserAccountRepository implements UserAccountRepository {
     }
 
     @Override
-    public boolean existsByAccountName(String accountName) {
+    public boolean existsByUserName(String accountName) {
         return store.values()
                 .stream()
-                .anyMatch(account -> account.getAccountName().equals(accountName));
+                .anyMatch(account -> account.getUserName().equals(accountName));
     }
 
     @Override

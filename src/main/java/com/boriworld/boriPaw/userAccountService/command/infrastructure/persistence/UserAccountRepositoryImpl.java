@@ -26,8 +26,8 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
     }
 
     @Override
-    public boolean existsByAccountName(String accountName) {
-        return accountJpaRepository.existsByAccountName(accountName);
+    public boolean existsByUserName(String accountName) {
+        return accountJpaRepository.existsByUserName(accountName);
     }
 
     @Override
@@ -38,6 +38,6 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
 
     @Override
     public Optional<UserAccount> findByEmail(String email) {
-        return Optional.empty();
+        return accountJpaRepository.findByEmail(email).map(UserAccountEntity::toModel);
     }
 }

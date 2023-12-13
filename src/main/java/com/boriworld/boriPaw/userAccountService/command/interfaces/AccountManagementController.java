@@ -3,8 +3,8 @@ package com.boriworld.boriPaw.userAccountService.command.interfaces;
 import com.boriworld.boriPaw.userAccountService.command.application.UserAccountManagementService;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
-import com.boriworld.boriPaw.userAccountService.command.interfaces.request.AccountCreateRequest;
-import com.boriworld.boriPaw.userAccountService.command.interfaces.response.AccountCreateResponse;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.request.UserAccountCreateRequest;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.response.UserAccountCreateResponse;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,14 +22,13 @@ import static com.boriworld.boriPaw.common.constant.ApiEndpoints.ACCOUNTS_ROOT_P
 @Slf4j
 public class AccountManagementController {
     private final UserAccountManagementService userAccountManagementService;
-
     @PostMapping(ACCOUNTS_ROOT_PATH)
-    public ResponseEntity<AccountCreateResponse> createAccount(@RequestBody AccountCreateRequest accountCreateRequest) {
+    public ResponseEntity<UserAccountCreateResponse> createAccount(@RequestBody UserAccountCreateRequest userAccountCreateRequest) {
         log.info("Account create Request");
-        UserAccountId userAccountId = userAccountManagementService.processUserAccountCreation(accountCreateRequest.toAccountCreate());
+        UserAccountId userAccountId = userAccountManagementService.processUserAccountCreation(userAccountCreateRequest.toAccountCreate());
 
         return ResponseEntity
                 .created(URI.create("/accounts/" + userAccountId.getId()))
-                .body(new AccountCreateResponse(userAccountId.getId()));
+                .body(new UserAccountCreateResponse(userAccountId.getId()));
     }
 }

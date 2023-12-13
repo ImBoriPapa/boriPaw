@@ -24,11 +24,11 @@ public class UserAccountValidatorImpl implements UserAccountValidator {
     }
 
     @Override
-    public void validateDuplicateAccountName(String accountName) {
-        boolean exists = userAccountRepository.existsByAccountName(accountName);
+    public void validateDuplicateUserName(String username) {
+        boolean exists = userAccountRepository.existsByUserName(username);
 
         if (exists) {
-            throw new AlreadyUsedAccountNameException("이미 사용중인 계정명입니다.");
+            throw new AlreadyUsedAccountNameException("이미 사용중인 유저명입니다.");
         }
     }
 }

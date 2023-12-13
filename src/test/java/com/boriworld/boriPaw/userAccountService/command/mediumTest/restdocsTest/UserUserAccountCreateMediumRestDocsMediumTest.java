@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.mediumTest.restdocsTest;
 
-import com.boriworld.boriPaw.userAccountService.command.interfaces.request.AccountCreateRequest;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.request.UserAccountCreateRequest;
 
 import com.boriworld.boriPaw.common.constant.ApiEndpoints;
 import com.boriworld.boriPaw.testContainer.testcontainer.RestDocsMediumTest;
@@ -26,7 +26,7 @@ public class UserUserAccountCreateMediumRestDocsMediumTest extends RestDocsMediu
     @DisplayName("회원 생성 통합 테스트: 회원 생성 요청 성공 통합 테스트")
     void 회원생성_요청_성공() throws Exception {
         //given
-        AccountCreateRequest request = new AccountCreateRequest("email@email.com", "sampleName", "password1234!@", "nickname");
+        UserAccountCreateRequest request = new UserAccountCreateRequest("email@email.com", "sampleName", "password1234!@", "nickname");
 
         String path = ApiEndpoints.ACCOUNTS_ROOT_PATH;
         //when

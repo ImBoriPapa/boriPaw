@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.domain;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
@@ -58,7 +58,7 @@ class UserAccountSmallTest {
         //then
         assertThat(userAccount.getUserAccountId()).isNull();
         assertThat(userAccount.getEmail()).isEqualTo(email);
-        assertThat(userAccount.getAccountName()).isEqualTo(accountName);
+        assertThat(userAccount.getUserName()).isEqualTo(accountName);
         assertThat(userAccount.getPassword()).isNotEqualTo(password);
         assertThat(userAccount.getUserProfile().getNickname()).isEqualTo(nickname);
         assertThat(userAccount.getUserProfile().getProfileImage()).isNull();
@@ -74,7 +74,7 @@ class UserAccountSmallTest {
         //given
         final UserAccountId userAccountId = UserAccountId.of(123L);
         final String email = "boriPapa@gmail.com";
-        final String accountName = "accountName";
+        final String accountName = "username";
         final String password = "password1234!@";
         final String nickname = "boriPapa";
         final String profileImage = "imageurl";
@@ -89,7 +89,7 @@ class UserAccountSmallTest {
         UserAccountInitialize initialize = UserAccountInitialize.builder()
                 .userAccountId(userAccountId)
                 .email(email)
-                .accountName(accountName)
+                .userName(accountName)
                 .password(password)
                 .userProfile(userProfile)
                 .accountStatus(accountStatus)

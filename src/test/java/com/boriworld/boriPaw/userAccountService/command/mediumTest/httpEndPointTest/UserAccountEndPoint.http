@@ -1,0 +1,27 @@
+POST localhost:8080/api/userAccounts
+Content-Type: application/json
+
+{
+  "email": "duplicate@email.com",
+  "username": "duplicateName",
+  "password": "password1234",
+  "nickname": "boriPapa"
+}
+
+### Login
+POST localhost:8080/api/login
+Content-Type: application/json
+
+{
+  "email": "duplicate@email.com",
+  "password" : "password1234"
+
+}
+
+### Reissue
+POST localhost:8080/api/reissue
+Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzAyNDc4NDMzLCJleHAiOjE3MDMwODMyMzN9.zgXo4KR62hEyHwyjdoAnVnc2lcUfkfgWRyYjdz2Ekc8_5QbhtRwWFG3ZJnxps3O_db50slS_dFHNsntVUnB8-g; Path=/; Max-Age=604799; Expires=Wed, 20 Dec 2023 14:40:33 GMT; Secure; HttpOnly; SameSite=None
+
+
+### Logout
+POST localhost:8080/api/logout/1

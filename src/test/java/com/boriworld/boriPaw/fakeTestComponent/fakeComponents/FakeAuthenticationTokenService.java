@@ -8,34 +8,30 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 
 public class FakeAuthenticationTokenService implements AuthenticationTokenService {
     private final String FAKE_SECRETE_KEY = "fakefakefakefakefakefakefakefakefakefakefakefakefake";
-    private final int ACCESS_TOKEN_LIFE;
-    private final int REFRESH_TOKEN_LIFE;
+    private final long ACCESS_TOKEN_LIFE_MILLI_SECOND;
+    private final long REFRESH_TOKEN_LIFE_MILLI_SECOND;
     private final Key key = Keys.hmacShaKeyFor(Base64.getEncoder().encodeToString(FAKE_SECRETE_KEY.getBytes()).getBytes());
 
-    public FakeAuthenticationTokenService(int ACCESS_TOKEN_LIFE, int REFRESH_TOKEN_LIFE) {
-        this.ACCESS_TOKEN_LIFE = ACCESS_TOKEN_LIFE;
-        this.REFRESH_TOKEN_LIFE = REFRESH_TOKEN_LIFE;
+    public FakeAuthenticationTokenService(long accessTokenLifeMilliSecond, long refreshTokenLifeMillieSecond) {
+        this.ACCESS_TOKEN_LIFE_MILLI_SECOND = accessTokenLifeMilliSecond;
+        this.REFRESH_TOKEN_LIFE_MILLI_SECOND = refreshTokenLifeMillieSecond;
     }
 
     @Override
-    public String generateTokenString(AuthenticationTokenCredentials authenticationTokenCredentials, AuthenticationTokenType tokenType) {
+    public String generateTokenString(AuthenticationTokenCredentials credentials, AuthenticationTokenType type) {
         final Date nowDate = new Date(System.currentTimeMillis());
-
-        long life = tokenType == AuthenticationTokenType.ACCESS_TOKEN ? ACCESS_TOKEN_LIFE : REFRESH_TOKEN_LIFE;
-
-        final Date expiryDate = new Date(nowDate.getTime() + TimeUnit.SECONDS.toMillis(life));
+        long expiration = type == AuthenticationTokenType.ACCESS_TOKEN ? ACCESS_TOKEN_LIFE_MILLI_SECOND : REFRESH_TOKEN_LIFE_MILLI_SECOND;
         return Jwts.builder()
-                .setClaims(authenticationTokenCredentials.claims())
-                .setSubject(authenticationTokenCredentials.subject())
-                .setIssuedAt(nowDate)
-                .setExpiration(expiryDate)
+                .setClaims(credentials.claims())
+                .setSubject(credentials.subject())
+                .setIssuedAt(Date.from(Instant.now()))
+                .setExpiration(new Date(nowDate.getTime() + expiration))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -69,14 +65,16 @@ public class FakeAuthenticationTokenService implements AuthenticationTokenServic
     }
 
     @Override
-    public Object getClaim(String token, String key) {
-        return getParesClaims(token)
+    public Object getClaim(String tokenString, String key) {
+        return getParesClaims(tokenString)
                 .getBody()
                 .get(key);
     }
 
     @Override
-    public Date getExpiredDate(String generateToken) {
-        return null;
+    public Date getExpiredDate(String tokenString) {
+        return getParesClaims(tokenString)
+                .getBody()
+                .getExpiration();
     }
 }

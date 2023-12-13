@@ -20,8 +20,8 @@ public class FakeUserAccountValidator implements UserAccountValidator {
     }
 
     @Override
-    public void validateDuplicateAccountName(String accountName) {
-        if (userAccountRepository.existsByAccountName(accountName)) {
+    public void validateDuplicateUserName(String accountName) {
+        if (userAccountRepository.existsByUserName(accountName)) {
             throw new AlreadyUsedAccountNameException(accountName);
         }
     }

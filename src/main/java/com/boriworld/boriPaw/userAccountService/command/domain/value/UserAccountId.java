@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(of = "id")
 public final class UserAccountId {
     private final Long id;
-
     private UserAccountId(Long id) {
         this.id = id;
     }

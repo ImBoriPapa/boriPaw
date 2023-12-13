@@ -1,1 +1,34 @@
+spring:
+  config:
+    activate:
+      on-profile: local
 
+  datasource:
+    url: jdbc:mysql://localhost:3367/local_db
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      idle-timeout: 30000
+      pool-name: Hikari-Pool
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6364
+      database: 0
+
+secrete:
+  secrete_key: "fsafnslkdasdkladmkgpeiakmggsdklkgewmkglsgiwwlgwefds"
+  accessTokenLifeMillieSeconds: 600000
+  refreshTokenLifeMillieSeconds: 604800000
+  encoder:
+    key: "asfsaklmasfapfqwpignpqgkqfkmwasdjndsjlfsdklfamklfaf3525fasfasfsafa"
+    iv: "asfsaklmasfapfqwpignpqgkqfkmwasdjndsjlfsdklfamklfaffsaghadhdfhfdah"

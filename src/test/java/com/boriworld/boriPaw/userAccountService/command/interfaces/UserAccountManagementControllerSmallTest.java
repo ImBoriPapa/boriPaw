@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.interfaces;
 
-import com.boriworld.boriPaw.userAccountService.command.interfaces.request.AccountCreateRequest;
-import com.boriworld.boriPaw.userAccountService.command.interfaces.response.AccountCreateResponse;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.request.UserAccountCreateRequest;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.response.UserAccountCreateResponse;
 import com.boriworld.boriPaw.fakeTestComponent.TestComponentContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,10 +25,10 @@ class UserAccountManagementControllerSmallTest {
         final String password = "password1234";
         final String nickname = "boriPapa";
 
-        AccountCreateRequest accountCreateRequest = new AccountCreateRequest(email, accountName, password, nickname);
+        UserAccountCreateRequest userAccountCreateRequest = new UserAccountCreateRequest(email, accountName, password, nickname);
 
         //when
-        ResponseEntity<AccountCreateResponse> response = accountManagementController.createAccount(accountCreateRequest);
+        ResponseEntity<UserAccountCreateResponse> response = accountManagementController.createAccount(userAccountCreateRequest);
         //then
         assertThat(response.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(201)));
         assertThat(response.getBody().id()).isEqualTo(1L);

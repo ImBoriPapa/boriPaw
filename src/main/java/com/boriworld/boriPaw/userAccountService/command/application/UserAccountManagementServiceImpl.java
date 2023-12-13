@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.application;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.event.AccountCreateEvent;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
@@ -46,7 +46,7 @@ public class UserAccountManagementServiceImpl implements UserAccountManagementSe
 
         userAccountValidator.validateDuplicateEmail(userAccountCreate.email());
 
-        userAccountValidator.validateDuplicateAccountName(userAccountCreate.accountName());
+        userAccountValidator.validateDuplicateUserName(userAccountCreate.userName());
     }
 
     private void publishCreateEvent(UserAccount savedUserAccount) {

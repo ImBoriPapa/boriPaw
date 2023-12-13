@@ -5,7 +5,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.service.Authentic
 
 public class FakeTokenPayloadEncoder implements AuthenticationTokenPayloadEncoder {
 
-    private final String SUFFIX = "[ENCODED]: ";
+    private final String SUFFIX = "[ENCODED]";
 
     @Override
     public String encode(String payloadValue) {
