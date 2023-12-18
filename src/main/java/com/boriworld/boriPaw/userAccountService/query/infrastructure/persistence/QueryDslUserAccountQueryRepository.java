@@ -1,9 +1,9 @@
-package com.boriworld.boriPaw.userAccountService.query.repository;
+package com.boriworld.boriPaw.userAccountService.query.infrastructure.persistence;
 
 
-import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
-
-import com.boriworld.boriPaw.userAccountService.query.response.UserAccountMe;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
+import com.boriworld.boriPaw.userAccountService.query.domain.model.UserInformation;
+import com.boriworld.boriPaw.userAccountService.query.domain.repository.UserAccountQueryRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -17,20 +17,22 @@ import static com.boriworld.boriPaw.userAccountService.command.infrastructure.pe
 
 @Repository
 @RequiredArgsConstructor
-public class UserAccountQueryRepository {
+public class QueryDslUserAccountQueryRepository implements UserAccountQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public Optional<UserAccountMe> get(Long userAccountId) {
+    @Override
+    public Optional<UserInformation> findUserInformationByAccountId(UserAccountId userAccountId) {
+
         return jpaQueryFactory
                 .select(
-                        Projections.constructor(UserAccountMe.class,
+                        Projections.constructor(UserInformation.class,
                                 userAccountEntity.userAccountId,
                                 userAccountEntity.authority,
                                 userAccountEntity.lastLoginAt
                         )
                 )
                 .from(userAccountEntity)
-                .where(userAccountEntity.userAccountId.eq(userAccountId))
+                .where(userAccountEntity.userAccountId.eq(userAccountId.getId()))
                 .fetch()
                 .stream()
                 .findFirst();
