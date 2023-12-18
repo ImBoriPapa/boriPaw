@@ -1,18 +1,22 @@
 package com.boriworld.boriPaw.userAccountService.command.application;
 
+
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountValidator;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.event.AccountCreateEvent;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
-import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountValidator;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
+
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
-import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -21,36 +25,27 @@ public class UserAccountManagementServiceImpl implements UserAccountManagementSe
     private final UserAccountRepository userAccountRepository;
     private final UserAccountPasswordEncoder userAccountPasswordEncoder;
     private final UserAccountEventPublisher userAccountEventPublisher;
-    private final RequestConstraintValidator<UserAccountCreate> requestConstraintValidator;
-    private final UserAccountValidator userAccountValidator;
+    private final Set<UserAccountValidator> validators;
 
     @Transactional
     public UserAccountId processUserAccountCreation(UserAccountCreate userAccountCreate) {
-        log.info("Start user account creation process.");
-        validateRequestedData(userAccountCreate);
-
-        UserAccount savedUserAccount = saveAccount(userAccountCreate);
-
-        publishCreateEvent(savedUserAccount);
-        log.info("Finish user account creation process successfully. AccountId: {}", savedUserAccount.getUserAccountId().getId());
-        return savedUserAccount.getUserAccountId();
-
+        log.info("start user account creation process.");
+        validate(userAccountCreate);
+        UserAccount userAccount = saveAccount(userAccountCreate);
+        userAccountEventPublisher.publish(AccountCreateEvent.of(userAccount));
+        return userAccount.getUserAccountId();
     }
 
     private UserAccount saveAccount(UserAccountCreate userAccountCreate) {
         return userAccountRepository.save(UserAccount.from(userAccountCreate, userAccountPasswordEncoder));
     }
 
-    private void validateRequestedData(UserAccountCreate userAccountCreate) {
-        requestConstraintValidator.validate(userAccountCreate);
-
-        userAccountValidator.validateDuplicateEmail(userAccountCreate.email());
-
-        userAccountValidator.validateDuplicateUserName(userAccountCreate.userName());
+    private void validate(Object object) {
+        validators.stream().filter(o -> o.supports(object.getClass()))
+                .findFirst()
+                .orElseThrow(() -> UnableToFindSupportedValidatorException.forMessage("Unable to find a supportable validator"))
+                .validate(object);
     }
 
-    private void publishCreateEvent(UserAccount savedUserAccount) {
-        userAccountEventPublisher.publish(new AccountCreateEvent(savedUserAccount.getUserAccountId(), savedUserAccount.getEmail()));
-    }
 }
 

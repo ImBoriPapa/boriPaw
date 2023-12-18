@@ -23,7 +23,7 @@ import static com.boriworld.boriPaw.common.constant.ApiEndpoints.*;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final String[] WHITE_LIST = {"/"};
+    private final String[] WHITE_LIST = {"/","/test"};
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;

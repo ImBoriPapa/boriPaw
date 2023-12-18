@@ -13,10 +13,7 @@ import com.boriworld.boriPaw.userAccountService.command.interfaces.response.Logi
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -27,6 +24,7 @@ import java.util.Objects;
 @Slf4j
 public class UserAccountAuthenticationController {
     private final UserAccountAuthenticationService userAccountAuthenticationService;
+
     @PostMapping(ApiEndpoints.LOGIN_PATH)
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         log.info("login request");
@@ -59,7 +57,7 @@ public class UserAccountAuthenticationController {
         try {
             Objects.requireNonNull(refreshCookie, "Refresh Token Cookie 를 찾을 수 없습니다.");
         } catch (NullPointerException e) {
-            throw new LoginFailException(e.getMessage());
+            throw new TokenReissueFailException(e.getMessage());
         }
     }
 
@@ -76,7 +74,7 @@ public class UserAccountAuthenticationController {
             Objects.requireNonNull(request.email(), "이메일을 입력해주세요");
             Objects.requireNonNull(request.password(), "비밀번호를 입력해주세요");
         } catch (NullPointerException e) {
-            throw new LoginFailException(e.getMessage());
+            throw new LoginFailException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

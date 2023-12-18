@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.domain;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
@@ -17,7 +17,7 @@ class UserAccountSmallTest {
     UserAccountPasswordEncoder userAccountPasswordEncoder = new FakeUserAccountPasswordEncoder();
 
     @Test
-    void AccountPasswordEncoder_가_Null_일때_NullPointerException_발생() throws Exception {
+    void whenUserAccountCreateObjectIsNull_thenThrowNullPointException() throws Exception {
         //given
 
         //when
@@ -28,14 +28,29 @@ class UserAccountSmallTest {
     }
 
     @Test
-    void AccountCreate_매개변수가_Null_일때_NullPointerException_발생() throws Exception {
+    void whenUserAccountPasswordEncoderObjectIsNull_thenThrowNullPointException() throws Exception {
         //given
-        final String email = "boriPapa@google.com";
-        final String accountName = "boriPapaDa";
-        final String password = "password1234!@";
-        final String nickname = "boriPapa";
+        final String email = "";
+        final String username = "";
+        final String password = "";
+        final String nickname = "";
+        UserAccountCreate create = new UserAccountCreate(email, username, password, nickname);
+        //when
 
-        UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
+        //then
+        assertThatThrownBy(() -> UserAccount.from(create, null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void whenEmailIsNullThrow() throws Exception {
+        //given
+        final String email = "";
+        final String username = "";
+        final String password = "";
+        final String nickname = "";
+
+        UserAccountCreate userAccountCreate = new UserAccountCreate(email, username, password, nickname);
         //when
 
         //then
@@ -58,7 +73,7 @@ class UserAccountSmallTest {
         //then
         assertThat(userAccount.getUserAccountId()).isNull();
         assertThat(userAccount.getEmail()).isEqualTo(email);
-        assertThat(userAccount.getUserName()).isEqualTo(accountName);
+        assertThat(userAccount.getUsername()).isEqualTo(accountName);
         assertThat(userAccount.getPassword()).isNotEqualTo(password);
         assertThat(userAccount.getUserProfile().getNickname()).isEqualTo(nickname);
         assertThat(userAccount.getUserProfile().getProfileImage()).isNull();
@@ -102,6 +117,22 @@ class UserAccountSmallTest {
         UserAccount userAccount = UserAccount.initialize(initialize);
         //then
         assertThat(userAccount).isNotNull();
+
+    }
+
+    @Test
+    void password_UserAccountPasswordEncoder_을_사용해서_로그인할수있다() throws Exception {
+        //given
+        final String email = "boriPapa@gmail.com";
+        final String accountName = "username";
+        final String password = "password1234!@";
+        final String nickname = "boriPapa";
+        //when
+        UserAccount userAccount = UserAccount.from(new UserAccountCreate(email, accountName, password, nickname), userAccountPasswordEncoder);
+        UserAccount loggedInAccount = userAccount.login(password, userAccountPasswordEncoder);
+        //then
+        assertThat(loggedInAccount).isNotNull();
+        assertThat(loggedInAccount.getLastLoginAt()).isAfter(userAccount.getLastLoginAt());
 
     }
 

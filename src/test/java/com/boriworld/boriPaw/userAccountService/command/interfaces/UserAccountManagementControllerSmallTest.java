@@ -2,7 +2,7 @@ package com.boriworld.boriPaw.userAccountService.command.interfaces;
 
 import com.boriworld.boriPaw.userAccountService.command.interfaces.request.UserAccountCreateRequest;
 import com.boriworld.boriPaw.userAccountService.command.interfaces.response.UserAccountCreateResponse;
-import com.boriworld.boriPaw.fakeTestComponent.TestComponentContainer;
+import com.boriworld.boriPaw.fakeTestComponent.FakeComponentContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatusCode;
@@ -14,7 +14,7 @@ class UserAccountManagementControllerSmallTest {
     private AccountManagementController accountManagementController;
     @BeforeEach
     void beforeEach() {
-        accountManagementController = new TestComponentContainer().accountManagementController;
+        accountManagementController = new FakeComponentContainer().accountManagementController;
     }
 
     @Test
@@ -28,7 +28,7 @@ class UserAccountManagementControllerSmallTest {
         UserAccountCreateRequest userAccountCreateRequest = new UserAccountCreateRequest(email, accountName, password, nickname);
 
         //when
-        ResponseEntity<UserAccountCreateResponse> response = accountManagementController.createAccount(userAccountCreateRequest);
+        ResponseEntity<UserAccountCreateResponse> response = accountManagementController.createUserAccount(userAccountCreateRequest);
         //then
         assertThat(response.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(201)));
         assertThat(response.getBody().id()).isEqualTo(1L);

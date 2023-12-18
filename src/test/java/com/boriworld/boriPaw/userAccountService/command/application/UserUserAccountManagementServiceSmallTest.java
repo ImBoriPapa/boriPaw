@@ -1,5 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.application;
 
+import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 
@@ -7,83 +9,65 @@ import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAc
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountStatus;
-import com.boriworld.boriPaw.userAccountService.command.exception.AlreadyUsedAccountNameException;
-import com.boriworld.boriPaw.userAccountService.command.exception.AlreadyUsedEmailException;
-import com.boriworld.boriPaw.common.validator.CustomValidationFailException;
-import com.boriworld.boriPaw.fakeTestComponent.TestComponentContainer;
+import com.boriworld.boriPaw.userAccountService.command.exception.DuplicateUsernameException;
+import com.boriworld.boriPaw.userAccountService.command.exception.DuplicateEmailException;
+import com.boriworld.boriPaw.fakeTestComponent.FakeComponentContainer;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.*;
 
 class UserUserAccountManagementServiceSmallTest {
-
+    private FakeComponentContainer componentContainer;
     private UserAccountManagementService userAccountManagementService;
     private UserAccountRepository userAccountRepository;
+    private UserAccountPasswordEncoder passwordEncoder;
+    private UserAccountEventPublisher publisher;
 
     @BeforeEach
     void beforeEach() {
-        TestComponentContainer componentContainer = new TestComponentContainer();
+        componentContainer = new FakeComponentContainer();
         userAccountRepository = componentContainer.userAccountRepository;
-        userAccountManagementService = componentContainer.userAccountManagementService;
-        final String email = "duplicate@email.com";
-        final String accountName = "duplicateName";
+        passwordEncoder = componentContainer.userAccountPasswordEncoder;
+        publisher = componentContainer.userAccountEventPublisher;
+        userAccountManagementService = new UserAccountManagementServiceImpl(userAccountRepository, passwordEncoder, publisher, Set.of());
+    }
+
+    UserAccount sampleData() {
+        final String email = "tester@email.com";
+        final String username = "tester";
+        final String password = "password1234";
+        final String nickname = "testerName";
+
+        UserAccountCreate userAccountCreate = new UserAccountCreate(email, username, password, nickname);
+        return userAccountRepository.save(UserAccount.from(userAccountCreate, passwordEncoder));
+    }
+
+    @Test
+    void givenDuplicateEmail_thenThrowDuplicateEmailException() throws Exception {
+        //given
+        UserAccount sampleUser = sampleData();
+        final String duplicateEmail = sampleUser.getEmail();
+        final String username = "boriPapaDa";
         final String password = "password1234";
         final String nickname = "boriPapa";
-
-        UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
-
-        userAccountRepository.save(UserAccount.from(userAccountCreate, componentContainer.userAccountPasswordEncoder));
-    }
-
-    @Test
-    void AccountCreate_객체가_null_이면_CustomValidationFailException_예외가_발생한다() throws Exception {
-        //given
-
-        //when
-
-        //then
-        assertThatThrownBy(() -> userAccountManagementService.processUserAccountCreation(null))
-                .isInstanceOf(CustomValidationFailException.class);
-
-    }
-
-    @Test
-    void 이메일형식이_아닐_경우() throws Exception {
-        //given
-        final String email = "emailEmail.com";
-        final String accountName = "accountName";
-        final String password = "password1234";
-        final String nickname = "nickname";
-        //when
-        UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
-
-        //then
-        assertThatThrownBy(() -> userAccountManagementService.processUserAccountCreation(userAccountCreate))
-                .isInstanceOf(CustomValidationFailException.class);
-    }
-
-    @Test
-    void 중복_이메일로_계정생성시_AlreadyUsedEmailException() throws Exception {
-        //given
-        final String duplicateEmail = "duplicate@email.com";
-        final String accountName = "boriPapaDa";
-        final String password = "password1234";
-        final String nickname = "boriPapa";
-        UserAccountCreate userAccountCreate = new UserAccountCreate(duplicateEmail, accountName, password, nickname);
+        UserAccountCreate userAccountCreate = new UserAccountCreate(duplicateEmail, username, password, nickname);
         //when
 
         //then
         assertThatThrownBy(() -> userAccountManagementService.processUserAccountCreation(userAccountCreate))
-                .isInstanceOf(AlreadyUsedEmailException.class);
+                .isInstanceOf(DuplicateEmailException.class);
     }
 
     @Test
-    void 중복_계정이름으로_계정생성시_AlreadyUsedAccountNameException() throws Exception {
+    void givenDuplicateUsername_thenThrowDuplicateUsernameException() throws Exception {
         //given
+        UserAccount userAccount = sampleData();
         final String email = "email@email.com";
-        final String duplicateAccountName = "duplicateName";
+        final String duplicateAccountName = userAccount.getUsername();
         final String password = "password1234";
         final String nickname = "boriPapa";
         UserAccountCreate userAccountCreate = new UserAccountCreate(email, duplicateAccountName, password, nickname);
@@ -91,24 +75,24 @@ class UserUserAccountManagementServiceSmallTest {
 
         //then
         assertThatThrownBy(() -> userAccountManagementService.processUserAccountCreation(userAccountCreate))
-                .isInstanceOf(AlreadyUsedAccountNameException.class);
+                .isInstanceOf(DuplicateUsernameException.class);
     }
 
 
     @Test
-    void AccountCreate_로_계정생성이_가능하다() throws Exception {
+    void givenUserAccountObjectAndUserPasswordEncoder_thenCreate_UserAccountAndReturnAccountId() throws Exception {
         //given
         final String email = "email@email.com";
-        final String accountName = "boriPapaDa";
+        final String username = "boriPapaDa";
         final String password = "password1234";
         final String nickname = "boriPapa";
-        UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
+        UserAccountCreate userAccountCreate = new UserAccountCreate(email, username, password, nickname);
         //when
         UserAccountId userAccountId = userAccountManagementService.processUserAccountCreation(userAccountCreate);
         UserAccount userAccount = userAccountRepository.findById(userAccountId).orElseThrow();
         //then
-        assertThat(userAccountId.getId()).isEqualTo(2L);
-        assertThat(userAccount.getAccountStatus()).isEqualTo(AccountStatus.PENDING);
+        assertThat(userAccountId).isEqualTo(userAccount.getUserAccountId());
+        assertThat(userAccount.getAccountStatus()).isEqualTo(AccountStatus.ACTIVE);
     }
 
 }

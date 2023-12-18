@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.interfaces;
 
-import com.boriworld.boriPaw.fakeTestComponent.TestComponentContainer;
+import com.boriworld.boriPaw.fakeTestComponent.FakeComponentContainer;
 import com.boriworld.boriPaw.userAccountService.command.interfaces.request.LoginRequest;
 import com.boriworld.boriPaw.userAccountService.command.interfaces.response.LoginResponse;
 import org.assertj.core.api.Assertions;
@@ -15,7 +15,7 @@ class UserAccountAuthenticationControllerSmallTest {
 
     @BeforeEach
     void beforeEach() {
-        TestComponentContainer container = new TestComponentContainer();
+        FakeComponentContainer container = new FakeComponentContainer();
         controller = container.userAccountAuthenticationController;
     }
     @Test

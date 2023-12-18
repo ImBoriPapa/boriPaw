@@ -1,5 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.infrastructure.imports;
 
+import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountPrincipal;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.SecurityContextManager;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
@@ -18,14 +19,23 @@ public class SecurityContextManagerImpl implements SecurityContextManager {
 
     @Override
     public void setAuthentication(UserAccountId userAccountId, Authority authority) {
+        SecurityContextHolder.getContext()
+                .setAuthentication(UsernamePasswordAuthenticationToken
+                        .authenticated(
+                                createPrincipal(userAccountId, authority),
+                                null,
+                                getGrantedAuthorities(authority)));
 
-        Collection<? extends GrantedAuthority> authorities = Arrays.stream(authority.getRoles())
+    }
+
+    private UserAccountPrincipal createPrincipal(UserAccountId userAccountId, Authority authority) {
+        return new UserAccountPrincipal(userAccountId, authority);
+    }
+
+    private Collection<? extends GrantedAuthority> getGrantedAuthorities(Authority authority) {
+        return Arrays.stream(authority.getRoles())
                 .map(SimpleGrantedAuthority::new)
                 .toList();
-
-        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(userAccountId, null, authorities);
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -52,7 +52,7 @@ public class UserAccountEntity {
         return UserAccountEntity.builder()
                 .userAccountId(userAccount.getUserAccountId() == null ? null : userAccount.getUserAccountId().getId())
                 .email(userAccount.getEmail())
-                .userName(userAccount.getUserName())
+                .userName(userAccount.getUsername())
                 .password(userAccount.getPassword())
                 .userProfileValue(UserProfileValue.from(userAccount.getUserProfile()))
                 .accountStatus(userAccount.getAccountStatus())

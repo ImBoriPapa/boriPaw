@@ -17,10 +17,11 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
+import java.util.Set;
 
-public class TestComponentContainer {
+
+public class FakeComponentContainer {
     public final UserAccountRepository userAccountRepository;
-    public final UserAccountValidator userAccountValidator;
     public final UserAccountPasswordEncoder userAccountPasswordEncoder;
     public final UserAccountEventPublisher userAccountEventPublisher;
     public final EmailCertificationCodeGenerator emailCertificationCodeGenerator;
@@ -37,9 +38,8 @@ public class TestComponentContainer {
     public final AuthenticationTokenPayloadEncoder authenticationTokenPayloadEncoder;
     public final SecurityContextManager securityContextManager;
 
-    public TestComponentContainer() {
+    public FakeComponentContainer() {
         this.userAccountRepository = new FakeUserAccountRepository();
-        this.userAccountValidator = new FakeUserAccountValidator(userAccountRepository);
         this.userAccountPasswordEncoder = new FakeUserAccountPasswordEncoder();
         this.userAccountEventPublisher = new FakeUserAccountEventPublisher();
         this.emailCertificationCodeGenerator = new FakeEmailCertificationCodeGenerator();
@@ -49,11 +49,10 @@ public class TestComponentContainer {
                 this.userAccountRepository,
                 this.userAccountPasswordEncoder,
                 this.userAccountEventPublisher,
-                this.requestConstraintValidator,
-                this.userAccountValidator
+                Set.of()
         );
         refreshTokenRepository = new FakeRefreshTokenRepository();
-        accountManagementController = new AccountManagementController(userAccountManagementService);
+        accountManagementController = new AccountManagementController(userAccountManagementService, requestConstraintValidator);
         authenticationTokenPayloadEncoder = new FakeTokenPayloadEncoder();
         securityContextManager = new FakeSecurityContextManger();
         authenticationTokenService = new FakeAuthenticationTokenService(1000, 3000);

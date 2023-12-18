@@ -15,6 +15,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.useCase.AccessTok
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.RefreshTokenCreate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +35,13 @@ public class UserAccountAuthenticationService {
     public AuthenticationToken processLogin(LoginProcess loginProcess) {
         log.info("login process");
         UserAccount userAccount = userAccountRepository.findByEmail(loginProcess.email())
-                .orElseThrow(() -> new LoginFailException("이메일을 확인을 해봐요"))
-                .updateLastLogin(loginProcess.password(), userAccountPasswordEncoder);
+                .orElseThrow(() -> new LoginFailException("이메일로 계정을 확인할수 없습니다.", HttpStatus.UNAUTHORIZED))
+                .login(loginProcess.password(), userAccountPasswordEncoder);
 
+        return createAuthenticationToken(userAccount);
+    }
+
+    private AuthenticationToken createAuthenticationToken(UserAccount userAccount) {
         AccessTokenCreate accessTokenCreate = new AccessTokenCreate(userAccount.getUserAccountId(), userAccount.getAuthority());
         AccessToken accessToken = AccessToken.createFrom(accessTokenCreate, authenticationTokenService, authenticationTokenPayloadEncoder);
 

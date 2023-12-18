@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.fakeTestComponent.fakeComponents;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
@@ -23,7 +23,7 @@ public class FakeUserAccountRepository implements UserAccountRepository {
         UserAccountInitialize accountInitialize = UserAccountInitialize.builder()
                 .userAccountId(UserAccountId.of(incrementAndGet))
                 .email(userAccount.getEmail())
-                .userName(userAccount.getUserName())
+                .userName(userAccount.getUsername())
                 .password(userAccount.getPassword())
                 .userProfile(userProfile)
                 .accountStatus(userAccount.getAccountStatus())
@@ -50,10 +50,10 @@ public class FakeUserAccountRepository implements UserAccountRepository {
     }
 
     @Override
-    public boolean existsByUserName(String accountName) {
+    public boolean existsByUsername(String accountName) {
         return store.values()
                 .stream()
-                .anyMatch(account -> account.getUserName().equals(accountName));
+                .anyMatch(account -> account.getUsername().equals(accountName));
     }
 
     @Override

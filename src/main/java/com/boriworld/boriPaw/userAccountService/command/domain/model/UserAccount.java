@@ -3,11 +3,13 @@ package com.boriworld.boriPaw.userAccountService.command.domain.model;
 import com.boriworld.boriPaw.userAccountService.command.application.LoginFailException;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
-import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 
 
 import java.time.LocalDateTime;
@@ -15,10 +17,11 @@ import java.util.Objects;
 
 
 @Getter
+@Slf4j
 public final class UserAccount {
     private final UserAccountId userAccountId;
     private final String email;
-    private final String userName;
+    private final String username;
     private final String password;
     private final UserProfile userProfile;
     private final AccountStatus accountStatus;
@@ -29,10 +32,10 @@ public final class UserAccount {
     private final LocalDateTime lastLoginAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private UserAccount(UserAccountId userAccountId, String email, String userName, String password, UserProfile userProfile, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
+    private UserAccount(UserAccountId userAccountId, String email, String username, String password, UserProfile userProfile, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
         this.userAccountId = userAccountId;
         this.email = email;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         this.userProfile = userProfile;
         this.accountStatus = accountStatus;
@@ -64,9 +67,10 @@ public final class UserAccount {
         Objects.requireNonNull(userAccountCreate, "createAccount() 메서드에 매개 변수 'accountCreate' 는 NULL 이 될수 없습니다..");
         Objects.requireNonNull(userAccountPasswordEncoder, "createAccount() 메서드에 매개 변수 'accountPasswordEncoder' 는 NULL 이 될수 없습니다.");
         UserProfile profile = UserProfile.of(userAccountCreate.nickname(), null);
+        log.info("create user account from UserAccountCreate");
         return UserAccount.builder()
                 .email(userAccountCreate.email())
-                .userName(userAccountCreate.userName())
+                .username(userAccountCreate.username())
                 .password(userAccountPasswordEncoder.encode(userAccountCreate.password()))
                 .userProfile(profile)
                 .accountStatus(AccountStatus.ACTIVE)
@@ -78,7 +82,7 @@ public final class UserAccount {
 
     /**
      * 사용시 주의!
-     * 계정 객체 초기화 메서드로 아래 용도이외 에는 사용하지 않아야 합니다.
+     * 계정 객체 초기화 메서드로 아래 용도외 에는 사용하지 않아야 합니다.
      * 데이터베이스에 Entity 혹은 Document 정보로 Account 객체를 초기화할 때 사용하는 메서드
      * Account 객체의 모든 필드를 복사
      *
@@ -89,7 +93,7 @@ public final class UserAccount {
         return UserAccount.builder()
                 .userAccountId(initialize.userAccountId())
                 .email(initialize.email())
-                .userName(initialize.userName())
+                .username(initialize.userName())
                 .password(initialize.password())
                 .userProfile(initialize.userProfile())
                 .accountStatus(initialize.accountStatus())
@@ -100,13 +104,13 @@ public final class UserAccount {
                 .build();
     }
 
-    public UserAccount updateLastLogin(final String password, UserAccountPasswordEncoder userAccountPasswordEncoder) {
+    public UserAccount login(final String password, UserAccountPasswordEncoder userAccountPasswordEncoder) {
         preventLoginByAccountStatus(this.accountStatus);
         checkPassword(password, userAccountPasswordEncoder);
         return UserAccount.builder()
                 .userAccountId(this.userAccountId)
                 .email(this.email)
-                .userName(this.userName)
+                .username(this.username)
                 .password(this.password)
                 .userProfile(this.userProfile)
                 .accountStatus(this.accountStatus)
@@ -120,13 +124,13 @@ public final class UserAccount {
 
     private void checkPassword(String password, UserAccountPasswordEncoder userAccountPasswordEncoder) {
         if (!userAccountPasswordEncoder.isMatch(password, this.password)) {
-            throw new LoginFailException("잘못된 이메일 혹은 잘못된 비밀번호입니다.");
+            throw new LoginFailException("잘못된 이메일 혹은 잘못된 비밀번호입니다.", HttpStatus.UNAUTHORIZED);
         }
     }
 
     public void preventLoginByAccountStatus(AccountStatus accountStatus) {
         if (accountStatus != AccountStatus.ACTIVE) {
-            throw new LoginFailException(accountStatus.getErrorMessage());
+            throw new LoginFailException(accountStatus.getErrorMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 

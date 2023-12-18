@@ -1,3 +1,8 @@
+GET localhost:8080/test
+
+
+
+#### UserAccountCreate
 POST localhost:8080/api/userAccounts
 Content-Type: application/json
 
@@ -8,15 +13,23 @@ Content-Type: application/json
   "nickname": "boriPapa"
 }
 
-### Login
+#### Login
 POST localhost:8080/api/login
 Content-Type: application/json
 
 {
   "email": "duplicate@email.com",
-  "password" : "password1234"
-
+  "password": "password1234"
 }
+
+> {%
+    client.global.set("access_token", response.headers.valueOf("Authorization"));
+    client.log(client.global.get("access_token"));
+%}
+
+#### me
+GET localhost:8080/api/me
+Authorization: {{access_token}}
 
 ### Reissue
 POST localhost:8080/api/reissue

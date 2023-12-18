@@ -37,20 +37,18 @@ public class RequestConstraintValidatorImpl<T> implements RequestConstraintValid
 
     private void handleConstraintErrorMessages(String objectName, Set<String> errorMessages) {
         if (!errorMessages.isEmpty()) {
-            log.error("Constraint validate failed for Object: {}", objectName);
-            throw new CustomValidationFailException(String.join("\n", errorMessages));
+
+            throw CustomValidationFailException.forMessage(String.format("Object: %s", objectName) + String.join("\n", errorMessages));
         }
     }
 
     private void checkTargetIsNotNull(T t) {
         if (t == null) {
-            log.error("fail constraint validate because for there is no for Object");
-            throw new CustomValidationFailException("There is no Object for validate");
+            throw CustomValidationFailException.forMessage("There is no Object for validate");
         }
     }
 
     private Set<String> extractConstraintErrorMessages(T t) {
-        log.info("do constraint validate target for Object: {}", t.getClass().getSimpleName());
         return validator
                 .validate(t)
                 .stream()

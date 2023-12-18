@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class UserUserAccountCreateMediumRestDocsMediumTest extends RestDocsMediumTest {
+public class UserUserAccountCreateValidatorMediumRestDocsMediumTest extends RestDocsMediumTest {
     @Test
     @DisplayName("회원 생성 통합 테스트: 회원 생성 요청 성공 통합 테스트")
     void 회원생성_요청_성공() throws Exception {
