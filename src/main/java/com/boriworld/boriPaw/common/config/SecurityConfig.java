@@ -1,7 +1,5 @@
 package com.boriworld.boriPaw.common.config;
 
-import com.boriworld.boriPaw.userAccountService.command.handler.JwtAccessDeniedHandler;
-import com.boriworld.boriPaw.userAccountService.command.handler.JwtAuthenticationEntryPoint;
 import com.boriworld.boriPaw.userAccountService.command.handler.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +21,7 @@ import static com.boriworld.boriPaw.common.constant.ApiEndpoints.*;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final String[] WHITE_LIST = {"/","/test"};
+    private final String[] WHITE_LIST = {"/","/test","/docs/**"};
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;

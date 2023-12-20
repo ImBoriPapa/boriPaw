@@ -2,8 +2,8 @@ package com.boriworld.boriPaw.userAccountService.command.domain.service;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
-import com.boriworld.boriPaw.userAccountService.command.exception.DuplicateEmailException;
-import com.boriworld.boriPaw.userAccountService.command.exception.DuplicateUsernameException;
+import com.boriworld.boriPaw.userAccountService.command.domain.exception.DuplicateEmailException;
+import com.boriworld.boriPaw.userAccountService.command.domain.exception.DuplicateUsernameException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.application;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountCreateValidator;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
@@ -9,8 +10,8 @@ import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAc
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.value.AccountStatus;
-import com.boriworld.boriPaw.userAccountService.command.exception.DuplicateUsernameException;
-import com.boriworld.boriPaw.userAccountService.command.exception.DuplicateEmailException;
+import com.boriworld.boriPaw.userAccountService.command.domain.exception.DuplicateUsernameException;
+import com.boriworld.boriPaw.userAccountService.command.domain.exception.DuplicateEmailException;
 import com.boriworld.boriPaw.fakeTestComponent.FakeComponentContainer;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -33,7 +34,9 @@ class UserUserAccountManagementServiceSmallTest {
         userAccountRepository = componentContainer.userAccountRepository;
         passwordEncoder = componentContainer.userAccountPasswordEncoder;
         publisher = componentContainer.userAccountEventPublisher;
-        userAccountManagementService = new UserAccountManagementServiceImpl(userAccountRepository, passwordEncoder, publisher, Set.of());
+        userAccountManagementService = new UserAccountManagementService(userAccountRepository, passwordEncoder, publisher, Set.of(
+                new UserAccountCreateValidator(userAccountRepository)
+        ));
     }
 
     UserAccount sampleData() {

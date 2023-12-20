@@ -22,7 +22,6 @@ public class QueryDslUserAccountQueryRepository implements UserAccountQueryRepos
 
     @Override
     public Optional<UserInformation> findUserInformationByAccountId(UserAccountId userAccountId) {
-
         return jpaQueryFactory
                 .select(
                         Projections.constructor(UserInformation.class,

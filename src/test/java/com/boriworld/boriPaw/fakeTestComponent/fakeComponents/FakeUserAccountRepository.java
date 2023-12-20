@@ -41,7 +41,6 @@ public class FakeUserAccountRepository implements UserAccountRepository {
     }
 
 
-
     @Override
     public boolean existsByEmail(String email) {
         return store.values()
@@ -66,6 +65,9 @@ public class FakeUserAccountRepository implements UserAccountRepository {
 
     @Override
     public Optional<UserAccount> findByEmail(String email) {
-        return Optional.empty();
+        return store.values()
+                .stream()
+                .filter(data -> data.getEmail().equals(email))
+                .findFirst();
     }
 }

@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.domain.value;
 
-import com.boriworld.boriPaw.userAccountService.command.exception.AuthenticationTokenException;
+import com.boriworld.boriPaw.userAccountService.command.domain.exception.AuthenticationTokenException;
 
 public enum AuthenticationTokenStatus {
     ACCESS("no problem"),

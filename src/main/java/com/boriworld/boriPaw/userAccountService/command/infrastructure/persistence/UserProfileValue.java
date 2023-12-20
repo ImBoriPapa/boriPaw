@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class UserProfileValue {
     private String nickname;
     private String profileImage;
-
     public UserProfileValue(String nickname, String profileImage) {
         this.nickname = nickname;
         this.profileImage = profileImage;

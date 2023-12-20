@@ -2,17 +2,16 @@ package com.boriworld.boriPaw.fakeTestComponent;
 
 import com.boriworld.boriPaw.userAccountService.command.application.UserAccountAuthenticationService;
 import com.boriworld.boriPaw.userAccountService.command.application.UserAccountManagementService;
-import com.boriworld.boriPaw.userAccountService.command.application.UserAccountManagementServiceImpl;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.RefreshTokenRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.EmailCertificationCodeRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.*;
-import com.boriworld.boriPaw.userAccountService.command.interfaces.AccountManagementController;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.controller.UserAccountManagementController;
 import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
-import com.boriworld.boriPaw.common.validator.RequestConstraintValidatorImpl;
+import com.boriworld.boriPaw.common.validator.RequestObjectConstraintValidator;
 import com.boriworld.boriPaw.fakeTestComponent.fakeComponents.*;
-import com.boriworld.boriPaw.userAccountService.command.interfaces.UserAccountAuthenticationController;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.controller.UserAccountAuthenticationController;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
@@ -28,7 +27,7 @@ public class FakeComponentContainer {
     public final EmailCertificationCodeRepository emailCertificationCodeRepository;
     public final RequestConstraintValidator requestConstraintValidator;
     public final UserAccountManagementService userAccountManagementService;
-    public final AccountManagementController accountManagementController;
+    public final UserAccountManagementController userAccountManagementController;
     public final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
     public final Validator validator = validatorFactory.getValidator();
     public final UserAccountAuthenticationService userAccountAuthenticationService;
@@ -44,15 +43,15 @@ public class FakeComponentContainer {
         this.userAccountEventPublisher = new FakeUserAccountEventPublisher();
         this.emailCertificationCodeGenerator = new FakeEmailCertificationCodeGenerator();
         this.emailCertificationCodeRepository = new FakeEmailCertificationCodeRepository();
-        this.requestConstraintValidator = new RequestConstraintValidatorImpl(validator);
-        this.userAccountManagementService = new UserAccountManagementServiceImpl(
+        this.requestConstraintValidator = new RequestObjectConstraintValidator(validator);
+        this.userAccountManagementService = new UserAccountManagementService(
                 this.userAccountRepository,
                 this.userAccountPasswordEncoder,
                 this.userAccountEventPublisher,
-                Set.of()
+                Set.of(new UserAccountCreateValidator(userAccountRepository))
         );
         refreshTokenRepository = new FakeRefreshTokenRepository();
-        accountManagementController = new AccountManagementController(userAccountManagementService, requestConstraintValidator);
+        userAccountManagementController = new UserAccountManagementController(userAccountManagementService, requestConstraintValidator);
         authenticationTokenPayloadEncoder = new FakeTokenPayloadEncoder();
         securityContextManager = new FakeSecurityContextManger();
         authenticationTokenService = new FakeAuthenticationTokenService(1000, 3000);
@@ -64,7 +63,7 @@ public class FakeComponentContainer {
                 authenticationTokenPayloadEncoder,
                 securityContextManager,
                 userAccountEventPublisher);
-        userAccountAuthenticationController = new UserAccountAuthenticationController(userAccountAuthenticationService);
+        userAccountAuthenticationController = new UserAccountAuthenticationController(userAccountAuthenticationService,requestConstraintValidator);
     }
 
 

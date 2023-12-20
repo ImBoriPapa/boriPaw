@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "user_account")
 @Entity
 public class UserAccountEntity {
     @Id

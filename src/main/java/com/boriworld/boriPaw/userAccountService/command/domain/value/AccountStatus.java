@@ -1,7 +1,4 @@
 package com.boriworld.boriPaw.userAccountService.command.domain.value;
-
-import java.util.Arrays;
-
 public enum AccountStatus {
     PENDING("이메일 인증이 필요합니다."),
     ACTIVE("계정 상태 정상"),
@@ -14,13 +11,6 @@ public enum AccountStatus {
 
     public String getErrorMessage() {
         return errorMessage;
-    }
-
-    public static AccountStatus fromString(String string) {
-        return Arrays.stream(AccountStatus.values())
-                .filter(accountStatus -> accountStatus.name().equals(string))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("찾을 수 없다."));
     }
 
 }

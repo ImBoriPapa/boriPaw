@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.domain.model;
 
-import com.boriworld.boriPaw.userAccountService.command.application.LoginFailException;
+import com.boriworld.boriPaw.userAccountService.command.domain.exception.LoginFailException;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountInitialize;
@@ -9,13 +9,15 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-
+/**
+ *
+ *
+ */
 @Getter
 @Slf4j
 public final class UserAccount {
@@ -46,7 +48,7 @@ public final class UserAccount {
         this.lastLoginAt = lastLoginAt;
     }
 
-    /**
+    /*
      * role: Account 객체 생성 정적 팩토리 메서드
      * responsibility: 계정 생성 요청에 따라 Account 계정 생성 정책에 따라 초기값을 설정하고 객체를 생성
      * 초기화 정보:
@@ -79,14 +81,12 @@ public final class UserAccount {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
-
     /**
      * 사용시 주의!
      * 계정 객체 초기화 메서드로 아래 용도외 에는 사용하지 않아야 합니다.
      * 데이터베이스에 Entity 혹은 Document 정보로 Account 객체를 초기화할 때 사용하는 메서드
      * Account 객체의 모든 필드를 복사
      *
-     * @param initialize
      * @return Account
      */
     public static UserAccount initialize(UserAccountInitialize initialize) {
@@ -101,12 +101,13 @@ public final class UserAccount {
                 .authority(initialize.authority())
                 .createdAt(initialize.createdAt())
                 .updatedAt(initialize.updatedAt())
+                .lastLoginAt(initialize.lastLoginAt())
                 .build();
     }
 
-    public UserAccount login(final String password, UserAccountPasswordEncoder userAccountPasswordEncoder) {
+    public UserAccount login(UserAccountLogin userAccountLogin, UserAccountPasswordEncoder userAccountPasswordEncoder) {
         preventLoginByAccountStatus(this.accountStatus);
-        checkPassword(password, userAccountPasswordEncoder);
+        checkPassword(userAccountLogin.password(), userAccountPasswordEncoder);
         return UserAccount.builder()
                 .userAccountId(this.userAccountId)
                 .email(this.email)
@@ -124,13 +125,13 @@ public final class UserAccount {
 
     private void checkPassword(String password, UserAccountPasswordEncoder userAccountPasswordEncoder) {
         if (!userAccountPasswordEncoder.isMatch(password, this.password)) {
-            throw new LoginFailException("잘못된 이메일 혹은 잘못된 비밀번호입니다.", HttpStatus.UNAUTHORIZED);
+            throw LoginFailException.forMessage("잘못된 이메일 혹은 잘못된 비밀번호입니다.");
         }
     }
 
-    public void preventLoginByAccountStatus(AccountStatus accountStatus) {
+    private void preventLoginByAccountStatus(AccountStatus accountStatus) {
         if (accountStatus != AccountStatus.ACTIVE) {
-            throw new LoginFailException(accountStatus.getErrorMessage(), HttpStatus.UNAUTHORIZED);
+            throw LoginFailException.forMessage(accountStatus.getErrorMessage());
         }
     }
 

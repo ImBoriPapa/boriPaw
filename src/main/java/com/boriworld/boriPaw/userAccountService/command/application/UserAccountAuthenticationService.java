@@ -13,9 +13,9 @@ import com.boriworld.boriPaw.userAccountService.command.domain.service.*;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.AccessTokenReissue;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.RefreshTokenCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.exception.LoginFailException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +34,10 @@ public class UserAccountAuthenticationService {
     @Transactional
     public AuthenticationToken processLogin(LoginProcess loginProcess) {
         log.info("login process");
+        UserAccountLogin userAccountLogin = new UserAccountLogin(loginProcess.password());
         UserAccount userAccount = userAccountRepository.findByEmail(loginProcess.email())
-                .orElseThrow(() -> new LoginFailException("이메일로 계정을 확인할수 없습니다.", HttpStatus.UNAUTHORIZED))
-                .login(loginProcess.password(), userAccountPasswordEncoder);
+                .orElseThrow(() -> LoginFailException.forMessage("이메일로 계정을 확인할수 없습니다."))
+                .login(userAccountLogin, userAccountPasswordEncoder);
 
         return createAuthenticationToken(userAccount);
     }

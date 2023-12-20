@@ -13,6 +13,7 @@ public enum ProblemDefinition {
     CONSTRAINT_VALIDATION_FAIL("constraint-validation-fail", "Constraint validation fail", HttpStatus.BAD_REQUEST, "요청에 유효성 검증에 실패했을 경우 입니다. 요청 데이터를 확인해주세요"),
     UNABLE_FIND_SUPPORTABLE_VALIDATOR("", "", HttpStatus.BAD_REQUEST, ""),
     NOT_FOUND_RESOURCE("", "", HttpStatus.NOT_FOUND, ""),
+    LOGIN_FAIL("", "", HttpStatus.UNAUTHORIZED, ""),
     ;
     private final String type;
     private final String title;

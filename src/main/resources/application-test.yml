@@ -21,8 +21,16 @@ spring:
     redis:
       host: localhost
       port: 6363
-      database: 0 # Redis 데이터베이스 인덱스
+      database: 0
 logging:
   level:
-    root: trace
+    root: INFO
+    org.springframework.jdbc: DEBUG
 
+secrete:
+  secrete_key: "fsafnslkdasdkladmkgpeiakmggsdklkgewmkglsgiwwlgwefds"
+  accessTokenLifeMillieSeconds: 600000
+  refreshTokenLifeMillieSeconds: 604800000
+  encoder:
+    key: "asfsaklmasfapfqwpignpqgkqfkmwasdjndsjlfsdklfamklfaf3525fasfasfsafa"
+    iv: "asfsaklmasfapfqwpignpqgkqfkmwasdjndsjlfsdklfamklfaffsaghadhdfhfdah"

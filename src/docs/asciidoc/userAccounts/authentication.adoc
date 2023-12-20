@@ -1,0 +1,8 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+include::{snippets}/userAccount/authentication/login/http-request.adoc[]
+
+include::{snippets}/userAccount/authentication/login/http-response.adoc[]
+include::{snippets}/userAccount/authentication/login/response-headers.adoc[]
