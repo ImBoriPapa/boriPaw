@@ -7,7 +7,7 @@ import com.boriworld.boriPaw.fakeTestComponent.fakeComponents.FakeTokenPayloadEn
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.AccessTokenCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenPayloadEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenService;
-import com.boriworld.boriPaw.userAccountService.command.domain.service.SecurityContextManager;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAuthenticationContextManager;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.value.AuthenticationTokenStatus;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 class AccessTokenSmallTest {
     private AuthenticationTokenService tokenService;
     private AuthenticationTokenPayloadEncoder payloadEncoder;
-    private SecurityContextManager securityContextManager;
+    private UserAuthenticationContextManager userAuthenticationContextManager;
 
     @Test
     @DisplayName("when create by createFrom() if AccessTokenCreate is null: NullPointerException")

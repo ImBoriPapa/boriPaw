@@ -22,15 +22,15 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-class UserAccountAuthenticationControllerSmallTest {
+class UserAuthenticationControllerSmallTest {
 
-    private UserAccountAuthenticationController controller;
+    private UserAuthenticationController controller;
     private FakeComponentContainer container;
 
     @BeforeEach
     void beforeEach() {
         container = new FakeComponentContainer();
-        controller = container.userAccountAuthenticationController;
+        controller = container.userAuthenticationController;
     }
 
     @Test

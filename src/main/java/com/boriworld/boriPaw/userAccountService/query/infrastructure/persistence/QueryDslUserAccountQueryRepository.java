@@ -3,6 +3,7 @@ package com.boriworld.boriPaw.userAccountService.query.infrastructure.persistenc
 
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import com.boriworld.boriPaw.userAccountService.query.domain.model.UserInformation;
+import com.boriworld.boriPaw.userAccountService.query.domain.model.UserProfileDetail;
 import com.boriworld.boriPaw.userAccountService.query.domain.repository.UserAccountQueryRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,13 +22,15 @@ public class QueryDslUserAccountQueryRepository implements UserAccountQueryRepos
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Optional<UserInformation> findUserInformationByAccountId(UserAccountId userAccountId) {
+    public Optional<UserProfileDetail> findUserProfileDetailByUserAccountId(UserAccountId userAccountId) {
         return jpaQueryFactory
                 .select(
-                        Projections.constructor(UserInformation.class,
+                        Projections.constructor(UserProfileDetail.class,
                                 userAccountEntity.userAccountId,
-                                userAccountEntity.authority,
-                                userAccountEntity.lastLoginAt
+                                userAccountEntity.userName,
+                                userAccountEntity.userProfileValue.nickname,
+                                userAccountEntity.userProfileValue.profileImage,
+                                userAccountEntity.userProfileValue.introduce
                         )
                 )
                 .from(userAccountEntity)

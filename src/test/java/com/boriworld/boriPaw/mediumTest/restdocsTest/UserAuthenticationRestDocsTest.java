@@ -5,7 +5,7 @@ import com.boriworld.boriPaw.common.constant.AuthenticationTokenHeaderNames;
 import com.boriworld.boriPaw.testContainer.testcontainer.RestDocsMediumTest;
 import com.boriworld.boriPaw.testData.TestJwtTokenFactory;
 import com.boriworld.boriPaw.testData.TestUserAccountsFactory;
-import com.boriworld.boriPaw.userAccountService.command.application.UserAccountAuthenticationService;
+import com.boriworld.boriPaw.userAccountService.command.application.UserAuthenticationService;
 import com.boriworld.boriPaw.userAccountService.command.application.dto.LoginProcess;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationToken;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationTokenCredentials;
@@ -42,11 +42,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class UserAccountAuthenticationRestDocsTest extends RestDocsMediumTest {
+public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
     @Autowired
     private TestUserAccountsFactory testUserAccountsFactory;
     @Autowired
-    private UserAccountAuthenticationService accountAuthenticationService;
+    private UserAuthenticationService accountAuthenticationService;
     @Autowired
     private TestJwtTokenFactory factory;
 
@@ -130,8 +130,9 @@ public class UserAccountAuthenticationRestDocsTest extends RestDocsMediumTest {
     @Test
     void givenRefreshTokenCookie_thenReturnReissuedTokens() throws Exception {
         //given
-        final String email = "tester1@test.com";
-        final String password = "password1234!@";
+        testUserAccountsFactory.initTester();
+        final String email = testUserAccountsFactory.TESTER_EMAIL;
+        final String password = testUserAccountsFactory.TESTER_RAW_PASSWORD;
         LoginProcess loginProcess = new LoginProcess(email, password);
         AuthenticationToken authenticationToken = accountAuthenticationService.processLogin(loginProcess);
         RefreshToken refreshToken = authenticationToken.refreshToken();

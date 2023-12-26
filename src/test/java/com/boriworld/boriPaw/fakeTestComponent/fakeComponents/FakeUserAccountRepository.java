@@ -19,7 +19,7 @@ public class FakeUserAccountRepository implements UserAccountRepository {
     public UserAccount save(UserAccount userAccount) {
 
         long incrementAndGet = SEQUENCE.incrementAndGet();
-        UserProfile userProfile = UserProfile.of(userAccount.getUserProfile().getNickname(), userAccount.getUserProfile().getProfileImage());
+        UserProfile userProfile = UserProfile.of(userAccount.getUserProfile().getNickname(), userAccount.getUserProfile().getProfileImage(),userAccount.getUserProfile().getIntroduce());
         UserAccountInitialize accountInitialize = UserAccountInitialize.builder()
                 .userAccountId(UserAccountId.of(incrementAndGet))
                 .email(userAccount.getEmail())

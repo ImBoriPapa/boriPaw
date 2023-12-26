@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.handler;
 
 import com.boriworld.boriPaw.common.constant.AuthenticationTokenHeaderNames;
-import com.boriworld.boriPaw.userAccountService.command.application.UserAccountAuthenticationService;
+import com.boriworld.boriPaw.userAccountService.command.application.UserAuthenticationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +17,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final UserAccountAuthenticationService userAccountAuthenticationService;
+    private final UserAuthenticationService userAuthenticationService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
         if (tokenString != null) {
-            userAccountAuthenticationService.processAuthenticationByAccessToken(tokenString);
+            userAuthenticationService.processAuthenticationByAccessToken(tokenString);
         }
 
 

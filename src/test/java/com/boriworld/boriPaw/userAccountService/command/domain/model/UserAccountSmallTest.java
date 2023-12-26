@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.userAccountService.command.domain;
+package com.boriworld.boriPaw.userAccountService.command.domain.model;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.exception.LoginFailException;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccountLogin;
@@ -9,63 +9,64 @@ import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccou
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import com.boriworld.boriPaw.fakeTestComponent.fakeComponents.FakeUserAccountPasswordEncoder;
 import org.assertj.core.api.AbstractThrowableAssert;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
+import static com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccountTestHelper.getUserAccount;
+import static com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccountTestHelper.getUserAccountCreate;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class UserAccountSmallTest {
-    UserAccountPasswordEncoder userAccountPasswordEncoder;
+    private UserAccountPasswordEncoder userAccountPasswordEncoder;
+
+    @BeforeEach
+    void beforeEach() {
+        this.userAccountPasswordEncoder = new FakeUserAccountPasswordEncoder();
+    }
 
     @Test
+    @DisplayName(value = "UserAccountCreate 객체가 없으면 NullPoint 예외 발생")
     void givenNullAccountCreate_thenThrowNullPointException() throws Exception {
         //given
-        UserAccountCreate userAccountCreate = null;
-        UserAccountPasswordEncoder userAccountPasswordEncoder = null;
+        UserAccountPasswordEncoder userAccountPasswordEncoder = new FakeUserAccountPasswordEncoder();
         //when
-
         //then
-        assertThatThrownBy(() -> UserAccount.from(userAccountCreate, userAccountPasswordEncoder))
+        assertThatThrownBy(() -> UserAccount.from(null, userAccountPasswordEncoder))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
+    @DisplayName(value = "AccountPasswordEncoder 객체가 Null 이면 NullPointException")
     void givenNullAccountPasswordEncoder_thenThrowNullPointException() throws Exception {
         //given
-        final String email = "";
-        final String username = "";
-        final String password = "";
-        final String nickname = "";
-        UserAccountCreate userAccountCreate = new UserAccountCreate(email, username, password, nickname);
-        userAccountPasswordEncoder = null;
+        UserAccountCreate userAccountCreate = getUserAccountCreate();
         //when
-
         //then
-        assertThatThrownBy(() -> UserAccount.from(userAccountCreate, userAccountPasswordEncoder))
+        assertThatThrownBy(() -> UserAccount.from(userAccountCreate, null))
                 .isInstanceOf(NullPointerException.class);
     }
 
+
     @Test
+    @DisplayName(value = "UserAccountCreate 와 UserAccountPasswordEncoder 로 UserAccount 를 만들수 있다.")
     void givenUserAccountCreateAndUserAccountPasswordEncoder_thenCreateUserAccount() throws Exception {
         //given
-        final String email = "boriPapa@google.com";
-        final String accountName = "boriPapaDa";
-        final String password = "password1234!@";
-        final String nickname = "boriPapa";
-
-        UserAccountCreate userAccountCreate = new UserAccountCreate(email, accountName, password, nickname);
+        UserAccountCreate userAccountCreate = getUserAccountCreate();
         userAccountPasswordEncoder = new FakeUserAccountPasswordEncoder();
         //when
         UserAccount userAccount = UserAccount.from(userAccountCreate, userAccountPasswordEncoder);
         //then
         assertAll(
                 () -> assertThat(userAccount.getUserAccountId()).isNull(),
-                () -> assertThat(userAccount.getEmail()).isEqualTo(email),
-                () -> assertThat(userAccount.getUsername()).isEqualTo(accountName),
-                () -> assertThat(userAccount.getPassword()).isNotEqualTo(password),
-                () -> assertThat(userAccount.getUserProfile().getNickname()).isEqualTo(nickname),
+                () -> assertThat(userAccount.getEmail()).isEqualTo(userAccountCreate.email()),
+                () -> assertThat(userAccount.getUsername()).isEqualTo(userAccountCreate.username()),
+                () -> assertThat(userAccount.getPassword()).isNotEqualTo(userAccountCreate.password()),
+                () -> assertThat(userAccount.getUserProfile().getNickname()).isEqualTo(userAccountCreate.nickname()),
                 () -> assertThat(userAccount.getUserProfile().getProfileImage()).isNull(),
                 () -> assertThat(userAccount.getAccountStatus()).isEqualTo(AccountStatus.ACTIVE),
                 () -> assertThat(userAccount.getPasswordStatus()).isEqualTo(PasswordStatus.STEADY),
@@ -74,10 +75,10 @@ class UserAccountSmallTest {
                 () -> assertThat(userAccount.getUpdatedAt()).isNull(),
                 () -> assertThat(userAccount.getLastLoginAt()).isNull()
         );
-
     }
 
     @Test
+    @DisplayName(value = "UserAccountInitialize 로 UserAccount 를 초기화 할 수 있다.")
     void givenUserAccountInitialize_thenInitializeUserAccount() throws Exception {
         //given
         final UserAccountId userAccountId = UserAccountId.of(123L);
@@ -86,7 +87,8 @@ class UserAccountSmallTest {
         final String password = "password1234!@";
         final String nickname = "boriPapa";
         final String profileImage = "imageurl";
-        final UserProfile userProfile = UserProfile.of(nickname, profileImage);
+        final String introduce = "안녕하세요";
+        final UserProfile userProfile = UserProfile.of(nickname, profileImage, introduce);
         final AccountStatus accountStatus = AccountStatus.ACTIVE;
         final PasswordStatus passwordStatus = PasswordStatus.STEADY;
         final Authority authority = Authority.USER;
@@ -128,37 +130,27 @@ class UserAccountSmallTest {
     }
 
     @Test
-    void given_wrongPassword_thenThenLoginFailException() throws Exception {
+    @DisplayName(value = "잚못된 비밀번호로 로그인 시도시 LoginFailException")
+    void givenWrongPassword_thenThrowLoginFailException() throws Exception {
         //given
-        final String email = "boriPapa@gmail.com";
-        final String username = "username";
-        final String password = "password1234!@";
-        final String nickname = "boriPapa";
-        final String wrongPassword = "wrongPassword";
-        userAccountPasswordEncoder = new FakeUserAccountPasswordEncoder();
-        UserAccount userAccount = UserAccount.from(new UserAccountCreate(email, username, password, nickname), userAccountPasswordEncoder);
-        UserAccountLogin userAccountLogin = new UserAccountLogin(wrongPassword);
+        final String WRONG_PASSWORD = "wrongPassword";
+        final UserAccountLogin userAccountLogin = new UserAccountLogin(WRONG_PASSWORD);
         //when
-        AbstractThrowableAssert<?, ? extends Throwable> thrown = assertThatThrownBy(() -> userAccount.login(userAccountLogin, userAccountPasswordEncoder));
         //then
-        thrown.isInstanceOf(LoginFailException.class);
-
-
+        assertThatThrownBy(() -> getUserAccount(userAccountPasswordEncoder)
+                .login(userAccountLogin, userAccountPasswordEncoder))
+                .isInstanceOf(LoginFailException.class);
     }
 
     @Test
+    @DisplayName(value = "비밀번호와 UserAccountPasswordEncoder 로 로그인을 할 수 있다.")
     void givenPasswordAndUserAccountPasswordEncoder_thenPossibleToLogin() throws Exception {
         //given
-        final String email = "boriPapa@gmail.com";
-        final String username = "username";
-        final String password = "password1234!@";
-        final String nickname = "boriPapa";
-        userAccountPasswordEncoder = new FakeUserAccountPasswordEncoder();
-        UserAccount userAccount = UserAccount.from(new UserAccountCreate(email, username, password, nickname), userAccountPasswordEncoder);
-        UserAccountLogin userAccountLogin = new UserAccountLogin(password);
-        userAccountPasswordEncoder = new FakeUserAccountPasswordEncoder();
+        final String PASSWORD = "password1234!@";
+        UserAccountLogin userAccountLogin = new UserAccountLogin(PASSWORD);
         //when
-        UserAccount loggedInAccount = userAccount.login(userAccountLogin, userAccountPasswordEncoder);
+        UserAccount loggedInAccount = getUserAccount(PASSWORD, userAccountPasswordEncoder)
+                .login(userAccountLogin, userAccountPasswordEncoder);
         //then
         assertThat(loggedInAccount).isNotNull();
         assertThat(loggedInAccount.getLastLoginAt()).isNotNull();

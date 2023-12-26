@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.infrastructure.imports;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountPrincipal;
-import com.boriworld.boriPaw.userAccountService.command.domain.service.SecurityContextManager;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAuthenticationContextManager;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import lombok.extern.slf4j.Slf4j;
@@ -17,19 +17,19 @@ import java.util.Collection;
 
 @Component
 @Slf4j
-public class SecurityContextManagerImpl implements SecurityContextManager {
+public class SpringSecurityUserAuthenticationContextManager implements UserAuthenticationContextManager {
 
     @Override
     public void setAuthentication(UserAccountId userAccountId, Authority authority) {
-        log.info("userAccountId: {}", userAccountId);
-        log.info("null ?");
-        SecurityContextHolder.getContext()
-                .setAuthentication(UsernamePasswordAuthenticationToken
-                        .authenticated(
-                                createPrincipal(userAccountId, authority),
-                                null,
-                                getGrantedAuthorities(authority)));
+        log.info("set authentication");
+        SecurityContextHolder
+                .getContext()
+                .setAuthentication(createAuthenticationToken(userAccountId, authority));
 
+    }
+
+    private UsernamePasswordAuthenticationToken createAuthenticationToken(UserAccountId userAccountId, Authority authority) {
+        return UsernamePasswordAuthenticationToken.authenticated(createPrincipal(userAccountId, authority), null, getGrantedAuthorities(authority));
     }
 
     private UserAccountPrincipal createPrincipal(UserAccountId userAccountId, Authority authority) {

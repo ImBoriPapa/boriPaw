@@ -25,13 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserAccountAuthenticationService {
+public class UserAuthenticationService {
     private final UserAccountRepository userAccountRepository;
     private final UserAccountPasswordEncoder userAccountPasswordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
     private final AuthenticationTokenService authenticationTokenService;
     private final AuthenticationTokenPayloadEncoder authenticationTokenPayloadEncoder;
-    private final SecurityContextManager securityContextManager;
+    private final UserAuthenticationContextManager userAuthenticationContextManager;
     private final UserAccountEventPublisher eventPublisher;
 
     @Transactional
@@ -67,7 +67,7 @@ public class UserAccountAuthenticationService {
     }
 
     public void processAuthenticationByAccessToken(final String tokenString) throws AuthenticationTokenException {
-        AccessToken.processingAuthenticationFromTokenString(tokenString, authenticationTokenService, authenticationTokenPayloadEncoder, securityContextManager);
+        AccessToken.processingAuthenticationFromTokenString(tokenString, authenticationTokenService, authenticationTokenPayloadEncoder, userAuthenticationContextManager);
     }
 
     private UserAccount getUserAccountByEmail(final String email) {

@@ -36,14 +36,18 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(d -> d.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .authorizeHttpRequests(matchers -> matchers
                         .requestMatchers(WHITE_LIST)
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, ACCOUNTS_ROOT_PATH, LOGIN_PATH, RE_ISSUE_PATH, LOGOUT_PATH)
                         .permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest()
+                        .authenticated())
+
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(authenticationTokenExceptionHandler, JwtAuthenticationFilter.class)
+
                 .exceptionHandling(
                         handle -> handle
                                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)

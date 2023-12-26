@@ -14,10 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-/**
- *
- *
- */
 @Getter
 @Slf4j
 public final class UserAccount {
@@ -68,7 +64,7 @@ public final class UserAccount {
     public static UserAccount from(UserAccountCreate userAccountCreate, UserAccountPasswordEncoder userAccountPasswordEncoder) {
         Objects.requireNonNull(userAccountCreate, "createAccount() 메서드에 매개 변수 'accountCreate' 는 NULL 이 될수 없습니다..");
         Objects.requireNonNull(userAccountPasswordEncoder, "createAccount() 메서드에 매개 변수 'accountPasswordEncoder' 는 NULL 이 될수 없습니다.");
-        UserProfile profile = UserProfile.of(userAccountCreate.nickname(), null);
+        UserProfile profile = UserProfile.of(userAccountCreate.nickname(), null, null);
         log.info("create user account from UserAccountCreate");
         return UserAccount.builder()
                 .email(userAccountCreate.email())
@@ -81,6 +77,7 @@ public final class UserAccount {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
+
     /**
      * 사용시 주의!
      * 계정 객체 초기화 메서드로 아래 용도외 에는 사용하지 않아야 합니다.

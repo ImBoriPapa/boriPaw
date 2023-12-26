@@ -24,7 +24,6 @@ public class RefreshTokenRedisTemplateRepository implements RefreshTokenReposito
 
     @Override
     public void save(RefreshToken refreshToken) {
-        log.info("start");
         RefreshTokenStrings refreshTokenStrings = RefreshTokenStrings.formModel(refreshToken);
         try {
             redisTemplate.opsForValue()
@@ -37,12 +36,8 @@ public class RefreshTokenRedisTemplateRepository implements RefreshTokenReposito
 
     @Override
     public Optional<RefreshToken> findRefreshTokenId(RefreshTokenId refreshTokenId) {
-        log.info("get");
-        log.info("id; {}",refreshTokenId.getId());
 
-        String s = redisTemplate.opsForValue()
-                .get(refreshTokenId.getId());
-        log.info("s: {}",s);
+        String s = redisTemplate.opsForValue().get(refreshTokenId.getId());
         try {
             if (StringUtils.hasText(s)) {
                 RefreshTokenStrings refreshTokenStrings = mapper.readValue(s, RefreshTokenStrings.class);

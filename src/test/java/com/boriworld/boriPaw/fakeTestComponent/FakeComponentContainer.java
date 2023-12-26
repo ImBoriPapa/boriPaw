@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.fakeTestComponent;
 
-import com.boriworld.boriPaw.userAccountService.command.application.UserAccountAuthenticationService;
+import com.boriworld.boriPaw.userAccountService.command.application.UserAuthenticationService;
 import com.boriworld.boriPaw.userAccountService.command.application.UserAccountManagementService;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.RefreshTokenRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
@@ -11,7 +11,7 @@ import com.boriworld.boriPaw.userAccountService.command.interfaces.controller.Us
 import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
 import com.boriworld.boriPaw.common.validator.RequestObjectConstraintValidator;
 import com.boriworld.boriPaw.fakeTestComponent.fakeComponents.*;
-import com.boriworld.boriPaw.userAccountService.command.interfaces.controller.UserAccountAuthenticationController;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.controller.UserAuthenticationController;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
@@ -30,12 +30,12 @@ public class FakeComponentContainer {
     public final UserAccountManagementController userAccountManagementController;
     public final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
     public final Validator validator = validatorFactory.getValidator();
-    public final UserAccountAuthenticationService userAccountAuthenticationService;
-    public final UserAccountAuthenticationController userAccountAuthenticationController;
+    public final UserAuthenticationService userAuthenticationService;
+    public final UserAuthenticationController userAuthenticationController;
     public final RefreshTokenRepository refreshTokenRepository;
     public final AuthenticationTokenService authenticationTokenService;
     public final AuthenticationTokenPayloadEncoder authenticationTokenPayloadEncoder;
-    public final SecurityContextManager securityContextManager;
+    public final UserAuthenticationContextManager userAuthenticationContextManager;
 
     public FakeComponentContainer() {
         this.userAccountRepository = new FakeUserAccountRepository();
@@ -53,17 +53,17 @@ public class FakeComponentContainer {
         refreshTokenRepository = new FakeRefreshTokenRepository();
         userAccountManagementController = new UserAccountManagementController(userAccountManagementService, requestConstraintValidator);
         authenticationTokenPayloadEncoder = new FakeTokenPayloadEncoder();
-        securityContextManager = new FakeSecurityContextManger();
+        userAuthenticationContextManager = new FakeUserAuthenticationContextManger();
         authenticationTokenService = new FakeAuthenticationTokenService(1000, 3000);
-        userAccountAuthenticationService = new UserAccountAuthenticationService(
+        userAuthenticationService = new UserAuthenticationService(
                 userAccountRepository,
                 userAccountPasswordEncoder,
                 refreshTokenRepository,
                 authenticationTokenService,
                 authenticationTokenPayloadEncoder,
-                securityContextManager,
+                userAuthenticationContextManager,
                 userAccountEventPublisher);
-        userAccountAuthenticationController = new UserAccountAuthenticationController(userAccountAuthenticationService,requestConstraintValidator);
+        userAuthenticationController = new UserAuthenticationController(userAuthenticationService,requestConstraintValidator);
     }
 
 

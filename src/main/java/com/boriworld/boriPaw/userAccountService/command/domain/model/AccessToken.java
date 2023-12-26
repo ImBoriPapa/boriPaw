@@ -5,7 +5,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.useCase.AccessTok
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationTokenCredentials;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenPayloadEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenService;
-import com.boriworld.boriPaw.userAccountService.command.domain.service.SecurityContextManager;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAuthenticationContextManager;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.AuthenticationTokenStatus;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.AuthenticationTokenType;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
@@ -96,7 +96,7 @@ public final class AccessToken {
      * @param encoder 토큰의 클래임의 비암호화 책임
      * @param manager 인증정보 관리
      */
-    public static AccessToken processingAuthenticationFromTokenString(String tokenString, AuthenticationTokenService service, AuthenticationTokenPayloadEncoder encoder, SecurityContextManager manager) {
+    public static AccessToken processingAuthenticationFromTokenString(String tokenString, AuthenticationTokenService service, AuthenticationTokenPayloadEncoder encoder, UserAuthenticationContextManager manager) {
         log.info("accessToken do authentication processing");
 
         AuthenticationTokenStatus tokenStatus = service.validateToken(tokenString);

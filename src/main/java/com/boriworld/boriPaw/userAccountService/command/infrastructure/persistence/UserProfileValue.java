@@ -12,16 +12,19 @@ import lombok.NoArgsConstructor;
 public class UserProfileValue {
     private String nickname;
     private String profileImage;
-    public UserProfileValue(String nickname, String profileImage) {
+    private String introduce;
+
+    protected UserProfileValue(String nickname, String profileImage, String introduce) {
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.introduce = introduce;
     }
 
-    public static UserProfileValue from(UserProfile userProfile) {
-        return new UserProfileValue(userProfile.getNickname(), userProfile.getProfileImage());
+    public static UserProfileValue fromUserProfile(UserProfile userProfile) {
+        return new UserProfileValue(userProfile.getNickname(), userProfile.getProfileImage(), userProfile.getIntroduce());
     }
 
-    public UserProfile to() {
-        return UserProfile.of(this.nickname, this.profileImage);
+    public UserProfile toUserProfile() {
+        return UserProfile.of(this.nickname, this.profileImage, this.introduce);
     }
 }

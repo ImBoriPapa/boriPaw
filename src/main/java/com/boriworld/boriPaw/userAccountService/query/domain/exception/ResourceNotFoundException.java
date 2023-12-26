@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.userAccountService.query.application;
+package com.boriworld.boriPaw.userAccountService.query.domain.exception;
 
 import com.boriworld.boriPaw.common.constant.ProblemDefinition;
 import com.boriworld.boriPaw.common.exception.CustomRuntimeException;
