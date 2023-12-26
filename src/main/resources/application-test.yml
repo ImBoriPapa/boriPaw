@@ -1,8 +1,13 @@
+server:
+  servlet:
+    encoding:
+      force-response: true
+  host: localhost
+
 spring:
   config:
     activate:
       on-profile: test
-
   datasource:
     url: jdbc:mysql://localhost:3366/test_db
     username: root
@@ -17,6 +22,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
+    open-in-view: false
   data:
     redis:
       host: localhost

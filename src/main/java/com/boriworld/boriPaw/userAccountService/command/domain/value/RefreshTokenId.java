@@ -1,18 +1,23 @@
 package com.boriworld.boriPaw.userAccountService.command.domain.value;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.model.RefreshToken;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
+@EqualsAndHashCode(of = "id")
 public final class RefreshTokenId {
-    private final UserAccountId userAccountId;
-    private RefreshTokenId(UserAccountId userAccountId) {
-        this.userAccountId = userAccountId;
+    private final String id;
+    private RefreshTokenId(String id) {
+        this.id = id;
     }
 
-    public static RefreshTokenId of(UserAccountId userAccountId) {
-        return new RefreshTokenId(userAccountId);
+    public static RefreshTokenId from(UserAccountId userAccountId) {
+        final String id = userAccountId.getId().toString();
+        return new RefreshTokenId(id);
     }
 
+    public static RefreshTokenId from(final String id) {
+        return new RefreshTokenId(id);
+    }
 
 }

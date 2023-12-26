@@ -10,8 +10,6 @@ import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
-
 import static org.assertj.core.api.Assertions.*;
 
 class RefreshTokenSmallTest {
@@ -26,7 +24,7 @@ class RefreshTokenSmallTest {
         tokenService = null;
         encoder = null;
         //when
-        assertThatThrownBy(() -> RefreshToken.createFrom(refreshTokenCreate, tokenService, encoder))
+        assertThatThrownBy(() -> RefreshToken.from(refreshTokenCreate, tokenService, encoder))
                 .isInstanceOf(NullPointerException.class);
         //then
 
@@ -41,7 +39,7 @@ class RefreshTokenSmallTest {
         tokenService = null;
         encoder = null;
         //when
-        assertThatThrownBy(() -> RefreshToken.createFrom(refreshTokenCreate, tokenService, encoder))
+        assertThatThrownBy(() -> RefreshToken.from(refreshTokenCreate, tokenService, encoder))
                 .isInstanceOf(NullPointerException.class);
         //then
 
@@ -56,7 +54,7 @@ class RefreshTokenSmallTest {
         tokenService = new FakeAuthenticationTokenService(1000L, 5000L);
         encoder = null;
         //when
-        assertThatThrownBy(() -> RefreshToken.createFrom(refreshTokenCreate, tokenService, encoder))
+        assertThatThrownBy(() -> RefreshToken.from(refreshTokenCreate, tokenService, encoder))
                 .isInstanceOf(NullPointerException.class);
         //then
 
@@ -72,10 +70,9 @@ class RefreshTokenSmallTest {
         tokenService = new FakeAuthenticationTokenService(1000L, 5000L);
         encoder = new FakeTokenPayloadEncoder();
         //when
-        RefreshToken refreshToken = RefreshToken.createFrom(refreshTokenCreate, tokenService, encoder);
+        RefreshToken refreshToken = RefreshToken.from(refreshTokenCreate, tokenService, encoder);
         //then
         assertThat(refreshToken).isNotNull();
-        assertThat(refreshToken.getRefreshTokenId().getUserAccountId()).isEqualTo(userAccountId);
         assertThat(refreshToken.getTokenString()).isNotNull();
         assertThat(tokenService.validateToken(refreshToken.getTokenString())).isEqualTo(AuthenticationTokenStatus.ACCESS);
     }

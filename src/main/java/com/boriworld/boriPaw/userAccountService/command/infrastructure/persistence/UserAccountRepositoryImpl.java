@@ -40,4 +40,9 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
     public Optional<UserAccount> findByEmail(String email) {
         return accountJpaRepository.findByEmail(email).map(UserAccountEntity::toModel);
     }
+
+    @Override
+    public UserAccount update(UserAccount userAccount) {
+        return accountJpaRepository.save(UserAccountEntity.fromModel(userAccount)).toModel();
+    }
 }

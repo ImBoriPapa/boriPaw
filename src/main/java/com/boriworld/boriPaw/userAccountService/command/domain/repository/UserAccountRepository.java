@@ -11,4 +11,5 @@ public interface UserAccountRepository {
     boolean existsByUsername(String accountName);
     Optional<UserAccount> findById(UserAccountId userAccountId);
     Optional<UserAccount> findByEmail(String email);
+    UserAccount update(UserAccount userAccount);
 }

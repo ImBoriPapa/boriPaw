@@ -4,6 +4,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountPr
 import com.boriworld.boriPaw.userAccountService.command.domain.service.SecurityContextManager;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,10 +16,13 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @Component
+@Slf4j
 public class SecurityContextManagerImpl implements SecurityContextManager {
 
     @Override
     public void setAuthentication(UserAccountId userAccountId, Authority authority) {
+        log.info("userAccountId: {}", userAccountId);
+        log.info("null ?");
         SecurityContextHolder.getContext()
                 .setAuthentication(UsernamePasswordAuthenticationToken
                         .authenticated(

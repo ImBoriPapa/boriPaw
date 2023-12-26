@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.interfaces.controller;
 
 import com.boriworld.boriPaw.common.constant.ApiEndpoints;
-import com.boriworld.boriPaw.common.constant.AuthenticationTokenHeaders;
+import com.boriworld.boriPaw.common.constant.AuthenticationTokenHeaderNames;
 import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
 import com.boriworld.boriPaw.userAccountService.command.application.UserAccountAuthenticationService;
 import com.boriworld.boriPaw.userAccountService.command.application.dto.LoginProcess;
@@ -42,8 +42,7 @@ public class UserAccountAuthenticationController {
     }
 
     @PostMapping(ApiEndpoints.RE_ISSUE_PATH)
-    public ResponseEntity<ReissueResponse> reIssue(@CookieValue(name = AuthenticationTokenHeaders.REFRESH_TOKEN_COOKIE_HEADER, required = false) String refreshCookie) {
-
+    public ResponseEntity<ReissueResponse> reIssue(@CookieValue(name = AuthenticationTokenHeaderNames.REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshCookie) {
         validateCookie(refreshCookie);
         AuthenticationToken authenticationToken = userAccountAuthenticationService.processReissueToken(refreshCookie);
         AccessToken accessToken = authenticationToken.accessToken();
@@ -73,13 +72,13 @@ public class UserAccountAuthenticationController {
 
     private HttpHeaders createHeaders(AccessToken accessToken, RefreshToken refreshToken) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(AuthenticationTokenHeaders.AUTHORIZATION_HEADER, AuthenticationTokenHeaders.ACCESS_TOKEN_PREFIX + accessToken.getTokenString());
+        httpHeaders.set(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER, AuthenticationTokenHeaderNames.ACCESS_TOKEN_PREFIX + accessToken.getTokenString());
         httpHeaders.set(HttpHeaders.SET_COOKIE, createRefreshTokenCookie(refreshToken));
         return httpHeaders;
     }
 
     private String createRefreshTokenCookie(RefreshToken refreshToken) {
-        ResponseCookie refresh = ResponseCookie.from(AuthenticationTokenHeaders.REFRESH_TOKEN_COOKIE_HEADER, refreshToken.getTokenString())
+        ResponseCookie refresh = ResponseCookie.from(AuthenticationTokenHeaderNames.REFRESH_TOKEN_COOKIE_NAME, refreshToken.getTokenString())
                 .secure(true)
                 .sameSite("None")
                 .httpOnly(true)

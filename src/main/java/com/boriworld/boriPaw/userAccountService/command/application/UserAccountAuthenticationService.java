@@ -4,6 +4,8 @@ package com.boriworld.boriPaw.userAccountService.command.application;
 import com.boriworld.boriPaw.userAccountService.command.application.dto.LoginProcess;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
+import com.boriworld.boriPaw.userAccountService.command.domain.exception.AuthenticationTokenException;
+import com.boriworld.boriPaw.userAccountService.command.domain.exception.NotRegisteredEmailException;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.AccessTokenCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationToken;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.*;
@@ -11,9 +13,10 @@ import com.boriworld.boriPaw.userAccountService.command.domain.repository.Refres
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.*;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.useCase.AccessTokenReissue;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.RefreshTokenCreate;
-import com.boriworld.boriPaw.userAccountService.command.domain.exception.LoginFailException;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.RefreshTokenId;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,43 +37,61 @@ public class UserAccountAuthenticationService {
     @Transactional
     public AuthenticationToken processLogin(LoginProcess loginProcess) {
         log.info("login process");
-        UserAccountLogin userAccountLogin = new UserAccountLogin(loginProcess.password());
-        UserAccount userAccount = userAccountRepository.findByEmail(loginProcess.email())
-                .orElseThrow(() -> LoginFailException.forMessage("이메일로 계정을 확인할수 없습니다."))
-                .login(userAccountLogin, userAccountPasswordEncoder);
-
-        return createAuthenticationToken(userAccount);
-    }
-
-    private AuthenticationToken createAuthenticationToken(UserAccount userAccount) {
-        AccessTokenCreate accessTokenCreate = new AccessTokenCreate(userAccount.getUserAccountId(), userAccount.getAuthority());
-        AccessToken accessToken = AccessToken.createFrom(accessTokenCreate, authenticationTokenService, authenticationTokenPayloadEncoder);
-
-        RefreshToken refreshToken = RefreshToken.createFrom(
-                new RefreshTokenCreate(userAccount.getUserAccountId(), userAccount.getAuthority()), authenticationTokenService,
-                authenticationTokenPayloadEncoder);
-        refreshTokenRepository.save(refreshToken);
-        return new AuthenticationToken(accessToken, refreshToken);
+        UserAccount userAccount = getUserAccountByEmail(loginProcess.email())
+                .login(new UserAccountLogin(loginProcess.password()), userAccountPasswordEncoder);
+        UserAccount LoggedInAccount = userAccountRepository.update(userAccount);
+        return createAuthenticationToken(LoggedInAccount);
     }
 
     @Transactional
-    public AuthenticationToken processReissueToken(final String refreshToken) {
-        RefreshToken refreshTokenFromString = RefreshToken.createFromTokenString(refreshToken, authenticationTokenService);
-        RefreshToken reissuedRefreshToken = refreshTokenRepository.findRefreshTokenId(refreshTokenFromString.getRefreshTokenId())
+    public AuthenticationToken processReissueToken(final String refreshTokenString) {
+
+        RefreshToken fromTokenString = RefreshToken.fromTokenString(refreshTokenString, authenticationTokenService, authenticationTokenPayloadEncoder);
+
+        RefreshToken reissue = refreshTokenRepository.findRefreshTokenId(fromTokenString.getRefreshTokenId())
                 .orElseThrow()
                 .reissue(authenticationTokenService, authenticationTokenPayloadEncoder);
 
-        refreshTokenRepository.save(reissuedRefreshToken);
-        AccessTokenReissue accessTokenReissue = new AccessTokenReissue();
-        return new AuthenticationToken(AccessToken.reissueFromRefresh(accessTokenReissue), reissuedRefreshToken);
+        refreshTokenRepository.save(reissue);
+
+        AccessToken accessToken = AccessToken.reissue(reissue, authenticationTokenService, authenticationTokenPayloadEncoder);
+
+        return new AuthenticationToken(accessToken, reissue);
     }
 
     @Transactional
     public void processLogout(Long userAccountId) {
-
+        RefreshToken refreshToken = refreshTokenRepository.findRefreshTokenId(RefreshTokenId.from(UserAccountId.of(userAccountId)))
+                .orElseThrow();
+        refreshTokenRepository.delete(refreshToken);
     }
 
-    public void processAuthenticationByAccessToken(final String tokenString) {
+    public void processAuthenticationByAccessToken(final String tokenString) throws AuthenticationTokenException {
         AccessToken.processingAuthenticationFromTokenString(tokenString, authenticationTokenService, authenticationTokenPayloadEncoder, securityContextManager);
+    }
+
+    private UserAccount getUserAccountByEmail(final String email) {
+        return userAccountRepository.findByEmail(email)
+                .orElseThrow(() -> NotRegisteredEmailException.forMessage("이메일로 계정을 확인할수 없습니다."));
+    }
+
+    private AuthenticationToken createAuthenticationToken(UserAccount userAccount) {
+        return new AuthenticationToken(
+                createAccessToken(userAccount.getUserAccountId(), userAccount.getAuthority()),
+                createAndSaveRefreshToken(userAccount.getUserAccountId(), userAccount.getAuthority()));
+    }
+
+    private RefreshToken createAndSaveRefreshToken(UserAccountId userAccountId, Authority authority) {
+        RefreshTokenCreate refreshTokenCreate = new RefreshTokenCreate(userAccountId, authority);
+        RefreshToken refreshToken = RefreshToken.from(refreshTokenCreate, authenticationTokenService, authenticationTokenPayloadEncoder);
+        refreshTokenRepository.save(refreshToken);
+        return refreshToken;
+    }
+
+    private AccessToken createAccessToken(UserAccountId userAccountId, Authority authority) {
+        return AccessToken.createFrom(
+                new AccessTokenCreate(userAccountId, authority),
+                authenticationTokenService,
+                authenticationTokenPayloadEncoder);
     }
 }

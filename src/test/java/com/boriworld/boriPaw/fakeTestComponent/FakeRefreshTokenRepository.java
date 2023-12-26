@@ -8,12 +8,18 @@ import java.util.Optional;
 
 public class FakeRefreshTokenRepository implements RefreshTokenRepository {
     @Override
-    public RefreshToken save(RefreshToken refreshToken) {
-        return null;
+    public void save(RefreshToken refreshToken) {
+
     }
 
     @Override
     public Optional<RefreshToken> findRefreshTokenId(RefreshTokenId refreshTokenId) {
         return Optional.empty();
+    }
+
+    @Override
+    public void delete(RefreshToken refreshToken) {
+
+
     }
 }

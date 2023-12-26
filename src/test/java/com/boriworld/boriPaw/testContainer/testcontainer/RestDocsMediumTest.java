@@ -2,11 +2,13 @@ package com.boriworld.boriPaw.testContainer.testcontainer;
 
 
 import org.junit.jupiter.api.BeforeEach;
-
 import org.junit.jupiter.api.extension.ExtendWith;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+
 import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -20,41 +22,40 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.nio.charset.Charset;
+
+
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
 
 @ActiveProfiles("test")
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
-public abstract class RestDocsMediumTest extends MediumTestContainerRunner{
+public abstract class RestDocsMediumTest extends MediumTestContainerRunner {
+    @Autowired
     protected MockMvc mockMvc;
     protected final ObjectMapper objectMapper = new ObjectMapper();
+
     public static OperationRequestPreprocessor getDocumentRequest() {
         return preprocessRequest(
-                modifyUris().removePort(),
+                modifyUris()
+                        .removePort()
+                        .scheme("https")
+                        .host("server.boripaw.com"),
                 prettyPrint()
+
         );
     }
 
     public static OperationResponsePreprocessor getDocumentResponse() {
         return preprocessResponse(
-                modifyUris().removePort(),
+                modifyUris()
+                        .removePort()
+                        .scheme("https")
+                        .host("server.boripaw.com"),
                 prettyPrint());
-    }
-
-    @BeforeEach
-    void setMockMvc(WebApplicationContext webApplicationContext, RestDocumentationContextProvider provider) {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(provider)
-                        .uris()
-                        .withScheme("https")
-                        .withHost("server.boripaw.com")
-                        .withPort(8080))
-                .addFilter(new CharacterEncodingFilter("UTF-8", true))
-                .alwaysDo(print())
-                .build();
     }
 }

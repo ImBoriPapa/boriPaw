@@ -2,7 +2,22 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
+
+== Login
+
 include::{snippets}/userAccount/authentication/login/http-request.adoc[]
 
 include::{snippets}/userAccount/authentication/login/http-response.adoc[]
 include::{snippets}/userAccount/authentication/login/response-headers.adoc[]
+
+== Login Fail
+
+include::{snippets}/userAccount/authentication/loginFailByEmail/http-request.adoc[]
+include::{snippets}/userAccount/authentication/loginFailByEmail/http-response.adoc[]
+include::{snippets}/userAccount/authentication/loginFailByEmail/response-fields.adoc[]
+
+== Reissue
+
+include::{snippets}/userAccount/authentication/reissue/http-request.adoc[]
+include::{snippets}/userAccount/authentication/reissue/http-response.adoc[]
+include::{snippets}/userAccount/authentication/reissue/response-headers.adoc[]

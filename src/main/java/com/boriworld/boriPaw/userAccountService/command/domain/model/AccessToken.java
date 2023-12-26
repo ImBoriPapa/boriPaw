@@ -6,7 +6,6 @@ import com.boriworld.boriPaw.userAccountService.command.domain.dto.Authenticatio
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenPayloadEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenService;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.SecurityContextManager;
-import com.boriworld.boriPaw.userAccountService.command.domain.useCase.AccessTokenReissue;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.AuthenticationTokenStatus;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.AuthenticationTokenType;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
@@ -39,6 +38,14 @@ public final class AccessToken {
         this.authority = authority;
     }
 
+    public static AccessToken reissue(RefreshToken refreshToken, AuthenticationTokenService service, AuthenticationTokenPayloadEncoder encoder) {
+        UserAccountId accountId = UserAccountId.of(Long.parseLong(service.getSubject(refreshToken.getTokenString())));
+        Authority authority = Authority.formString(encoder.decode(service.getClaim(refreshToken.getTokenString(), "authority").toString()));
+        AuthenticationTokenCredentials authenticationTokenCredentials = createAuthenticationTokenCredentials(accountId, authority, encoder);
+        String generateTokenString = service.generateTokenString(authenticationTokenCredentials, AuthenticationTokenType.ACCESS_TOKEN);
+        return new AccessToken(generateTokenString, accountId, authority);
+    }
+
     private void checkNullParameter(String tokenString, UserAccountId userAccountId, Authority authority) {
         Objects.requireNonNull(tokenString, "tokenString must not be null");
         Objects.requireNonNull(userAccountId, "userAccountId must not be null");
@@ -59,30 +66,25 @@ public final class AccessToken {
     public static AccessToken createFrom(AccessTokenCreate accessTokenCreate, AuthenticationTokenService tokenService, AuthenticationTokenPayloadEncoder encoder) {
         checkNullObject(accessTokenCreate, tokenService, encoder);
         return new AccessToken(
-                tokenService.generateTokenString(createAuthenticationTokenCredentials(accessTokenCreate, encoder), AuthenticationTokenType.ACCESS_TOKEN),
+                tokenService.generateTokenString(createAuthenticationTokenCredentials(accessTokenCreate.userAccountId(), accessTokenCreate.authority(), encoder), AuthenticationTokenType.ACCESS_TOKEN),
                 accessTokenCreate.userAccountId(),
                 accessTokenCreate.authority());
     }
 
-    private static AuthenticationTokenCredentials createAuthenticationTokenCredentials(AccessTokenCreate accessTokenCreate, AuthenticationTokenPayloadEncoder encoder) {
+    private static AuthenticationTokenCredentials createAuthenticationTokenCredentials(UserAccountId userAccountId, Authority authority, AuthenticationTokenPayloadEncoder encoder) {
         return new AuthenticationTokenCredentials(
-                accessTokenCreate.userAccountId().getId().toString(),
-                encodeClaims(accessTokenCreate, encoder));
+                userAccountId.getId().toString(),
+                encodeClaims(authority, encoder));
     }
 
-    private static Map<String, String> encodeClaims(AccessTokenCreate accessTokenCreate, AuthenticationTokenPayloadEncoder encoder) {
-        return Map.of("authority", encoder.encode(accessTokenCreate.authority().name()));
+    private static Map<String, String> encodeClaims(Authority authority, AuthenticationTokenPayloadEncoder encoder) {
+        return Map.of("authority", encoder.encode(authority.name()));
     }
 
     private static void checkNullObject(AccessTokenCreate accessTokenCreate, AuthenticationTokenService tokenService, AuthenticationTokenPayloadEncoder encoder) {
         Objects.requireNonNull(accessTokenCreate, "AccessTokenCreate must not be null");
         Objects.requireNonNull(tokenService, "AuthenticationTokenService must not be null");
         Objects.requireNonNull(encoder, "SecurityContextManager must not be null");
-    }
-
-
-    public static AccessToken reissueFromRefresh(AccessTokenReissue accessTokenReissue) {
-        return null;
     }
 
     /**
@@ -99,7 +101,7 @@ public final class AccessToken {
 
         AuthenticationTokenStatus tokenStatus = service.validateToken(tokenString);
         if (tokenStatus != AuthenticationTokenStatus.ACCESS) {
-            tokenStatus.throwAccessTokenErrorException();
+            tokenStatus.throwAuthenticationTokenErrorException();
         }
 
         UserAccountId accountId = UserAccountId.of(Long.parseLong(service.getSubject(tokenString)));

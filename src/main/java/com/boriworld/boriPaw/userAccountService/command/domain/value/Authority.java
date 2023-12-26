@@ -19,7 +19,7 @@ public enum Authority {
         return Arrays.stream(Authority.values())
                 .filter(authority -> authority.name().equals(string))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("찾을 수 없다."));
+                .orElseThrow(() -> NotFoundAuthorityFromStringException.forMessage("String 으로 부터 일치하는 Authority 를 찾을 수 없습니다다."));
     }
 
     public String[] getRoles() {

@@ -1,4 +1,4 @@
-package com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence;
+package com.boriworld.boriPaw.userAccountService.command.infrastructure.redis;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.EmailCertificationCodeRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.EmailCertificationCode;

@@ -10,29 +10,24 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Component
 @ActiveProfiles(value = {"test", "local"})
 @RequiredArgsConstructor
 @Transactional
-public class TestUserAccounts {
+public class TestUserAccountsFactory {
     private final UserAccountPasswordEncoder encoder;
     private final UserAccountRepository userAccountRepository;
     private final EntityManager em;
+    public final String TESTER_EMAIL = "tester@gmail.com";
+    public final String TESTER_USERNAME = "testUser";
+    public final String TESTER_RAW_PASSWORD = "password1234!@";
+    public final String TESTER_NICKNAME = "tester";
 
-    public List<UserAccount> init() {
-        List<UserAccount> userAccounts = new ArrayList<>();
-        String email = "tester1@test.com";
-        String username = "testUser1";
-        String password = "password1234!@";
-        String nickname = "tester1";
-
-        UserAccountCreate create = new UserAccountCreate(email, username, password, nickname);
-        UserAccount userAccount = UserAccount.from(create, encoder);
-        UserAccount account = userAccountRepository.save(userAccount);
-        userAccounts.add(account);
-        return userAccounts;
+    public UserAccount initTester() {
+        UserAccountCreate accountCreate = new UserAccountCreate(TESTER_EMAIL, TESTER_USERNAME, TESTER_RAW_PASSWORD, TESTER_NICKNAME);
+        UserAccount userAccount = userAccountRepository.save(UserAccount.from(accountCreate, encoder));
+        em.flush();
+        em.clear();
+        return userAccount;
     }
 }

@@ -7,6 +7,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.value.RefreshToke
 import java.util.Optional;
 
 public interface RefreshTokenRepository {
-    RefreshToken save(RefreshToken refreshToken);
+    void save(RefreshToken refreshToken);
     Optional<RefreshToken> findRefreshTokenId(RefreshTokenId refreshTokenId);
+    void delete(RefreshToken refreshToken);
 }

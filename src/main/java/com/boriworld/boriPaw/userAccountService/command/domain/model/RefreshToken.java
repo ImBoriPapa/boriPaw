@@ -4,8 +4,10 @@ import com.boriworld.boriPaw.userAccountService.command.domain.dto.Authenticatio
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenPayloadEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenService;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.RefreshTokenCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.RefreshTokenInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import lombok.Getter;
+
 
 import java.time.Duration;
 import java.time.Instant;
@@ -27,8 +29,14 @@ public final class RefreshToken {
         this.timeToLiveInMilliseconds = timeToLiveInMilliseconds;
     }
 
+    /**
+     * 데이터베이스에서 조회한 데이터로 초기화하기 위한 메서드입니다. 다른 용도로 사용해서는 안됩니다.
+     */
+    public static RefreshToken initialize(RefreshTokenInitialize initialize) {
+        return new RefreshToken(RefreshTokenId.from(initialize.refreshTokenId()), initialize.tokenString(), initialize.timeToLive());
+    }
 
-    public static RefreshToken createFrom(RefreshTokenCreate refreshTokenCreate, AuthenticationTokenService service, AuthenticationTokenPayloadEncoder encoder) {
+    public static RefreshToken from(RefreshTokenCreate refreshTokenCreate, AuthenticationTokenService service, AuthenticationTokenPayloadEncoder encoder) {
         Objects.requireNonNull(refreshTokenCreate, "RefreshTokenCreate must be not null");
         Objects.requireNonNull(service, "AuthenticationTokenService must be not null");
         Objects.requireNonNull(encoder, "AuthenticationTokenPayloadEncoder must be not null");
@@ -37,24 +45,31 @@ public final class RefreshToken {
         AuthenticationTokenCredentials credentials = createTokenCredentials(userAccountId, encodedAuthority);
         String generateToken = service.generateTokenString(credentials, AuthenticationTokenType.REFRESH_TOKEN);
         Instant expirationTime = service.getExpiredDate(generateToken).toInstant();
-        return new RefreshToken(RefreshTokenId.of(userAccountId), generateToken, calculateTimeToLive(expirationTime));
-    }
-
-    public static RefreshToken createFromTokenString(final String tokenString, AuthenticationTokenService service) {
-        UserAccountId userAccountId = UserAccountId.of(Long.parseLong(service.getSubject(tokenString)));
-        long calculateTimeToLive = calculateTimeToLive(service.getExpiredDate(tokenString).toInstant());
-        return new RefreshToken(RefreshTokenId.of(userAccountId), tokenString, calculateTimeToLive);
+        return new RefreshToken(RefreshTokenId.from(userAccountId), generateToken, calculateTimeToLive(expirationTime));
     }
 
     private static AuthenticationTokenCredentials createTokenCredentials(UserAccountId userAccountId, String encodedAuthority) {
         return new AuthenticationTokenCredentials(userAccountId.getId().toString(), Map.of("authority", encodedAuthority));
     }
 
+    public static RefreshToken fromTokenString(String refreshTokenString, AuthenticationTokenService authenticationTokenService, AuthenticationTokenPayloadEncoder authenticationTokenPayloadEncoder) {
+
+        AuthenticationTokenStatus authenticationTokenStatus = authenticationTokenService.validateToken(refreshTokenString);
+        if (authenticationTokenStatus != AuthenticationTokenStatus.ACCESS) {
+            authenticationTokenStatus.throwAuthenticationTokenErrorException();
+        }
+
+        RefreshTokenId id = RefreshTokenId.from(authenticationTokenService.getSubject(refreshTokenString));
+        long timeToLive = calculateTimeToLive(authenticationTokenService.getExpiredDate(refreshTokenString).toInstant());
+
+        return new RefreshToken(id, refreshTokenString, timeToLive);
+    }
+
     public RefreshToken reissue(AuthenticationTokenService tokenService, AuthenticationTokenPayloadEncoder encoder) {
         AuthenticationTokenStatus authenticationTokenStatus = tokenService.validateToken(this.tokenString);
 
         if (authenticationTokenStatus != AuthenticationTokenStatus.ACCESS) {
-            authenticationTokenStatus.throwAccessTokenErrorException();
+            authenticationTokenStatus.throwAuthenticationTokenErrorException();
         }
 
         UserAccountId userAccountId = UserAccountId.of(Long.parseLong(tokenService.getSubject(this.tokenString)));
@@ -64,9 +79,8 @@ public final class RefreshToken {
         String generateToken = tokenService.generateTokenString(tokenCredentials, AuthenticationTokenType.REFRESH_TOKEN);
         Instant expirationTime = tokenService.getExpiredDate(generateToken).toInstant();
 
-        return new RefreshToken(RefreshTokenId.of(userAccountId), generateToken, calculateTimeToLive(expirationTime));
+        return new RefreshToken(RefreshTokenId.from(userAccountId), generateToken, calculateTimeToLive(expirationTime));
     }
-
 
     private static long calculateTimeToLive(Instant expirationTime) {
         return Duration.between(Instant.now(), expirationTime).toMillis();

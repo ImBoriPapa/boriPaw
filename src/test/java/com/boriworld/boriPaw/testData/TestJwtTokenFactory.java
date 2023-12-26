@@ -1,46 +1,31 @@
-package com.boriworld.boriPaw.userAccountService.command.infrastructure.imports;
+package com.boriworld.boriPaw.testData;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationTokenCredentials;
-import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenService;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.AuthenticationTokenStatus;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.AuthenticationTokenType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.security.Key;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 
-/**
- * Jwt 를 이용한 인증 토큰 생성,검증등
- */
 @Component
-@Slf4j
-public final class JwtAuthenticationTokenService implements AuthenticationTokenService {
+@ActiveProfiles("test")
+public class TestJwtTokenFactory {
     private final String SECRET_KEY;
-    private final long ACCESS_TOKEN_LIFE_MILLI_SECONDS;
-    private final long REFRESH_TOKEN_LIFE_MILLI_SECONDS;
 
-    public JwtAuthenticationTokenService(
-            @Value("${secrete.secrete_key}") String secreteKey,
-            @Value("${secrete.accessTokenLifeMillieSeconds}") long accessTokenLifeMillieSeconds,
-            @Value("${secrete.refreshTokenLifeMillieSeconds}") long refreshTokenLifeMillieSeconds) {
+    public TestJwtTokenFactory(
+            @Value("${secrete.secrete_key}") String secreteKey) {
         this.SECRET_KEY = secreteKey;
-        this.ACCESS_TOKEN_LIFE_MILLI_SECONDS = accessTokenLifeMillieSeconds;
-        this.REFRESH_TOKEN_LIFE_MILLI_SECONDS = refreshTokenLifeMillieSeconds;
     }
 
-    public String generateTokenString(AuthenticationTokenCredentials credentials, AuthenticationTokenType type) {
-        log.debug("generate token string");
-        Date nowDate = Date.from(Instant.now());
-        long expiration = type == AuthenticationTokenType.ACCESS_TOKEN ? ACCESS_TOKEN_LIFE_MILLI_SECONDS : REFRESH_TOKEN_LIFE_MILLI_SECONDS;
-        Date expiryDate = new Date(nowDate.getTime() + expiration);
+    public String generateTokenString(AuthenticationTokenCredentials credentials, Date start,Date expiration) {
+
         return Jwts.builder()
                 /*
                     @Issue setClaims() 이전에 setSubject() 를 사용하면 getSubject() = null 이슈
@@ -48,24 +33,19 @@ public final class JwtAuthenticationTokenService implements AuthenticationTokenS
                  */
                 .setClaims(credentials.claims())
                 .setSubject(credentials.subject())
-                .setIssuedAt(nowDate)
-                .setExpiration(expiryDate)
+                .setIssuedAt(start)
+                .setExpiration(expiration)
                 .signWith(getEncodedSecreteKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
     public AuthenticationTokenStatus validateToken(String token) {
-        log.info("validate token String");
         try {
             getClaimsJws(token);
-
-            log.info("access token verification result= {}", AuthenticationTokenStatus.ACCESS);
             return AuthenticationTokenStatus.ACCESS;
         } catch (ExpiredJwtException e) {
-            log.info("access token verification result= {}", AuthenticationTokenStatus.EXPIRED);
             return AuthenticationTokenStatus.EXPIRED;
         } catch (JwtException | IllegalArgumentException e) {
-            log.info("access token verification result= {}", AuthenticationTokenStatus.DENIED);
             return AuthenticationTokenStatus.DENIED;
         } catch (Exception e) {
             return AuthenticationTokenStatus.ERROR;
@@ -83,7 +63,7 @@ public final class JwtAuthenticationTokenService implements AuthenticationTokenS
                 .get(key);
     }
 
-    @Override
+
     public Date getExpiredDate(String generateToken) {
         return getClaimsJws(generateToken)
                 .getBody()

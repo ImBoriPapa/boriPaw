@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.interfaces.controller;
 
-import com.boriworld.boriPaw.common.constant.AuthenticationTokenHeaders;
+import com.boriworld.boriPaw.common.constant.AuthenticationTokenHeaderNames;
 import com.boriworld.boriPaw.common.validator.ConstraintValidationFailureException;
 import com.boriworld.boriPaw.fakeTestComponent.FakeComponentContainer;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
@@ -8,7 +8,6 @@ import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccou
 import com.boriworld.boriPaw.userAccountService.command.interfaces.request.LoginRequest;
 import com.boriworld.boriPaw.userAccountService.command.interfaces.response.LoginResponse;
 import org.assertj.core.api.AbstractThrowableAssert;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -84,9 +83,9 @@ class UserAccountAuthenticationControllerSmallTest {
         HttpCookie refreshTokenCookie = HttpCookie.parse(cookies.get(0)).get(0);
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getHeaders().getFirst(AuthenticationTokenHeaders.AUTHORIZATION_HEADER)).isNotNull();
+        assertThat(response.getHeaders().getFirst(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER)).isNotNull();
         assertThat(cookies).isNotEmpty().hasSize(1);
-        assertThat(refreshTokenCookie.getName()).isEqualTo(AuthenticationTokenHeaders.REFRESH_TOKEN_COOKIE_HEADER);
+        assertThat(refreshTokenCookie.getName()).isEqualTo(AuthenticationTokenHeaderNames.REFRESH_TOKEN_COOKIE_NAME);
 
     }
 }

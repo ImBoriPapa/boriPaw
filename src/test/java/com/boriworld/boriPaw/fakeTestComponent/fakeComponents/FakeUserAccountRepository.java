@@ -70,4 +70,10 @@ public class FakeUserAccountRepository implements UserAccountRepository {
                 .filter(data -> data.getEmail().equals(email))
                 .findFirst();
     }
+
+    @Override
+    public UserAccount update(UserAccount userAccount) {
+        store.replace(userAccount.getUserAccountId().getId(), userAccount);
+        return store.get(userAccount.getUserAccountId().getId());
+    }
 }

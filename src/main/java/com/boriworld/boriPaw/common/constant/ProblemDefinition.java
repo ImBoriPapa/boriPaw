@@ -14,7 +14,11 @@ public enum ProblemDefinition {
     UNABLE_FIND_SUPPORTABLE_VALIDATOR("", "", HttpStatus.BAD_REQUEST, ""),
     NOT_FOUND_RESOURCE("", "", HttpStatus.NOT_FOUND, ""),
     LOGIN_FAIL("", "", HttpStatus.UNAUTHORIZED, ""),
-    ;
+    NOT_REGISTERED_EMAIL("not-registered-email", "not registered", HttpStatus.NOT_FOUND, ""),
+    NOT_FOUND_AUTHORITY_FROM_STRING("here ", "here", HttpStatus.BAD_REQUEST, ""),
+    DENIED_TOKEN("here", "here", HttpStatus.UNAUTHORIZED, ""),
+    EXPIRED_TOKEN("here", "here", HttpStatus.UNAUTHORIZED, ""),
+    ERROR_TOKEN("type", "title", HttpStatus.FORBIDDEN, "");
     private final String type;
     private final String title;
     private final HttpStatus status;
