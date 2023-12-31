@@ -1,9 +1,8 @@
 package com.boriworld.boriPaw.followService.command.application;
 
-import com.boriworld.boriPaw.followService.command.domain.exception.AlreadyFollowException;
 import com.boriworld.boriPaw.followService.command.domain.model.*;
-import com.boriworld.boriPaw.followService.command.domain.repository.BlockFollowerRepository;
 import com.boriworld.boriPaw.followService.command.domain.repository.FollowRepository;
+import com.boriworld.boriPaw.followService.command.domain.event.FollowEventPublisher;
 import com.boriworld.boriPaw.followService.command.domain.service.FollowValidator;
 import com.boriworld.boriPaw.followService.command.domain.usecase.FollowCreate;
 import com.boriworld.boriPaw.followService.command.domain.value.FollowId;
@@ -21,15 +20,15 @@ import java.util.List;
 @Slf4j
 public class FollowService {
     private final FollowRepository followRepository;
-    private final BlockFollowerRepository blockFollowerRepository;
     private final List<FollowValidator> followValidators;
+    private final FollowEventPublisher eventPublisher;
 
     @Transactional
     public FollowId processFollow(FollowCreate followCreate) {
         log.info("process follow");
         validate(followCreate);
 
-        Follow follow = Follow.follow(new FollowCreate(followCreate.follower(), followCreate.following()));
+        Follow follow = Follow.from(new FollowCreate(followCreate.follower(), followCreate.following()));
 
         return followRepository.save(follow).getFollowId();
     }

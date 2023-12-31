@@ -35,7 +35,7 @@ public class CreateFollowValidator implements FollowValidator {
     }
 
     private void checkAlreadyFollow(FollowCreate followCreate) {
-        boolean exists = followRepository.existsByFollowerAndFollowing(followCreate.following(), followCreate.follower());
+        boolean exists = followRepository.existsByFollowerAndFollowing(followCreate.follower(), followCreate.following());
         if (exists) {
             //이미 팔로우 하고 있다면 예외
             throw AlreadyFollowException.forMessage("이미 팔로우 하고 있습니다.");

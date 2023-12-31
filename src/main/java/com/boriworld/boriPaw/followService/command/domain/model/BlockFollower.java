@@ -1,5 +1,6 @@
 package com.boriworld.boriPaw.followService.command.domain.model;
 
+import com.boriworld.boriPaw.followService.command.domain.value.BlockFollowerId;
 import com.boriworld.boriPaw.followService.command.domain.value.Follower;
 import com.boriworld.boriPaw.followService.command.domain.value.Following;
 

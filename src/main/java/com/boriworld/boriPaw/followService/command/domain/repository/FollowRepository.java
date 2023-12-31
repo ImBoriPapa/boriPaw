@@ -9,10 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FollowRepository {
-    boolean existsByFollowerAndFollowing(Following following, Follower follower);
+    boolean existsByFollowerAndFollowing(Follower follower,Following following);
 
     Follow save(Follow follow);
-    List<Follow> findAllByFollowing(Following following);
+
     Optional<Follow> findByFollowId(FollowId followId);
+
     void delete(Follow follow);
 }
