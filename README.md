@@ -35,20 +35,57 @@
             │   ├── config
             │   │   ├── AuthenticationTokenPayloadEncoderConfig.java
             │   │   ├── JpaConfig.java
+            │   │   ├── RedisConfig.java
             │   │   ├── SecurityConfig.java
             │   │   └── ValidatorConfig.java
             │   ├── constant
             │   │   ├── ApiEndpoints.java
-            │   │   ├── AuthenticationTokenHeaders.java
+            │   │   ├── AuthenticationTokenHeaderNames.java
             │   │   ├── EncodeAlgorithm.java
             │   │   └── ProblemDefinition.java
             │   ├── exception
             │   │   ├── CustomRuntimeException.java
             │   │   └── GlobalExceptionHandler.java
+            │   ├── factory
+            │   │   └── ErrorResponseFactory.java
             │   └── validator
-            │       ├── CustomValidationFailException.java
+            │       ├── ConstraintValidationFailureException.java
             │       ├── RequestConstraintValidator.java
-            │       └── RequestConstraintValidatorImpl.java
+            │       └── RequestObjectConstraintValidator.java
+            ├── followService
+            │   ├── command
+            │   │   ├── application
+            │   │   │   └── FollowService.java
+            │   │   ├── domain
+            │   │   │   ├── exception
+            │   │   │   │   └── AlreadyFollowException.java
+            │   │   │   ├── model
+            │   │   │   │   ├── BlockFollower.java
+            │   │   │   │   ├── BlockFollowerId.java
+            │   │   │   │   ├── Follow.java
+            │   │   │   │   └── FollowStatus.java
+            │   │   │   ├── repository
+            │   │   │   │   ├── BlockFollowerRepository.java
+            │   │   │   │   ├── FollowRepository.java
+            │   │   │   │   └── RelationshipRepository.java
+            │   │   │   ├── service
+            │   │   │   │   └── FollowValidator.java
+            │   │   │   ├── usecase
+            │   │   │   │   └── FollowCreate.java
+            │   │   │   └── value
+            │   │   │       ├── FollowId.java
+            │   │   │       ├── FollowStatus.java
+            │   │   │       ├── Follower.java
+            │   │   │       └── Following.java
+            │   │   ├── infrastructure
+            │   │   │   └── imports
+            │   │   │       └── CreateFollowValidator.java
+            │   │   └── interfaces
+            │   └── query
+            │       └── application
+            │           ├── FollowQueryRepository.java
+            │           ├── FollowQueryService.java
+            │           └── FollowerDto.java
             ├── supports
             │   ├── controller
             │   │   └── ProblemController.java
@@ -56,12 +93,9 @@
             └── userAccountService
                 ├── command
                 │   ├── application
-                │   │   ├── LoginFailException.java
                 │   │   ├── ProfileManagementService.java
-                │   │   ├── UnableToFindSupportedValidatorException.java
-                │   │   ├── UserAccountAuthenticationService.java
                 │   │   ├── UserAccountManagementService.java
-                │   │   ├── UserAccountManagementServiceImpl.java
+                │   │   ├── UserAuthenticationService.java
                 │   │   └── dto
                 │   │       ├── EmailCertification.java
                 │   │       └── LoginProcess.java
@@ -74,11 +108,24 @@
                 │   │   │   ├── AccountCreateEvent.java
                 │   │   │   ├── AccountEvent.java
                 │   │   │   └── UserAccountEventPublisher.java
+                │   │   ├── exception
+                │   │   │   ├── AccessTokenDeniedException.java
+                │   │   │   ├── AccessTokenExpiredException.java
+                │   │   │   ├── AuthenticationTokenException.java
+                │   │   │   ├── BlockUserAccountException.java
+                │   │   │   ├── DuplicateEmailException.java
+                │   │   │   ├── DuplicateUsernameException.java
+                │   │   │   ├── LoginFailException.java
+                │   │   │   ├── NotRegisteredEmailException.java
+                │   │   │   ├── TokenReissueFailException.java
+                │   │   │   ├── UnableToFindSupportedValidatorException.java
+                │   │   │   └── UserAccountMismatchException.java
                 │   │   ├── model
                 │   │   │   ├── AccessToken.java
                 │   │   │   ├── EmailCertificationCode.java
                 │   │   │   ├── RefreshToken.java
-                │   │   │   └── UserAccount.java
+                │   │   │   ├── UserAccount.java
+                │   │   │   └── UserAccountLogin.java
                 │   │   ├── repository
                 │   │   │   ├── EmailCertificationCodeRepository.java
                 │   │   │   ├── RefreshTokenRepository.java
@@ -88,14 +135,15 @@
                 │   │   │   ├── AuthenticationTokenService.java
                 │   │   │   ├── CertificationMailSender.java
                 │   │   │   ├── EmailCertificationCodeGenerator.java
-                │   │   │   ├── SecurityContextManager.java
                 │   │   │   ├── UserAccountCreateValidator.java
                 │   │   │   ├── UserAccountPasswordEncoder.java
-                │   │   │   └── UserAccountValidator.java
+                │   │   │   ├── UserAccountValidator.java
+                │   │   │   └── UserAuthenticationContextManager.java
                 │   │   ├── useCase
                 │   │   │   ├── AccessTokenCreate.java
                 │   │   │   ├── AccessTokenReissue.java
                 │   │   │   ├── RefreshTokenCreate.java
+                │   │   │   ├── RefreshTokenInitialize.java
                 │   │   │   ├── SendCertificationEmail.java
                 │   │   │   ├── UserAccountCreate.java
                 │   │   │   ├── UserAccountInitialize.java
@@ -105,19 +153,13 @@
                 │   │       ├── AuthenticationTokenStatus.java
                 │   │       ├── AuthenticationTokenType.java
                 │   │       ├── Authority.java
+                │   │       ├── NotFoundAuthorityFromStringException.java
                 │   │       ├── PasswordStatus.java
                 │   │       ├── RefreshTokenId.java
                 │   │       ├── UserAccountId.java
                 │   │       └── UserProfile.java
-                │   ├── exception
-                │   │   ├── AccessTokenDeniedException.java
-                │   │   ├── AccessTokenExpiredException.java
-                │   │   ├── AuthenticationTokenException.java
-                │   │   ├── BlockUserAccountException.java
-                │   │   ├── DuplicateEmailException.java
-                │   │   ├── DuplicateUsernameException.java
-                │   │   └── UserAccountMismatchException.java
                 │   ├── handler
+                │   │   ├── AuthenticationTokenExceptionHandler.java
                 │   │   ├── JwtAccessDeniedHandler.java
                 │   │   ├── JwtAuthenticationEntryPoint.java
                 │   │   └── JwtAuthenticationFilter.java
@@ -130,43 +172,53 @@
                 │   │   │   ├── CipherAuthenticationTokenPayloadEncoder.java
                 │   │   │   ├── EmailCertificationCodeGeneratorImpl.java
                 │   │   │   ├── JwtAuthenticationTokenService.java
-                │   │   │   ├── SecurityContextManagerImpl.java
+                │   │   │   ├── SpringSecurityUserAuthenticationContextManager.java
                 │   │   │   └── UserAccountPasswordEncoderImpl.java
-                │   │   └── persistence
-                │   │       ├── AccountJpaRepository.java
+                │   │   ├── persistence
+                │   │   │   ├── AccountJpaRepository.java
+                │   │   │   ├── UserAccountEntity.java
+                │   │   │   ├── UserAccountRepositoryImpl.java
+                │   │   │   └── UserProfileValue.java
+                │   │   └── redis
                 │   │       ├── InMemoryEmailCertificationCodeRepository.java
-                │   │       ├── RefreshTokenRepositoryImpl.java
-                │   │       ├── UserAccountEntity.java
-                │   │       ├── UserAccountRepositoryImpl.java
-                │   │       └── UserProfileValue.java
+                │   │       ├── RefreshTokenRedisTemplateRepository.java
+                │   │       └── RefreshTokenStrings.java
                 │   └── interfaces
-                │       ├── AccountManagementController.java
-                │       ├── EmailCertificationResponse.java
-                │       ├── ReissueResponse.java
-                │       ├── TokenReissueFailException.java
-                │       ├── UserAccountAuthenticationController.java
+                │       ├── controller
+                │       │   ├── UserAccountManagementController.java
+                │       │   └── UserAuthenticationController.java
                 │       ├── request
                 │       │   ├── EmailCertificationRequest.java
                 │       │   ├── LoginRequest.java
                 │       │   └── UserAccountCreateRequest.java
                 │       └── response
+                │           ├── EmailCertificationResponse.java
                 │           ├── LoginResponse.java
+                │           ├── ReissueResponse.java
                 │           └── UserAccountCreateResponse.java
                 └── query
                     ├── application
-                    │   ├── ResourceNotFoundException.java
-                    │   └── UserAccountQueryService.java
+                    │   ├── UserAccountQueryService.java
+                    │   └── UserAuthenticationQueryService.java
                     ├── domain
+                    │   ├── exception
+                    │   │   └── ResourceNotFoundException.java
                     │   ├── model
-                    │   │   └── UserInformation.java
+                    │   │   ├── UserInformation.java
+                    │   │   └── UserProfileDetail.java
                     │   └── repository
-                    │       └── UserAccountQueryRepository.java
+                    │       ├── UserAccountQueryRepository.java
+                    │       └── UserAuthenticationQueryRepository.java
                     ├── infrastructure
                     │   └── persistence
-                    │       └── QueryDslUserAccountQueryRepository.java
+                    │       ├── QueryDslUserAccountQueryRepository.java
+                    │       └── UserAuthenticationQueryDslRepository.java
                     └── interfaces
-                        ├── UserAccountQueryController.java
+                        ├── controller
+                        │   ├── UserAccountQueryController.java
+                        │   └── UserAuthenticationQueryController.java
                         └── response
-                            └── UserInformationResponse.java
+                            ├── UserInformationResponse.java
+                            └── UserProfileDetailResponse.java
 
 ```
