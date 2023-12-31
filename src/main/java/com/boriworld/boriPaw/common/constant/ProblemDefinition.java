@@ -18,7 +18,8 @@ public enum ProblemDefinition {
     NOT_FOUND_AUTHORITY_FROM_STRING("here ", "here", HttpStatus.BAD_REQUEST, ""),
     DENIED_TOKEN("here", "here", HttpStatus.UNAUTHORIZED, ""),
     EXPIRED_TOKEN("here", "here", HttpStatus.UNAUTHORIZED, ""),
-    ERROR_TOKEN("type", "title", HttpStatus.FORBIDDEN, "");
+    ERROR_TOKEN("type", "title", HttpStatus.FORBIDDEN, ""),
+    ALREADY_FOLLOW("type", "title", HttpStatus.BAD_REQUEST, "");
     private final String type;
     private final String title;
     private final HttpStatus status;
