@@ -30,7 +30,81 @@
 └── com
     └── boriworld
         └── boriPaw
+            ├── common
+            │   ├── config
+            │   ├── constant
+            │   ├── exception
+            │   ├── factory
+            │   └── validator
+            ├── followService
+            │   ├── command
+            │   │   ├── application
+            │   │   ├── domain
+            │   │   │   ├── event
+            │   │   │   ├── exception
+            │   │   │   ├── model
+            │   │   │   ├── repository
+            │   │   │   ├── service
+            │   │   │   ├── usecase
+            │   │   │   └── value
+            │   │   ├── infrastructure
+            │   │   │   ├── event
+            │   │   │   ├── imports
+            │   │   │   └── persistence
+            │   │   └── interfaces
+            │   │       ├── controller
+            │   │       └── dto
+            │   └── query
+            │       ├── application
+            │       ├── domain
+            │       ├── infrastructure
+            │       └── interfaces
+            ├── supports
+            │   ├── controller
+            │   └── problem
+            └── userAccountService
+                ├── command
+                │   ├── application
+                │   │   └── dto
+                │   ├── domain
+                │   │   ├── dto
+                │   │   ├── event
+                │   │   ├── exception
+                │   │   ├── model
+                │   │   ├── repository
+                │   │   ├── service
+                │   │   ├── useCase
+                │   │   └── value
+                │   ├── handler
+                │   ├── infrastructure
+                │   │   ├── event
+                │   │   ├── imports
+                │   │   ├── persistence
+                │   │   └── redis
+                │   └── interfaces
+                │       ├── controller
+                │       ├── request
+                │       └── response
+                └── query
+                    ├── application
+                    ├── domain
+                    │   ├── exception
+                    │   ├── model
+                    │   └── repository
+                    ├── infrastructure
+                    │   └── persistence
+                    └── interfaces
+                        ├── controller
+                        └── response
+
+70 directories
+(base)  ~/Desktop/bori-world/boriPaw/src/main/java   main  tree   
+.
+└── com
+    └── boriworld
+        └── boriPaw
             ├── BoriPawApplication.java
+            ├── TestData.java
             ├── common
             │   ├── config
             │   │   ├── AuthenticationTokenPayloadEncoderConfig.java
@@ -57,35 +131,59 @@
             │   │   ├── application
             │   │   │   └── FollowService.java
             │   │   ├── domain
+            │   │   │   ├── event
+            │   │   │   │   ├── FollowCreateEvent.java
+            │   │   │   │   ├── FollowDeleteEvent.java
+            │   │   │   │   ├── FollowEvent.java
+            │   │   │   │   └── FollowEventPublisher.java
             │   │   │   ├── exception
             │   │   │   │   └── AlreadyFollowException.java
             │   │   │   ├── model
             │   │   │   │   ├── BlockFollower.java
-            │   │   │   │   ├── BlockFollowerId.java
-            │   │   │   │   ├── Follow.java
-            │   │   │   │   └── FollowStatus.java
+            │   │   │   │   └── Follow.java
             │   │   │   ├── repository
-            │   │   │   │   ├── BlockFollowerRepository.java
-            │   │   │   │   ├── FollowRepository.java
-            │   │   │   │   └── RelationshipRepository.java
+            │   │   │   │   └── FollowRepository.java
             │   │   │   ├── service
             │   │   │   │   └── FollowValidator.java
             │   │   │   ├── usecase
-            │   │   │   │   └── FollowCreate.java
+            │   │   │   │   ├── FollowCreate.java
+            │   │   │   │   └── FollowInitialize.java
             │   │   │   └── value
+            │   │   │       ├── BlockFollowerId.java
             │   │   │       ├── FollowId.java
             │   │   │       ├── FollowStatus.java
             │   │   │       ├── Follower.java
             │   │   │       └── Following.java
             │   │   ├── infrastructure
-            │   │   │   └── imports
-            │   │   │       └── CreateFollowValidator.java
+            │   │   │   ├── event
+            │   │   │   │   └── FollowEventApplicationPublisher.java
+            │   │   │   ├── imports
+            │   │   │   │   └── CreateFollowValidator.java
+            │   │   │   └── persistence
+            │   │   │       ├── FollowEntity.java
+            │   │   │       ├── FollowJpaRepository.java
+            │   │   │       └── FollowRepositoryImpl.java
             │   │   └── interfaces
+            │   │       ├── controller
+            │   │       │   └── FollowController.java
+            │   │       └── dto
+            │   │           └── FollowCreateRequest.java
             │   └── query
-            │       └── application
-            │           ├── FollowQueryRepository.java
-            │           ├── FollowQueryService.java
-            │           └── FollowerDto.java
+            │       ├── application
+            │       │   ├── FollowQueryRepository.java
+            │       │   └── FollowQueryService.java
+            │       ├── domain
+            │       │   ├── FollowerDetail.java
+            │       │   ├── FollowerQuery.java
+            │       │   ├── FollowerSlice.java
+            │       │   ├── Followers.java
+            │       │   ├── FollowingDetail.java
+            │       │   ├── FollowingQuery.java
+            │       │   └── FollowingSlice.java
+            │       ├── infrastructure
+            │       │   └── FollowQueryRepositoryJpaRepository.java
+            │       └── interfaces
+            │           └── FollowQueryController.java
             ├── supports
             │   ├── controller
             │   │   └── ProblemController.java
@@ -175,8 +273,8 @@
                 │   │   │   ├── SpringSecurityUserAuthenticationContextManager.java
                 │   │   │   └── UserAccountPasswordEncoderImpl.java
                 │   │   ├── persistence
-                │   │   │   ├── AccountJpaRepository.java
                 │   │   │   ├── UserAccountEntity.java
+                │   │   │   ├── UserAccountJpaRepository.java
                 │   │   │   ├── UserAccountRepositoryImpl.java
                 │   │   │   └── UserProfileValue.java
                 │   │   └── redis
@@ -220,5 +318,6 @@
                         └── response
                             ├── UserInformationResponse.java
                             └── UserProfileDetailResponse.java
+
 
 ```
