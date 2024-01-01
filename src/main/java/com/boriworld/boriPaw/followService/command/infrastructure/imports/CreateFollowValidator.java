@@ -1,7 +1,6 @@
 package com.boriworld.boriPaw.followService.command.infrastructure.imports;
 
 import com.boriworld.boriPaw.followService.command.domain.exception.AlreadyFollowException;
-import com.boriworld.boriPaw.followService.command.domain.repository.BlockFollowerRepository;
 import com.boriworld.boriPaw.followService.command.domain.repository.FollowRepository;
 import com.boriworld.boriPaw.followService.command.domain.service.FollowValidator;
 import com.boriworld.boriPaw.followService.command.domain.usecase.FollowCreate;
@@ -16,13 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 public class CreateFollowValidator implements FollowValidator {
-
-    BlockFollowerRepository blockFollowerRepository;
     private final FollowRepository followRepository;
 
     @Override
     public boolean support(Class<?> clazz) {
-        return UserAccountCreate.class.isAssignableFrom(clazz);
+        return FollowCreate.class.isAssignableFrom(clazz);
     }
 
     @Transactional(readOnly = true)
@@ -43,8 +40,8 @@ public class CreateFollowValidator implements FollowValidator {
     }
 
     private void checkBlockFollower(FollowCreate followCreate) {
-        boolean isBlock = blockFollowerRepository.existsByFollowingAndFollower(followCreate.following(), followCreate.follower());
-        if (isBlock) {
+
+        if (false) {
             throw BlockUserAccountException.forMessage("팔로우 할 수 없는 계정입니다.");
         }
     }

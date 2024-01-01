@@ -19,7 +19,7 @@ import lombok.Setter;
 public class UserAccountCreateRequest {
     @Email(message = "올바른 이메일 형식이어야 합니다.")
     private String email;
-    @Size(min = 8, message = "비밀번호는 최소 8자 이상이어야 합니다.")
+    @NotBlank(message = "유저네임을 입력해주세요")
     private String username;
     @Size(min = 8, message = "비밀번호는 최소 8자 이상이어야 합니다.")
     private String password;

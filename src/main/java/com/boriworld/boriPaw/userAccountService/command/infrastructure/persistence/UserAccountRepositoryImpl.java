@@ -13,36 +13,36 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class UserAccountRepositoryImpl implements UserAccountRepository {
-    private final AccountJpaRepository accountJpaRepository;
+    private final UserAccountJpaRepository userAccountJpaRepository;
 
     @Override
     public UserAccount save(UserAccount userAccount) {
-        return accountJpaRepository.save(UserAccountEntity.fromModel(userAccount)).toModel();
+        return userAccountJpaRepository.save(UserAccountEntity.fromModel(userAccount)).toModel();
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        return accountJpaRepository.existsByEmail(email);
+        return userAccountJpaRepository.existsByEmail(email);
     }
 
     @Override
     public boolean existsByUsername(String accountName) {
-        return accountJpaRepository.existsByUserName(accountName);
+        return userAccountJpaRepository.existsByUserName(accountName);
     }
 
     @Override
     public Optional<UserAccount> findById(UserAccountId userAccountId) {
-        return accountJpaRepository.findById(userAccountId.getId())
+        return userAccountJpaRepository.findById(userAccountId.getId())
                 .map(UserAccountEntity::toModel);
     }
 
     @Override
     public Optional<UserAccount> findByEmail(String email) {
-        return accountJpaRepository.findByEmail(email).map(UserAccountEntity::toModel);
+        return userAccountJpaRepository.findByEmail(email).map(UserAccountEntity::toModel);
     }
 
     @Override
     public UserAccount update(UserAccount userAccount) {
-        return accountJpaRepository.save(UserAccountEntity.fromModel(userAccount)).toModel();
+        return userAccountJpaRepository.save(UserAccountEntity.fromModel(userAccount)).toModel();
     }
 }

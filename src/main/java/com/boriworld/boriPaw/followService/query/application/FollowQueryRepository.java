@@ -1,12 +1,14 @@
 package com.boriworld.boriPaw.followService.query.application;
 
-import com.boriworld.boriPaw.followService.command.domain.model.Follow;
-import com.boriworld.boriPaw.followService.command.domain.value.Follower;
-import com.boriworld.boriPaw.followService.command.domain.value.Following;
 
-import java.util.List;
+import com.boriworld.boriPaw.followService.query.domain.FollowerQuery;
+import com.boriworld.boriPaw.followService.query.domain.FollowerSlice;
+import com.boriworld.boriPaw.followService.query.domain.FollowingQuery;
+import com.boriworld.boriPaw.followService.query.domain.FollowingSlice;
+
+
 
 public interface FollowQueryRepository {
-    List<Follow> findByFollowing(Following following);
-    List<Follow> findByFollower(Follower follower);
+    FollowerSlice findFollowersByFollowing(FollowerQuery followerQuery);
+    FollowingSlice findFollowingsByFollower(FollowingQuery followingQuery);
 }

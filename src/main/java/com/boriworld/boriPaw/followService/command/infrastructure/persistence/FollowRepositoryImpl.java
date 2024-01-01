@@ -18,7 +18,7 @@ public class FollowRepositoryImpl implements FollowRepository {
 
     @Override
     public boolean existsByFollowerAndFollowing(Follower follower,Following following) {
-        return followJpaRepository.findByFollowerAndFollowing(follower.getUserAccountId().getId(),follower.getUserAccountId().getId());
+        return followJpaRepository.existsByFollowerAndFollowing(follower.getUserAccountId().getId(),follower.getUserAccountId().getId());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.boriworld.boriPaw.followService.command.application;
 
+import com.boriworld.boriPaw.followService.command.domain.event.FollowCreateEvent;
+import com.boriworld.boriPaw.followService.command.domain.event.FollowDeleteEvent;
 import com.boriworld.boriPaw.followService.command.domain.model.*;
 import com.boriworld.boriPaw.followService.command.domain.repository.FollowRepository;
 import com.boriworld.boriPaw.followService.command.domain.event.FollowEventPublisher;
@@ -27,10 +29,14 @@ public class FollowService {
     public FollowId processFollow(FollowCreate followCreate) {
         log.info("process follow");
         validate(followCreate);
-
+        log.info("here?");
         Follow follow = Follow.from(new FollowCreate(followCreate.follower(), followCreate.following()));
 
-        return followRepository.save(follow).getFollowId();
+        Follow followed = followRepository.save(follow);
+
+        eventPublisher.publish(new FollowCreateEvent(followed));
+
+        return followed.getFollowId();
     }
 
     @Transactional
@@ -40,6 +46,8 @@ public class FollowService {
                 .orElseThrow(() -> ResourceNotFoundException.forMessage("not found"));
 
         followRepository.delete(follow);
+
+        eventPublisher.publish(new FollowDeleteEvent(follow));
     }
 
     private void validate(Object o) {

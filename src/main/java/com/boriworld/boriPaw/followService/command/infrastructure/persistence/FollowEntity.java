@@ -12,6 +12,13 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(
+        name = "follow",
+        indexes = {
+                @Index(name = "idx_following", columnList = "following"),
+                @Index(name = "idx_follower", columnList = "follower")
+        }
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FollowEntity {
     @Id
@@ -38,7 +45,7 @@ public class FollowEntity {
 
     public static FollowEntity fromModel(Follow follow) {
         return new FollowEntity(
-                follow.getFollowId().getId(),
+                follow.getFollowId() == null ? null : follow.getFollowId().getId(),
                 follow.getFollowing().getUserAccountId().getId(),
                 follow.getFollower().getUserAccountId().getId(),
                 follow.getFollowedAt());

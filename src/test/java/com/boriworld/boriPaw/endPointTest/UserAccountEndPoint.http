@@ -39,3 +39,32 @@ POST localhost:8080/api/logout/1
 ### Get Profile
 GET localhost:8080/api/userAccounts/1/profile
 Authorization: {{access_token}}
+
+
+
+#### login tester1
+POST localhost:8080/api/login
+Content-Type: application/json
+
+{
+  "email": "email1@gmail.com",
+  "password": "testpassword1234"
+}
+
+> {%
+    client.global.set("access_token", response.headers.valueOf("Authorization"));
+    client.log(client.global.get("access_token"));
+%}
+
+### Create Follow
+POST localhost:8080/api/follow
+Authorization: {{access_token}}
+Content-Type: application/json
+
+{
+  "followingId": 1
+}
+
+### get Follower
+GET localhost:8080/api/follower?last=2
+Authorization: {{access_token}}
