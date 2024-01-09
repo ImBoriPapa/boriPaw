@@ -1,10 +1,12 @@
 package com.boriworld.boriPaw.followService.query.interfaces;
 
 import com.boriworld.boriPaw.common.constant.ApiEndpoints;
+import com.boriworld.boriPaw.followService.command.domain.value.FollowId;
 import com.boriworld.boriPaw.followService.command.domain.value.Following;
 import com.boriworld.boriPaw.followService.query.application.FollowQueryService;
-import com.boriworld.boriPaw.followService.query.domain.FollowerQuery;
-import com.boriworld.boriPaw.followService.query.domain.FollowerSlice;
+import com.boriworld.boriPaw.followService.query.domain.usecase.FollowersFindByCondition;
+import com.boriworld.boriPaw.followService.query.domain.model.Followers;
+import com.boriworld.boriPaw.followService.query.domain.value.Requester;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,33 +14,42 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class FollowQueryController {
-
     private final FollowQueryService followQueryService;
 
-    @GetMapping(ApiEndpoints.GET_FOLLOWER)
-    public ResponseEntity<FollowerSlice> getFollower(@AuthenticationPrincipal UserAccountPrincipal principal,
-                                                     @RequestParam(defaultValue = "0") Long last) {
-        Following following = Following.of(principal.userAccountId().getId());
-
-        FollowerSlice followerSlice = followQueryService.findFollower(new FollowerQuery(following, last));
+    /**
+     * Using Value Path
+     * GET /follow/followers?userAccountId=123 : userAccountId=123 를 팔로우하는 목록
+     */
+    @GetMapping(ApiEndpoints.GET_FOLLOWERS)
+    public ResponseEntity<Followers> getFollowers(FollowersSearchParameters parameters,
+                                                  @AuthenticationPrincipal UserAccountPrincipal principal) {
+        log.info("userAccountId: {}", parameters.getUserAccountId());
+        log.info("followId: {}", parameters.getFollowId());
+        Following following = Following.of(parameters.getUserAccountId());
+        Requester requester = Requester.of(principal.userAccountId());
+        FollowId followId = FollowId.of(parameters.getFollowId());
+        Followers followers = followQueryService.findFollowers(new FollowersFindByCondition(following, requester, followId, 10, 10));
 
         return ResponseEntity
                 .ok()
-                .body(followerSlice);
+                .body(followers);
     }
 
-    @GetMapping(ApiEndpoints.GET_FOLLOWING)
-    public ResponseEntity getFollowing(@AuthenticationPrincipal UserAccountPrincipal principal) {
+    /**
+     * Using Value Path
+     * GET /follow/followings?userAccountId=123 : userAccountId=123 가 팔로우하는 목록
+     */
+    @GetMapping(ApiEndpoints.GET_FOLLOWINGS)
+    public ResponseEntity<Followers> getFollowings() {
 
-
-        return null;
+        return ResponseEntity
+                .ok()
+                .body(null);
     }
 }

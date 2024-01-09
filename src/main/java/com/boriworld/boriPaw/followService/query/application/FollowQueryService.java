@@ -1,11 +1,9 @@
 package com.boriworld.boriPaw.followService.query.application;
 
-import com.boriworld.boriPaw.followService.command.domain.model.Follow;
-import com.boriworld.boriPaw.followService.command.domain.value.Follower;
-import com.boriworld.boriPaw.followService.query.domain.FollowerQuery;
-import com.boriworld.boriPaw.followService.query.domain.FollowerSlice;
-import com.boriworld.boriPaw.followService.query.domain.FollowingQuery;
-import com.boriworld.boriPaw.followService.query.domain.FollowingSlice;
+import com.boriworld.boriPaw.followService.query.domain.usecase.FollowersFindByCondition;
+import com.boriworld.boriPaw.followService.query.domain.model.Followers;
+
+import com.boriworld.boriPaw.followService.query.domain.repository.FollowQueryRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Component;
@@ -22,17 +20,10 @@ public class FollowQueryService {
      * 타켓을 팔로우하고 있는 목록 조회
      */
     @Transactional(readOnly = true)
-    public FollowerSlice findFollower(FollowerQuery followerQuery) {
+    public Followers findFollowers(FollowersFindByCondition followersFindByCondition) {
 
-        return followQueryRepository.findFollowersByFollowing(followerQuery);
+        return followQueryRepository.findFollowersByCondition(followersFindByCondition);
 
     }
 
-    /**
-     * 타켓이 팔로우 하는 목록 조회
-     */
-    public FollowingSlice findFollowing(FollowingQuery followingQuery) {
-
-        return followQueryRepository.findFollowingsByFollower(followingQuery);
-    }
 }

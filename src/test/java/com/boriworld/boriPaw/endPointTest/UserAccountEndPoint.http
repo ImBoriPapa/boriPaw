@@ -43,7 +43,7 @@ Authorization: {{access_token}}
 
 
 #### login tester1
-POST localhost:8080/api/login
+POST localhost:8080/api/v1/login
 Content-Type: application/json
 
 {
@@ -57,7 +57,7 @@ Content-Type: application/json
 %}
 
 ### Create Follow
-POST localhost:8080/api/follow
+POST localhost:8080/api/v1/follow
 Authorization: {{access_token}}
 Content-Type: application/json
 
@@ -66,5 +66,5 @@ Content-Type: application/json
 }
 
 ### get Follower
-GET localhost:8080/api/follower?last=2
+GET localhost:8080/api/v1/follow?searchType=FOLLOWER&userAccountId=123
 Authorization: {{access_token}}

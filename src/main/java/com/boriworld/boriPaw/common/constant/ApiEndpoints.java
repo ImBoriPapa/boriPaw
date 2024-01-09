@@ -2,7 +2,9 @@ package com.boriworld.boriPaw.common.constant;
 
 
 public class ApiEndpoints {
-    private static final String API_PATH = "/api";
+
+    private static final String VERSION = "/v1";
+    private static final String API_PATH = "/api" + VERSION;
 
     //UserAccounts
     public static final String ACCOUNTS_ROOT_PATH = API_PATH + "/userAccounts";
@@ -17,6 +19,6 @@ public class ApiEndpoints {
     //Follow
     public static final String FOLLOW_ROOT_PATH = API_PATH + "/follow";
     public static final String UNFOLLOW = FOLLOW_ROOT_PATH + "/{followId}";
-    public static final String GET_FOLLOWER = API_PATH + "/follower";
-    public static final String GET_FOLLOWING = API_PATH + "/following";
+    public static final String GET_FOLLOWERS = FOLLOW_ROOT_PATH + "/followers";
+    public static final String GET_FOLLOWINGS = FOLLOW_ROOT_PATH + "/followings";
 }
