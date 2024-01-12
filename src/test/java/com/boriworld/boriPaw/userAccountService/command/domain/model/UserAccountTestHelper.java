@@ -7,12 +7,11 @@ import lombok.Getter;
 @Getter
 public class UserAccountTestHelper {
     private static final String EMAIL = "email@email.com";
-    private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String NICKNAME = "nickname";
 
     public static UserAccountCreate getUserAccountCreate() {
-        return new UserAccountCreate(EMAIL, USERNAME, PASSWORD, NICKNAME);
+        return new UserAccountCreate(EMAIL, PASSWORD, NICKNAME);
     }
 
 
@@ -22,6 +21,6 @@ public class UserAccountTestHelper {
 
 
     public static UserAccount getUserAccount(String password, UserAccountPasswordEncoder encoder) {
-        return UserAccount.from(new UserAccountCreate(EMAIL, USERNAME, password, NICKNAME), encoder);
+        return UserAccount.from(new UserAccountCreate(EMAIL, password, NICKNAME), encoder);
     }
 }

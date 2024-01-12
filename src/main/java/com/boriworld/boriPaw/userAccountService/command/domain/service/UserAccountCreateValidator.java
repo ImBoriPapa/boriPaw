@@ -22,15 +22,6 @@ public class UserAccountCreateValidator implements UserAccountValidator {
     public void validate(Object object) {
         UserAccountCreate userAccountCreate = (UserAccountCreate) object;
         checkDuplicateEmailCheck(userAccountCreate);
-        checkDuplicateUsername(userAccountCreate);
-    }
-
-    private void checkDuplicateUsername(UserAccountCreate userAccountCreate) {
-        boolean existsByUserName = userAccountRepository.existsByUsername(userAccountCreate.username());
-
-        if (existsByUserName) {
-            throw DuplicateUsernameException.forMessage(String.format("The username '%s' is not available.", userAccountCreate.username()));
-        }
     }
 
     private void checkDuplicateEmailCheck(UserAccountCreate userAccountCreate) {

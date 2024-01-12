@@ -66,9 +66,13 @@ public final class UserAccount {
         Objects.requireNonNull(userAccountPasswordEncoder, "createAccount() 메서드에 매개 변수 'accountPasswordEncoder' 는 NULL 이 될수 없습니다.");
         UserProfile profile = UserProfile.of(userAccountCreate.nickname(), null, null);
         log.info("create user account from UserAccountCreate");
+
+        String username = userAccountCreate.email().split("@")[0];
+        String defaultUsername = "(@)" + username;
+
         return UserAccount.builder()
                 .email(userAccountCreate.email())
-                .username(userAccountCreate.username())
+                .username(defaultUsername)
                 .password(userAccountPasswordEncoder.encode(userAccountCreate.password()))
                 .userProfile(profile)
                 .accountStatus(AccountStatus.ACTIVE)
@@ -77,7 +81,6 @@ public final class UserAccount {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
-
     /**
      * 사용시 주의!
      * 계정 객체 초기화 메서드로 아래 용도외 에는 사용하지 않아야 합니다.

@@ -71,10 +71,9 @@ class UserAuthenticationControllerSmallTest {
     void givenLoginRequest_thenReturnAccessTokenInAuthorizationHeaderAndRefreshTokenInCookie() throws Exception {
         //given
         final String email = "email@email.com";
-        final String username = "username";
         final String password = "email@email.com";
         final String nickname = "nickname";
-        UserAccountCreate userAccountCreate = new UserAccountCreate(email, username, password, nickname);
+        UserAccountCreate userAccountCreate = new UserAccountCreate(email, password, nickname);
         container.userAccountRepository.save(UserAccount.from(userAccountCreate, container.userAccountPasswordEncoder));
         LoginRequest request = new LoginRequest(email, password);
         //when

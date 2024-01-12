@@ -33,11 +33,10 @@ public class TestData {
         List<UserAccount> users = new ArrayList();
         IntStream.rangeClosed(1, 30).forEach(index -> {
             String email = "email" + index + "@gmail.com";
-            String username = "tester" + index;
             String password = "testpassword1234";
             String nickname = "nickname" + index;
             UserAccountCreate userAccountCreate = new UserAccountCreate(
-                    email, username, password, nickname
+                    email, password, nickname
             );
             users.add(UserAccount.from(userAccountCreate, userAccountPasswordEncoder));
         });

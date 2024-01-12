@@ -64,7 +64,7 @@ class UserAccountSmallTest {
         assertAll(
                 () -> assertThat(userAccount.getUserAccountId()).isNull(),
                 () -> assertThat(userAccount.getEmail()).isEqualTo(userAccountCreate.email()),
-                () -> assertThat(userAccount.getUsername()).isEqualTo(userAccountCreate.username()),
+
                 () -> assertThat(userAccount.getPassword()).isNotEqualTo(userAccountCreate.password()),
                 () -> assertThat(userAccount.getUserProfile().getNickname()).isEqualTo(userAccountCreate.nickname()),
                 () -> assertThat(userAccount.getUserProfile().getProfileImage()).isNull(),

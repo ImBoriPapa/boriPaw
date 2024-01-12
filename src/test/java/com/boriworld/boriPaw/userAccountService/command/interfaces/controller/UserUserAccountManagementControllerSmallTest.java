@@ -24,11 +24,10 @@ class UserUserAccountManagementControllerSmallTest {
     void givenUserAccountCreateRequest_thenCreateUserAccountAndReturnUserAccountId() throws Exception {
         //given
         final String email = "duplicate@email.com";
-        final String accountName = "duplicateName";
         final String password = "password1234";
         final String nickname = "boriPapa";
 
-        UserAccountCreateRequest userAccountCreateRequest = new UserAccountCreateRequest(email, accountName, password, nickname);
+        UserAccountCreateRequest userAccountCreateRequest = new UserAccountCreateRequest(email, password, nickname);
 
         //when
         ResponseEntity<UserAccountCreateResponse> response = userAccountManagementController.createUserAccount(userAccountCreateRequest);

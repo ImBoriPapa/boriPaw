@@ -30,10 +30,9 @@ public class UserAccountCreateRestDocsTest extends RestDocsMediumTest {
     void givenUserAccountRequest_thenCreateUserAccountAndReturnAccountId() throws Exception {
         //given
         final String email = "email@email.com";
-        final String username = "username";
         final String password = "password1234";
         final String nickname = "nickname";
-        UserAccountCreateRequest request = new UserAccountCreateRequest(email, username, password, nickname);
+        UserAccountCreateRequest request = new UserAccountCreateRequest(email, password, nickname);
         //when
         ResultActions resultActions = mockMvc.perform(post(ApiEndpoints.ACCOUNTS_ROOT_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -47,7 +46,6 @@ public class UserAccountCreateRestDocsTest extends RestDocsMediumTest {
                         getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                                fieldWithPath("username").type(JsonFieldType.STRING).description("유저네임"),
                                 fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
                                 fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")),
                         responseFields(
