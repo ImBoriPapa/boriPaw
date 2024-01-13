@@ -17,6 +17,7 @@ import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,7 +42,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
     @Autowired
     private TestUserAccountsFactory testUserAccountsFactory;
@@ -49,6 +49,7 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
     private UserAuthenticationService accountAuthenticationService;
     @Autowired
     private TestJwtTokenFactory factory;
+
 
     @Test
     void givenLoginRequest_thenReturnStatusIsOkWithAccessTokenAndRefreshToken() throws Exception {
@@ -91,7 +92,6 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
         //andDo
         actions.andDo(loginFailDocument());
     }
-
     @Test
     void givenExpiredAccessToken_thenReturnUnauthorized() throws Exception {
         //given

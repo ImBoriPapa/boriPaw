@@ -6,14 +6,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
 import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;
+import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -25,19 +29,27 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.Charset;
 
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
 
+@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
-public abstract class RestDocsMediumTest extends MediumTestContainerRunner {
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+public abstract class RestDocsMediumTest extends MediumTestContainerRunner{
     @Autowired
     protected MockMvc mockMvc;
+    @Autowired
+    private TestDataCleaner cleaner;
     protected final ObjectMapper objectMapper = new ObjectMapper();
+
+    @BeforeEach
+    void clean() {
+        cleaner.clean();
+    }
 
     public static OperationRequestPreprocessor getDocumentRequest() {
         return preprocessRequest(

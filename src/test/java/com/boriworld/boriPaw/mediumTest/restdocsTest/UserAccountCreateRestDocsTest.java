@@ -6,9 +6,12 @@ import com.boriworld.boriPaw.userAccountService.command.interfaces.request.UserA
 import com.boriworld.boriPaw.common.constant.ApiEndpoints;
 import com.boriworld.boriPaw.testContainer.testcontainer.RestDocsMediumTest;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.http.MediaType;
 
 
@@ -18,6 +21,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 
+import static com.boriworld.boriPaw.testContainer.testcontainer.RestDocsMediumTest.getDocumentRequest;
+import static com.boriworld.boriPaw.testContainer.testcontainer.RestDocsMediumTest.getDocumentResponse;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
