@@ -12,6 +12,8 @@ hooks:
     - location: scripts/before.sh
       timeout: 300
       runas: ec2-user
+    - name: Delete Exists JAR FILE
+      run: rm -f /home/ec2-user/boriPaw-0.0.1-SNAPSHOT.jar
   ApplicationStart:
     - location: scripts/after.sh
       timeout: 300
