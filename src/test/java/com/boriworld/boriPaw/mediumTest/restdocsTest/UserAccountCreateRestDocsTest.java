@@ -6,15 +6,18 @@ import com.boriworld.boriPaw.userAccountService.command.interfaces.request.UserA
 import com.boriworld.boriPaw.common.constant.ApiEndpoints;
 import com.boriworld.boriPaw.testContainer.testcontainer.RestDocsMediumTest;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 
@@ -28,7 +31,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UserAccountCreateRestDocsTest extends RestDocsMediumTest {
     @Test
@@ -39,23 +42,31 @@ public class UserAccountCreateRestDocsTest extends RestDocsMediumTest {
         final String nickname = "nickname";
         UserAccountCreateRequest request = new UserAccountCreateRequest(email, password, nickname);
         //when
-        ResultActions resultActions = mockMvc.perform(post(ApiEndpoints.ACCOUNTS_ROOT_PATH)
+        ResultActions actions = mockMvc.perform(post(ApiEndpoints.ACCOUNTS_ROOT_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(request)));
         //then
-        resultActions
-                .andExpect(status().isCreated())
-                .andDo(print())
-                .andDo(document("userAccount/management/create",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestFields(
-                                fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                                fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-                                fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")),
-                        responseFields(
-                                fieldWithPath("userAccountId").type(JsonFieldType.NUMBER).description("유저 계정 아이디")
-                        )));
+        actions.andExpectAll(
+                status().isCreated(),
+                header().exists(HttpHeaders.LOCATION),
+                jsonPath("$.userAccountId").exists()
+        );
+        //andDp
+        actions.andDo(createUserAccountDoument());
+    }
+
+    @NotNull
+    private static RestDocumentationResultHandler createUserAccountDoument() {
+        return document("userAccount/management/create",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")),
+                responseFields(
+                        fieldWithPath("userAccountId").type(JsonFieldType.NUMBER).description("유저 계정 아이디")
+                ));
     }
 
 }
