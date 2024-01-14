@@ -1,0 +1,34 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= BoriPaw Server API documentation
+:doctype: book
+:sectnums:
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:toc-title: Table of Domain
+:sectlinks:
+
+Contact: <ImBoriPapa@gmail.com>
+
+== UserAccount
+=== link:userAccounts/management.html[Management API, window=_blank]
+
+=== link:userAccounts/authentication.html[Authentication API,window=_blank]
+
+=== link:userAccounts/profile.html[Profile API,window=_blank]
+
+== Follow
+
+== Post
+
+== Like
+
+== NewFeed
+
+== Fanout
+
+
