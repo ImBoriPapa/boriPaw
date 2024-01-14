@@ -51,4 +51,4 @@ jobs:
     - name: S3 Upload
       run: aws deploy push --application-name ${{ env.AWS_CODE_DEPOLY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/ci-cd/$GITHUB_SHA.zip --source . 
     - name: EC2 배포
-      run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPOLY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPOLY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=ci-cd/$GITHUB_SHA.zip,bundleType=zip
+      run:  aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPOLY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPOLY_GROUP }} --file-exists-behavior OVERWRITE --s3-location bucket=$AWS_S3_BUCKET,key=ci-cd/$GITHUB_SHA.zip,bundleType=zip
