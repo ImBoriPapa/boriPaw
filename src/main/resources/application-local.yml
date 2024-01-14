@@ -43,4 +43,4 @@ secrete:
     iv: "asfsaklmasfapfqwpignpqgkqfkmwasdjndsjlfsdklfamklfaffsaghadhdfhfdah"
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: TRACE

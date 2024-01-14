@@ -30,7 +30,7 @@ import static com.boriworld.boriPaw.common.constant.ApiEndpoints.*;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final String[] WHITE_LIST = {"/test", "/resources/**", "/images", "/docs/**","/docs/index.html" ,"/static/**", "/greeting", "/favicon.ico", "/*/icon-*", "/css/**", "/js/**"};
+    private final String[] WHITE_LIST = {"/test", "/resources/**", "/greeting", "/favicon.ico", "/*/icon-*", "/css/**", "/js/**","/images","/fonts/**"};
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -52,7 +52,6 @@ public class SecurityConfig {
                 }))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(d -> d.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 .authorizeHttpRequests(matchers -> matchers
                         .requestMatchers(WHITE_LIST)
                         .permitAll()
