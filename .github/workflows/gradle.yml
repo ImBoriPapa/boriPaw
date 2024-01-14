@@ -46,8 +46,8 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v2
       with: 
         aws-region: ${{ env.AWS_REGION }}
-        aws-access-key-id: ${{ secrets.BORI_PAW_AWS_IAM_SECRETE_KEY }}
-        aws-secret-access-key: ${{ secrets.BORI_PAW_AWS_IAM_SECRETE_KEY }}
+        aws-access-key-id: ${{ secrets.BORI_PAW_AWS_IAM_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.BORI_PAW_AWS_IAM_SECRETE_ACCESS_KEY }}
     - name: S3 Upload
       run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/ci-cd/$GITHUB_SHA.zip --source . 
     - name: EC2 배포
