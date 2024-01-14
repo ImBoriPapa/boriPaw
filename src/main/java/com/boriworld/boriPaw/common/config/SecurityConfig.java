@@ -30,7 +30,7 @@ import static com.boriworld.boriPaw.common.constant.ApiEndpoints.*;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final String[] WHITE_LIST = {"/test", "/resources/**", "/images", "/docs/**", "/static/**", "/greeting", "/favicon.ico", "/*/icon-*", "/css/**", "/js/**"};
+    private final String[] WHITE_LIST = {"/document", "/test", "/resources/**", "/images", "/docs/**", "/static/**", "/greeting", "/favicon.ico", "/*/icon-*", "/css/**", "/js/**"};
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Arrays.asList("https://server.boripaw.com","http://localhost:8080"));
+                    configuration.setAllowedOrigins(Arrays.asList("https://server.boripaw.com", "http://localhost:8080"));
                     configuration.setAllowedMethods(Collections.singletonList("*"));
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
