@@ -14,19 +14,4 @@ services:
     container_name: bori_paw_redis
     ports:
       - "6364:6379"
-  jenkins:
-    image: jenkins/jenkins:lts
-    container_name: bori_paw_jenkins
-    ports:
-      - "8090:8080"
-  nginx:
-    image: nginx:latest
-    container_name: bori_paw_proxy
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /Users/leechoongsub/desktop/nginx/conf:/etc/nginx/conf:ro
-      - /Users/leechoongsub/desktop/nginx/ssl:/etc/nginx/ssl
-      - /Users/leechoongsub/desktop/nginx/html:/usr/share/nginx/html
-      - /Users/leechoongsub/desktop/nginx/localhost.crt:/etc/nginx/localhost.crt
+
