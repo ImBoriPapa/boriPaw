@@ -28,7 +28,9 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v3
+    - name: checkout
+      uses: actions/checkout@v3
+    
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
@@ -36,11 +38,13 @@ jobs:
         distribution: 'corretto'
     - name: gradlew 실행 권한 부여
       run: chmod +x ./gradlew
+    
     - name: Build with Gradle
       uses: ./gradlew clean build
       with:
         arguments: build
     - name: AWS credential
+      uses: aws-actions/configure-aws-credentials@v2
       with: 
         aws-region: ${{ env.AWS_REGION }}
         aws-access-key-id: ${{ secrets.BORI_PAW_AWS_IAM_SECRETE_KEY }}
