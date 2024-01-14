@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 env:
-  AWS_REGiON: ap-northeast-2
+  AWS_REGION: ap-northeast-2
   AWS_S3_BUCKET: bori-paw-bucket
   AWS_CODE_DEPOLY_APPLICATION: boripaw-cd
   AWS_CODE_DEPOLU_GROUP: boripaw-cd-group
