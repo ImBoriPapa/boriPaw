@@ -5,7 +5,7 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: BoriPaw CI/CD
 
 on:
   push:
@@ -16,19 +16,39 @@ on:
 permissions:
   contents: read
 
+env:
+  AWS_REGION: ap-northeast-2
+  AWS_S3_BUCKET: bori-paw-bucket
+  AWS_CODE_DEPOLY_APPLICATION: boripaw-cd
+  AWS_CODE_DEPOLY_GROUP: boripaw-cd-group
+
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v3
+    - name: checkout
+      uses: actions/checkout@v3
+    
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'temurin'
+        distribution: 'corretto'
+    - name: gradlew 실행 권한 부여
+      run: chmod +x ./gradlew
+    
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
-      with:
-        arguments: build
+      run: ./gradlew clean build
+
+    - name: AWS credential
+      uses: aws-actions/configure-aws-credentials@v2
+      with: 
+        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ secrets.BORI_PAW_AWS_IAM_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.BORI_PAW_AWS_IAM_SECRETE_ACCESS_KEY }}
+    - name: S3 Upload
+      run: aws deploy push --application-name ${{ env.AWS_CODE_DEPOLY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/ci-cd/$GITHUB_SHA.zip --source . 
+    - name: EC2 배포
+      run:  aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPOLY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPOLY_GROUP }} --file-exists-behavior OVERWRITE --s3-location bucket=$AWS_S3_BUCKET,key=ci-cd/$GITHUB_SHA.zip,bundleType=zip

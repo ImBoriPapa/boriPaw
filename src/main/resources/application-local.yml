@@ -34,7 +34,6 @@ spring:
       host: localhost
       port: 6364
       database: 0
-
 secrete:
   secrete_key: "fsafnslkdasdkladmkgpeiakmggsdklkgewmkglsgiwwlgwefds"
   accessTokenLifeMillieSeconds: 600000
@@ -42,3 +41,6 @@ secrete:
   encoder:
     key: "asfsaklmasfapfqwpignpqgkqfkmwasdjndsjlfsdklfamklfaf3525fasfasfsafa"
     iv: "asfsaklmasfapfqwpignpqgkqfkmwasdjndsjlfsdklfamklfaffsaghadhdfhfdah"
+logging:
+  level:
+    org.springframework.security: TRACE

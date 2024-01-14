@@ -68,3 +68,7 @@ Content-Type: application/json
 ### get Follower
 GET localhost:8080/api/v1/follow?searchType=FOLLOWER&userAccountId=123
 Authorization: {{access_token}}
+
+###
+GET https://server.boripaw.com/docs/index.html
+Authorization: {{access_token}}
