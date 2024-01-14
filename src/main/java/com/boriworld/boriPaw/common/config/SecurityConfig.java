@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import static com.boriworld.boriPaw.common.constant.ApiEndpoints.*;
@@ -27,7 +28,7 @@ import static com.boriworld.boriPaw.common.constant.ApiEndpoints.*;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final String[] WHITE_LIST = {"/test", "/docs/**", "/static/**", "/greeting", "/favicon.ico","/*/icon-*","/css/**","/js/**"};
+    private final String[] WHITE_LIST = {"/test", "/resources/**", "/images", "/docs/**", "/static/**", "/greeting", "/favicon.ico", "/*/icon-*", "/css/**", "/js/**"};
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -38,9 +39,9 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .cors(c->c.configurationSource(request -> {
+                .cors(c -> c.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Collections.singletonList("*"));
+                    configuration.setAllowedOrigins(Arrays.asList("https://server.boripaw.com","http://localhost:8080"));
                     configuration.setAllowedMethods(Collections.singletonList("*"));
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
