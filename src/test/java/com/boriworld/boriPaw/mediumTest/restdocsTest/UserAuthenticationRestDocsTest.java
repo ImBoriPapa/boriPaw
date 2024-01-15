@@ -9,11 +9,15 @@ import com.boriworld.boriPaw.userAccountService.command.application.UserAuthenti
 import com.boriworld.boriPaw.userAccountService.command.application.dto.LoginProcess;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationToken;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationTokenCredentials;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.AccessToken;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.RefreshToken;
+import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.Authority;
 import com.boriworld.boriPaw.userAccountService.command.interfaces.request.LoginRequest;
 import jakarta.servlet.http.Cookie;
 
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +28,7 @@ import org.springframework.http.MediaType;
 
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 
@@ -42,6 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
     @Autowired
     private TestUserAccountsFactory testUserAccountsFactory;
@@ -50,8 +56,11 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
     @Autowired
     private TestJwtTokenFactory factory;
 
+    @Autowired
+    private UserAuthenticationService userAuthenticationService;
 
     @Test
+    @DisplayName("로그인 요청시 AccessToken 과 RefreshToken 응답")
     void givenLoginRequest_thenReturnStatusIsOkWithAccessTokenAndRefreshToken() throws Exception {
         //given
         testUserAccountsFactory.initTester();
@@ -74,6 +83,7 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
     }
 
     @Test
+    @DisplayName("잘못된 이메일로 로그인 요청시 404 응답")
     void givenLoginRequest_With_WrongEmail_thenReturn404Status() throws Exception {
         //given
         testUserAccountsFactory.initTester();
@@ -82,9 +92,8 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
         LoginRequest request = new LoginRequest(notExistsEmail, password);
         //when
         ResultActions actions = mockMvc.perform(post(ApiEndpoints.LOGIN_PATH)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(request)))
-                .andDo(print());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request)));
         //then
         actions.andExpectAll(
                 status().is(HttpStatus.NOT_FOUND.value())
@@ -92,7 +101,31 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
         //andDo
         actions.andDo(loginFailDocument());
     }
+
     @Test
+    @DisplayName("발급 받은 AccessToken 으로 인증 정보 확인이 가능하다.")
+    void givenAccessToken_thenReturnAuthenticationInformation() throws Exception {
+        //given
+        testUserAccountsFactory.initTester();
+        AuthenticationToken authenticationToken = userAuthenticationService.processLogin(new LoginProcess(testUserAccountsFactory.TESTER_EMAIL, testUserAccountsFactory.TESTER_RAW_PASSWORD));
+        String accessToken = AuthenticationTokenHeaderNames.ACCESS_TOKEN_PREFIX + authenticationToken.accessToken().getTokenString();
+        //when
+        ResultActions actions = mockMvc.perform(get(ApiEndpoints.ME).header(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER, accessToken));
+        //then
+        actions.andExpectAll(
+                status().isOk(),
+                jsonPath("$.userAccountId").exists(),
+                jsonPath("$.authority").exists(),
+                jsonPath("$.lastLoginAt").exists()
+        );
+
+        //andDo
+        actions.andDo(GetMeDocument());
+    }
+
+
+    @Test
+    @DisplayName("만료된 AccessToken 으로 요청시 401 응답")
     void givenExpiredAccessToken_thenReturnUnauthorized() throws Exception {
         //given
         AuthenticationTokenCredentials credentials = new AuthenticationTokenCredentials(
@@ -106,28 +139,36 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
         String token = AuthenticationTokenHeaderNames.ACCESS_TOKEN_PREFIX + accessToken;
         //when
         ResultActions actions = mockMvc.perform(get(ApiEndpoints.ME)
+                .header(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER, token));
+        //then
+        actions.andExpect(status().is(HttpStatus.UNAUTHORIZED.value()));
+        //andDo
+        actions.andDo(expiredAccessTokenDocument());
+    }
+
+    @Test
+    @DisplayName("거절된 AccessToken 으로 요청시 401 응답")
+    void givenDeniedAccessToken_thenReturnBadRequest() throws Exception {
+        //given
+        AuthenticationTokenCredentials credentials = new AuthenticationTokenCredentials("123", Map.of("authority", Authority.USER.name()));
+
+        String accessToken = factory.generateTokenWithInvalidSignature(credentials);
+
+        String token = AuthenticationTokenHeaderNames.ACCESS_TOKEN_PREFIX + accessToken;
+        //when
+        ResultActions actions = mockMvc.perform(get(ApiEndpoints.ME)
                         .header(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER, token))
                 .andDo(print())
                 .andDo(expiredAccessTokenDocument());
         //then
-        actions.andExpect(status().is(HttpStatus.UNAUTHORIZED.value()));
+        actions.andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
         //andDo
+        actions.andDo(DeniedAccessTokenDocument());
     }
 
-    private RestDocumentationResultHandler expiredAccessTokenDocument() {
-        return document("userAccount/authentication/expiredAccessToken",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                responseFields(
-                        fieldWithPath("type").type(STRING).description("에러 타입"),
-                        fieldWithPath("title").type(STRING).description("제목"),
-                        fieldWithPath("status").type(NUMBER).description("상태"),
-                        fieldWithPath("detail").type(STRING).description("상세내용")
-                )
-        );
-    }
 
     @Test
+    @DisplayName("RefreshToken 으로 토큰 재발급")
     void givenRefreshTokenCookie_thenReturnReissuedTokens() throws Exception {
         //given
         testUserAccountsFactory.initTester();
@@ -142,13 +183,52 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
 
         //when
         ResultActions actions = mockMvc.perform(post(ApiEndpoints.RE_ISSUE_PATH)
-                        .cookie(cookie))
-                .andDo(print());
+                .cookie(cookie));
         //then
         actions.andExpect(status().isOk());
         //andDo
         actions.andDo(reissueDocument());
+    }
 
+    private RestDocumentationResultHandler GetMeDocument() {
+        return document("userAccount/authentication/getMe",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestHeaders(
+                        headerWithName(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER).description("Access Token")
+                ),
+                responseFields(
+                        fieldWithPath("userAccountId").type(NUMBER).description("userAccount 식별 아이디"),
+                        fieldWithPath("authority").type(STRING).description("권한 정보"),
+                        fieldWithPath("lastLoginAt").type(STRING).description("마지막 로그인 시간")
+                )
+        );
+    }
+
+    private static RestDocumentationResultHandler DeniedAccessTokenDocument() {
+        return document("userAccount/authentication/deniedAccessToken",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                responseFields(
+                        fieldWithPath("type").type(STRING).description("에러 타입"),
+                        fieldWithPath("title").type(STRING).description("제목"),
+                        fieldWithPath("status").type(NUMBER).description("상태"),
+                        fieldWithPath("detail").type(STRING).description("상세내용")
+                )
+        );
+    }
+
+    private RestDocumentationResultHandler expiredAccessTokenDocument() {
+        return document("userAccount/authentication/expiredAccessToken",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                responseFields(
+                        fieldWithPath("type").type(STRING).description("에러 타입"),
+                        fieldWithPath("title").type(STRING).description("제목"),
+                        fieldWithPath("status").type(NUMBER).description("상태"),
+                        fieldWithPath("detail").type(STRING).description("상세내용")
+                )
+        );
     }
 
     private static RestDocumentationResultHandler reissueDocument() {
@@ -198,8 +278,8 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
                         fieldWithPath("userAccountId").type(NUMBER).description("계정 식별 아이디")
                 ),
                 responseHeaders(
-                        headerWithName(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER).description("AccessToken"),
-                        headerWithName(HttpHeaders.SET_COOKIE).description("RefreshToken")
+                        headerWithName(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER).description("AccessToken, 요청시 인증 및 인가 수행"),
+                        headerWithName(HttpHeaders.SET_COOKIE).description("RefreshToken, 재발급 토큰")
                 )
         );
     }

@@ -16,9 +16,9 @@ public enum ProblemDefinition {
     LOGIN_FAIL("", "", HttpStatus.UNAUTHORIZED, ""),
     NOT_REGISTERED_EMAIL("not-registered-email", "not registered", HttpStatus.NOT_FOUND, ""),
     NOT_FOUND_AUTHORITY_FROM_STRING("here ", "here", HttpStatus.BAD_REQUEST, ""),
-    DENIED_TOKEN("here", "here", HttpStatus.UNAUTHORIZED, ""),
-    EXPIRED_TOKEN("here", "here", HttpStatus.UNAUTHORIZED, ""),
-    ERROR_TOKEN("type", "title", HttpStatus.FORBIDDEN, ""),
+    DENIED_TOKEN("denied-token", "token-denied", HttpStatus.BAD_REQUEST, "거절된 토큰입니다."),
+    EXPIRED_TOKEN("expired-token", "token-expired", HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
+    ERROR_TOKEN("error-token", "token-error", HttpStatus.FORBIDDEN, "잘못된 토큰입니다."),
     ALREADY_FOLLOW("type", "title", HttpStatus.BAD_REQUEST, "");
     private final String type;
     private final String title;

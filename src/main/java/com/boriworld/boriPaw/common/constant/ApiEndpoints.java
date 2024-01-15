@@ -11,7 +11,7 @@ public class ApiEndpoints {
     public static final String GET_PROFILE = ACCOUNTS_ROOT_PATH + "/{user-accountId}/profile";
 
     //Authentication
-    public static final String ME = API_PATH + "/me";
+    public static final String ME = ACCOUNTS_ROOT_PATH + "/me";
     public static final String LOGIN_PATH = API_PATH + "/login";
     public static final String RE_ISSUE_PATH = API_PATH + "/reissue";
     public static final String LOGOUT_PATH = API_PATH + "/logout/{userAccountId}";

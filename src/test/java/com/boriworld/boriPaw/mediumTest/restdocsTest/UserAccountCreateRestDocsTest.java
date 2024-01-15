@@ -47,7 +47,7 @@ public class UserAccountCreateRestDocsTest extends RestDocsMediumTest {
                 header().exists(HttpHeaders.LOCATION),
                 jsonPath("$.userAccountId").exists()
         );
-        //andDp
+        //andDo
         actions.andDo(createUserAccountDocument());
     }
 
@@ -61,6 +61,15 @@ public class UserAccountCreateRestDocsTest extends RestDocsMediumTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(request)));
         //then
+        actions.andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.type").exists(),
+                jsonPath("$.title").exists(),
+                jsonPath("$.status").exists(),
+                jsonPath("$.detail").exists(),
+                jsonPath("$.instance").exists()
+        );
+        //andDO
         actions.andDo(createUserAccountConstraintFailDocument());
     }
 

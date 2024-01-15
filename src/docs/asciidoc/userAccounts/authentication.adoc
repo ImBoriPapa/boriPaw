@@ -2,21 +2,63 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
+= 인증 및 인가 API
 
-== Login
+== Login 요청
+
+- 이메일과 비밀번호를 이용해서 로그인 요청 성공하면 AccessToken과 RefreshToken을 발급 받습니다.
+- Authorization 헤더에 Bearer 형태로 Access Token을 발급
+- Cookie 헤더에 refresh-token을 발급
+
+*HTTP Method : POST*
+
+*URL* : https://server.boripaw.com/api/v1/login
+
+=== Request
 
 include::{snippets}/userAccount/authentication/login/http-request.adoc[]
 
+include::{snippets}/userAccount/authentication/login/request-fields.adoc[]
+
+=== Response : 성공
+
 include::{snippets}/userAccount/authentication/login/http-response.adoc[]
+
+=== Response Headers
+
 include::{snippets}/userAccount/authentication/login/response-headers.adoc[]
 
-== Login Fail
+=== Response : 실패(등록되지 않은 이메일 사용)
 
-include::{snippets}/userAccount/authentication/loginFailByEmail/http-request.adoc[]
 include::{snippets}/userAccount/authentication/loginFailByEmail/http-response.adoc[]
-include::{snippets}/userAccount/authentication/loginFailByEmail/response-fields.adoc[]
 
-== Reissue
+== 인증
+-  발급 받은 AccessToken 사용자 정보를 조회할 수 있다.
+
+=== Request
+include::{snippets}/userAccount/authentication/getMe/http-request.adoc[]
+
+=== Response : 성공
+include::{snippets}/userAccount/authentication/getMe/http-response.adoc[]
+
+==== Response fields
+include::{snippets}/userAccount/authentication/getMe/response-fields.adoc[]
+
+=== Response : 실패(Access Token 만료)
+
+include::{snippets}/userAccount/authentication/expiredAccessToken/http-response.adoc[]
+
+=== Response : 실패(Access Token 거절)
+
+include::{snippets}/userAccount/authentication/deniedAccessToken/http-response.adoc[]
+
+== Reissue, 토큰 재발급
+
+- Refresh Token을 이용해 AccessToken을 재발급 받습니다.
+
+*HTTP Method*
+
+*URL* : https://server.boripaw.com/api/v1/login
 
 include::{snippets}/userAccount/authentication/reissue/http-request.adoc[]
 include::{snippets}/userAccount/authentication/reissue/http-response.adoc[]

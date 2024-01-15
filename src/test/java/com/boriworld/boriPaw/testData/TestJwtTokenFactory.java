@@ -24,8 +24,7 @@ public class TestJwtTokenFactory {
         this.SECRET_KEY = secreteKey;
     }
 
-    public String generateTokenString(AuthenticationTokenCredentials credentials, Date start,Date expiration) {
-
+    public String generateTokenString(AuthenticationTokenCredentials credentials, Date start, Date expiration) {
         return Jwts.builder()
                 /*
                     @Issue setClaims() 이전에 setSubject() 를 사용하면 getSubject() = null 이슈
@@ -37,6 +36,27 @@ public class TestJwtTokenFactory {
                 .setExpiration(expiration)
                 .signWith(getEncodedSecreteKey(), SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    public String generateTokenWithInvalidSignature(AuthenticationTokenCredentials credentials) {
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + 3600);
+        String InvalidSecretKey = "fsafnslkdasdkladmkgpeiakmggsdklkgewmkglsgiwwlgw2421";
+        return Jwts.builder()
+                /*
+                    @Issue setClaims() 이전에 setSubject() 를 사용하면 getSubject() = null 이슈
+                    setClaims()를 먼저 사용하고 setSubject()를 사용해야 합니다.
+                 */
+                .setClaims(credentials.claims())
+                .setSubject(credentials.subject())
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .signWith(Keys.hmacShaKeyFor(Base64.getEncoder().encodeToString(InvalidSecretKey.getBytes()).getBytes()))
+                .compact();
+    }
+
+    public String generateTokenWithError() {
+        return "InvalidToken";
     }
 
     public AuthenticationTokenStatus validateToken(String token) {
