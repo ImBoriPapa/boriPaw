@@ -6,13 +6,13 @@ import com.boriworld.boriPaw.followService.command.domain.value.Follower;
 import com.boriworld.boriPaw.followService.command.domain.value.Following;
 import com.boriworld.boriPaw.followService.command.infrastructure.persistence.FollowEntity;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
-import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence.UserAccountEntity;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+@Profile("local")
 @Component
 @RequiredArgsConstructor
 @Transactional

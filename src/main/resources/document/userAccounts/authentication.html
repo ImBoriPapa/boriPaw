@@ -462,8 +462,8 @@ Host: server.boripaw.com
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1MjQ1MjYyLCJleHAiOjE3MDUyNDU4NjJ9.u-2MxFOdU59wSGkGA-g7tD5SRUB-13XRrRkjDLcKwSHlxV3JFvnOmohodWT8QHFuJS0ckJMagAhjchSjz2JCoA
-Set-Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1MjQ1MjYyLCJleHAiOjE3MDU4NTAwNjJ9.OeIHy2WCpVP79nonpSLc5ByoHAmFkvS0Q7S75bVvi06jR7sMEefMvDWEfw6PZeOMoK0ueru3lr_xqoqqaY3Y4w; Path=/; Max-Age=604799; Expires=Sun, 21 Jan 2024 15:14:22 GMT; Secure; HttpOnly; SameSite=None
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1MzA0NTk0LCJleHAiOjE3MDUzMDUxOTR9.NjUXtWhxU8khz7hrntN3sw5nuhUZX4-h0dnZKdw1GtPIK-mivVTaDi0Wl72TwLAMIQMHVqYkfuUhbskwwXwU1w
+Set-Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1MzA0NTk0LCJleHAiOjE3MDU5MDkzOTR9.QrpBOCYsquqYnBZUmnqPyA_GCFQ6UnVPNzbFc5KMrObh8DAeNsJuSp44XzGs2q2bxjWHojL9MJqJC5oDu7sQZw; Path=/; Max-Age=604799; Expires=Mon, 22 Jan 2024 07:43:14 GMT; Secure; HttpOnly; SameSite=None
 Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
@@ -531,10 +531,10 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 195
+Content-Length: 220
 
 {
-  "type" : "//localhost/not-registered-email",
+  "type" : "//server.boripaw.com/supports/errors/not-registered-email",
   "title" : "not registered",
   "status" : 404,
   "detail" : "이메일로 계정을 확인할수 없습니다.",
@@ -592,7 +592,7 @@ Content-Length: 195
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/reissue HTTP/1.1
 Host: server.boripaw.com
-Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1MjQ1MjYxLCJleHAiOjE3MDU4NTAwNjF9.vTDDY9Oo3hvRANm_cPy0c7NmvXXQ8LOhJyf8C4y9Ut274tSNyntQHVRK_UIcqalKsw9DcGy2NruA5egrND7fJA
+Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1MzA0NTk0LCJleHAiOjE3MDU5MDkzOTR9.QrpBOCYsquqYnBZUmnqPyA_GCFQ6UnVPNzbFc5KMrObh8DAeNsJuSp44XzGs2q2bxjWHojL9MJqJC5oDu7sQZw
 Content-Type: application/x-www-form-urlencoded</code></pre>
 </div>
 </div>
@@ -602,8 +602,8 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1MjQ1MjYxLCJleHAiOjE3MDUyNDU4NjF9.1mR_4UJI4iWthHV1dZo1psPtCevEI7e99uEL1Y7KM_WJIgPyyr0IphZZFnmQmj3vFAOY0tmNtC0A_ivDPtn3pA
-Set-Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1MjQ1MjYxLCJleHAiOjE3MDU4NTAwNjF9.vTDDY9Oo3hvRANm_cPy0c7NmvXXQ8LOhJyf8C4y9Ut274tSNyntQHVRK_UIcqalKsw9DcGy2NruA5egrND7fJA; Path=/; Max-Age=604799; Expires=Sun, 21 Jan 2024 15:14:21 GMT; Secure; HttpOnly; SameSite=None
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1MzA0NTk0LCJleHAiOjE3MDUzMDUxOTR9.NjUXtWhxU8khz7hrntN3sw5nuhUZX4-h0dnZKdw1GtPIK-mivVTaDi0Wl72TwLAMIQMHVqYkfuUhbskwwXwU1w
+Set-Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1MzA0NTk0LCJleHAiOjE3MDU5MDkzOTR9.QrpBOCYsquqYnBZUmnqPyA_GCFQ6UnVPNzbFc5KMrObh8DAeNsJuSp44XzGs2q2bxjWHojL9MJqJC5oDu7sQZw; Path=/; Max-Age=604799; Expires=Mon, 22 Jan 2024 07:43:14 GMT; Secure; HttpOnly; SameSite=None
 Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
