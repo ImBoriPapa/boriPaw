@@ -6,6 +6,7 @@ import com.boriworld.boriPaw.userAccountService.command.interfaces.request.UserA
 import com.boriworld.boriPaw.common.constant.ApiEndpoints;
 import com.boriworld.boriPaw.testContainer.testcontainer.RestDocsMediumTest;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -56,10 +57,16 @@ public class UserAccountCreateRestDocsTest extends RestDocsMediumTest {
         //given
         UserAccountCreateRequest request = new UserAccountCreateRequest();
         //when
-        ResultActions actions = mockMvc.perform(post(ApiEndpoints.ACCOUNTS_ROOT_PATH).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsBytes(request)));
+        ResultActions actions = mockMvc.perform(post(ApiEndpoints.ACCOUNTS_ROOT_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request)));
         //then
-        actions.andDo(print());
-        actions.andDo(document("userAccount/management/create-validation-fail",
+        actions.andDo(createUserAccountConstraintFailDocument());
+    }
+
+    @NotNull
+    private static RestDocumentationResultHandler createUserAccountConstraintFailDocument() {
+        return document("userAccount/management/create-validation-fail",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 requestFields(
@@ -73,7 +80,7 @@ public class UserAccountCreateRestDocsTest extends RestDocsMediumTest {
                         fieldWithPath("detail").type(JsonFieldType.STRING).description("detail"),
                         fieldWithPath("instance").type(JsonFieldType.STRING).description("instance")
                 )
-                ));
+        );
     }
 
     private static RestDocumentationResultHandler createUserAccountDocument() {

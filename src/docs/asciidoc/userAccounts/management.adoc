@@ -16,15 +16,15 @@ include::{snippets}/userAccount/management/create/http-request.adoc[]
 
 include::{snippets}/userAccount/management/create/request-fields.adoc[]
 
-IMPORTANT: email, password, nickname 은 공백을 허용하지 않습니다.
-
-=== Response
+=== Response 성공
 
 include::{snippets}/userAccount/management/create/http-response.adoc[]
 include::{snippets}/userAccount/management/create/response-fields.adoc[]
 
 계정 생성에 성공하면 HttpStatus 201과 userAccountId를 응답합니다.
 
-== 검증 실패
-include::{snippets}/userAccount/management/create-validation-fail/http-request.adoc[]
+=== Response 실패(요청값 검증에 실패)
 include::{snippets}/userAccount/management/create-validation-fail/http-response.adoc[]
+
+IMPORTANT: email, password, nickname 은 공백을 허용하지 않습니다.
+
