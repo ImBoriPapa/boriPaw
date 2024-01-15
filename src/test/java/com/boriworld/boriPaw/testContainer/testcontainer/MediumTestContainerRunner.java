@@ -4,6 +4,7 @@ package com.boriworld.boriPaw.testContainer.testcontainer;
 import lombok.extern.slf4j.Slf4j;
 
 
+import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
@@ -11,6 +12,7 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import java.io.File;
 import java.time.Duration;
 @Slf4j
+@ActiveProfiles("test")
 public abstract class MediumTestContainerRunner {
     protected static DockerComposeContainer<?> container;
 

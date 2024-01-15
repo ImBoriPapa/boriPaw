@@ -2,7 +2,29 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
+= 사용자 계정관리 API
+
+== 사용자 계정 생성
+
+*HTTP Method: POST*
+
+*URL* : https://server.boripaw.com/api/v1/user-accounts
+
+=== Request
+
 include::{snippets}/userAccount/management/create/http-request.adoc[]
 
-include::{snippets}/userAccount/management/create/http-response.adoc[]
+include::{snippets}/userAccount/management/create/request-fields.adoc[]
 
+IMPORTANT: email, password, nickname 은 공백을 허용하지 않습니다.
+
+=== Response
+
+include::{snippets}/userAccount/management/create/http-response.adoc[]
+include::{snippets}/userAccount/management/create/response-fields.adoc[]
+
+계정 생성에 성공하면 HttpStatus 201과 userAccountId를 응답합니다.
+
+== 검증 실패
+include::{snippets}/userAccount/management/create-validation-fail/http-request.adoc[]
+include::{snippets}/userAccount/management/create-validation-fail/http-response.adoc[]

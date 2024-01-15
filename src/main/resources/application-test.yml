@@ -2,7 +2,7 @@ server:
   servlet:
     encoding:
       force-response: true
-  host: localhost
+  host: server.boripaw.com
 
 spring:
   config:

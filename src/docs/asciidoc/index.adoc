@@ -15,11 +15,9 @@ endif::[]
 Contact: <ImBoriPapa@gmail.com>
 
 == UserAccount
-=== link:userAccounts/management.html[Management API, window=_blank]
-
-=== link:userAccounts/authentication.html[Authentication API,window=_blank]
-
-=== link:userAccounts/profile.html[Profile API,window=_blank]
+. link:userAccounts/management.html[Management API, window=_blank]
+- 계정 관련 API 입니다.
+. link:userAccounts/authentication.html[Authentication API,window=_blank]
 
 == Follow
 

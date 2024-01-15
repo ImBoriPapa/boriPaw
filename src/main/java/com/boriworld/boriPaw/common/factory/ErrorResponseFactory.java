@@ -13,7 +13,6 @@ import java.net.URI;
 @Component
 public class ErrorResponseFactory {
     private final String SERVER_HOST;
-
     public ErrorResponseFactory(@Value("${server.host}") final String SERVER_HOST) {
         this.SERVER_HOST = SERVER_HOST;
     }
@@ -40,10 +39,11 @@ public class ErrorResponseFactory {
     }
 
     private URI createTypeURI(String type) {
+        String path = "supports/errors/" + type;
         return UriComponentsBuilder
                 .newInstance()
                 .host(SERVER_HOST)
-                .path(type)
+                .path(path)
                 .build()
                 .toUri();
     }

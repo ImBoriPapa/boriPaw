@@ -23,7 +23,7 @@ public class UserAccountQueryController {
     private final UserAccountQueryService userAccountQueryService;
 
     @GetMapping(ApiEndpoints.GET_PROFILE)
-    public ResponseEntity<UserProfileDetailResponse> getProfile(@PathVariable Long userAccountId) {
+    public ResponseEntity<UserProfileDetailResponse> getProfile(@PathVariable(value = "user-accountId") Long userAccountId) {
         log.info("Get Profile userAccountId: {}", userAccountId);
         UserProfileDetail userProfileDetail = userAccountQueryService.getUserDetail(UserAccountId.of(userAccountId));
 

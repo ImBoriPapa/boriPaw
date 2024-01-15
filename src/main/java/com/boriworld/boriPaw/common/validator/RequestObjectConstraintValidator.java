@@ -37,10 +37,11 @@ public class RequestObjectConstraintValidator implements RequestConstraintValida
 
     private void handleConstraintErrorMessages(String objectName, Set<String> errorMessages) {
         if (!errorMessages.isEmpty()) {
-
-            throw ConstraintValidationFailureException.forMessage(String.format("Object: %s", objectName) + String.join("\n", errorMessages));
+            String errorMessage = String.format("Object: %s", objectName) + " Message:" + String.join(", ", errorMessages);
+            throw ConstraintValidationFailureException.forMessage(errorMessage);
         }
     }
+
 
     private void checkTargetIsNotNull(Object o) {
         if (o == null) {

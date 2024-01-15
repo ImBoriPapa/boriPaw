@@ -26,7 +26,7 @@ public class UserAccountManagementController {
 
     @PostMapping(ACCOUNTS_ROOT_PATH)
     public ResponseEntity<UserAccountCreateResponse> createUserAccount(@RequestBody UserAccountCreateRequest userAccountCreateRequest) {
-        log.info("Account create Request");
+        log.info("User Account create request");
         validator.validate(userAccountCreateRequest);
         UserAccountId userAccountId = userAccountManagementService.processUserAccountCreation(userAccountCreateRequest.toUserAccountCreate());
 
