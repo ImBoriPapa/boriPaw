@@ -79,9 +79,9 @@ public class UserAuthenticationController {
 
     private String createRefreshTokenCookie(RefreshToken refreshToken) {
         ResponseCookie refresh = ResponseCookie.from(AuthenticationTokenHeaderNames.REFRESH_TOKEN_COOKIE_NAME, refreshToken.getTokenString())
-                .secure(true)
-                .sameSite("None")
-                .httpOnly(false)
+                .secure(false)
+                .sameSite("Lax")
+                .httpOnly(true)
                 .path("/")
                 .maxAge(Duration.ofMillis(refreshToken.getTimeToLiveInMilliseconds()))
                 .build();
