@@ -69,8 +69,8 @@ public class SecurityConfig {
     private static Customizer<CorsConfigurer<HttpSecurity>> getCorsConfigurerCustomizer() {
         return c -> c.configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
-//            configuration.setAllowedOrigins(Arrays.asList("https://server.boripaw.com", "http://localhost:8080"));
-            configuration.setAllowedOrigins(Collections.singletonList("*"));
+            configuration.setAllowedOrigins(Arrays.asList("https://server.boripaw.com", "http://localhost:8080","http://localhost:3000"));
+//            configuration.setAllowedOrigins(Collections.singletonList("*"));
             configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
             configuration.setAllowCredentials(true);
             configuration.setAllowedHeaders(Collections.singletonList("*"));
