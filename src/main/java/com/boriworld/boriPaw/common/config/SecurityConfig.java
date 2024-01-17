@@ -70,10 +70,9 @@ public class SecurityConfig {
         return c -> c.configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowedOrigins(Arrays.asList("https://server.boripaw.com", "http://localhost:8080","http://localhost:3000"));
-//            configuration.setAllowedOrigins(Collections.singletonList("*"));
             configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
             configuration.setAllowCredentials(true);
-            configuration.setAllowedHeaders(Collections.singletonList("*"));
+            configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
             configuration.setMaxAge(3600L); //1시간
             return configuration;
         });
