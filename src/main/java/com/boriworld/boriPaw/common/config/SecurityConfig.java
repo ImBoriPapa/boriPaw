@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,7 +46,7 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .cors(getCorsConfigurerCustomizer())
+                .cors(c -> c.configurationSource(apiConfigurationSource()))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(d -> d.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(matchers -> matchers
@@ -66,15 +68,17 @@ public class SecurityConfig {
                 .build();
     }
 
-    private static Customizer<CorsConfigurer<HttpSecurity>> getCorsConfigurerCustomizer() {
-        return c -> c.configurationSource(request -> {
-            CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Arrays.asList("https://server.boripaw.com", "http://localhost:8080","http://localhost:3000"));
-            configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-            configuration.setAllowCredentials(true);
-            configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-            configuration.setMaxAge(3600L); //1시간
-            return configuration;
-        });
+    private CorsConfigurationSource apiConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("https://server.boripaw.com", "http://localhost:8080", "http://localhost:3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE));
+        configuration.setMaxAge(3600L); //1시간
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
+
+
 }
