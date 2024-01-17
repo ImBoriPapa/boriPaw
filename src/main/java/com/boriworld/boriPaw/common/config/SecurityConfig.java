@@ -24,6 +24,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static com.boriworld.boriPaw.common.constant.ApiEndpoints.*;
 
@@ -70,7 +71,7 @@ public class SecurityConfig {
             CorsConfiguration configuration = new CorsConfiguration();
 //            configuration.setAllowedOrigins(Arrays.asList("https://server.boripaw.com", "http://localhost:8080"));
             configuration.setAllowedOrigins(Collections.singletonList("*"));
-            configuration.setAllowedMethods(Collections.singletonList("*"));
+            configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
             configuration.setAllowCredentials(true);
             configuration.setAllowedHeaders(Collections.singletonList("*"));
             configuration.setMaxAge(3600L); //1시간
