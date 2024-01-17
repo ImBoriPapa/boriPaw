@@ -1,6 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.application;
 
 
+import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserProfileRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountValidator;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.event.AccountCreateEvent;
@@ -9,9 +10,11 @@ import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccount
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserProfileCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.exception.UnableToFindSupportedValidatorException;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.UserProfile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import java.util.Set;
 @Slf4j
 public class UserAccountManagementService {
     private final UserAccountRepository userAccountRepository;
+    private final UserProfileRepository userProfileRepository;
     private final UserAccountPasswordEncoder userAccountPasswordEncoder;
     private final UserAccountEventPublisher userAccountEventPublisher;
     private final Set<UserAccountValidator> validators;
@@ -32,8 +36,13 @@ public class UserAccountManagementService {
     public UserAccountId processUserAccountCreation(UserAccountCreate userAccountCreate) {
         log.info("start user account creation process.");
         validate(userAccountCreate);
+
         UserAccount userAccount = saveAccount(userAccountCreate);
+
+        userProfileRepository.save(UserProfile.of(new UserProfileCreate(userAccount, userAccountCreate.nickname())));
+
         userAccountEventPublisher.publish(AccountCreateEvent.of(userAccount));
+
         return userAccount.getUserAccountId();
     }
 

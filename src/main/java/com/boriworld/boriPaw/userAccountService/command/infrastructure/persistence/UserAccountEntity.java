@@ -22,8 +22,6 @@ public class UserAccountEntity {
     private String email;
     private String userName;
     private String password;
-    @Embedded
-    private UserProfileValue userProfileValue;
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
     @Enumerated(EnumType.STRING)
@@ -35,12 +33,11 @@ public class UserAccountEntity {
     private LocalDateTime lastLoginAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    protected UserAccountEntity(Long userAccountId, String email, String userName, String password, UserProfileValue userProfileValue, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
+    protected UserAccountEntity(Long userAccountId, String email, String userName, String password, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
         this.userAccountId = userAccountId;
         this.email = email;
         this.userName = userName;
         this.password = password;
-        this.userProfileValue = userProfileValue;
         this.accountStatus = accountStatus;
         this.passwordStatus = passwordStatus;
         this.authority = authority;
@@ -55,7 +52,6 @@ public class UserAccountEntity {
                 .email(userAccount.getEmail())
                 .userName(userAccount.getUsername())
                 .password(userAccount.getPassword())
-                .userProfileValue(UserProfileValue.fromUserProfile(userAccount.getUserProfile()))
                 .accountStatus(userAccount.getAccountStatus())
                 .passwordStatus(userAccount.getPasswordStatus())
                 .authority(userAccount.getAuthority())
@@ -71,7 +67,6 @@ public class UserAccountEntity {
                 .email(this.email)
                 .userName(this.userName)
                 .password(this.password)
-                .userProfile(this.userProfileValue.toUserProfile())
                 .accountStatus(this.accountStatus)
                 .passwordStatus(this.passwordStatus)
                 .authority(this.authority)

@@ -1,5 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.query.application;
 
+import com.boriworld.boriPaw.followService.query.domain.value.Requester;
+
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import com.boriworld.boriPaw.userAccountService.query.domain.exception.ResourceNotFoundException;
 
@@ -9,13 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 
-
 @Component
 @RequiredArgsConstructor
 public class UserAccountQueryService {
     private final UserAccountQueryRepository repository;
 
-    public UserProfileDetail getUserDetail(UserAccountId userAccountId) {
+    public UserProfileDetail getUserDetail(Requester requester, UserAccountId userAccountId) {
 
         return repository.findUserProfileDetailByUserAccountId(userAccountId)
                 .orElseThrow(() -> ResourceNotFoundException.forMessage("프로필 정보를 찾을 수 없습니다"));

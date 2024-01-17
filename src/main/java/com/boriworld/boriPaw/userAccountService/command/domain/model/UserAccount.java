@@ -4,6 +4,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.exception.LoginFa
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserProfileCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,7 +22,6 @@ public final class UserAccount {
     private final String email;
     private final String username;
     private final String password;
-    private final UserProfile userProfile;
     private final AccountStatus accountStatus;
     private final PasswordStatus passwordStatus;
     private final Authority authority;
@@ -30,12 +30,11 @@ public final class UserAccount {
     private final LocalDateTime lastLoginAt;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private UserAccount(UserAccountId userAccountId, String email, String username, String password, UserProfile userProfile, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
+    private UserAccount(UserAccountId userAccountId, String email, String username, String password, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
         this.userAccountId = userAccountId;
         this.email = email;
         this.username = username;
         this.password = password;
-        this.userProfile = userProfile;
         this.accountStatus = accountStatus;
         this.passwordStatus = passwordStatus;
         this.authority = authority;
@@ -64,23 +63,21 @@ public final class UserAccount {
     public static UserAccount from(UserAccountCreate userAccountCreate, UserAccountPasswordEncoder userAccountPasswordEncoder) {
         Objects.requireNonNull(userAccountCreate, "createAccount() 메서드에 매개 변수 'accountCreate' 는 NULL 이 될수 없습니다..");
         Objects.requireNonNull(userAccountPasswordEncoder, "createAccount() 메서드에 매개 변수 'accountPasswordEncoder' 는 NULL 이 될수 없습니다.");
-        UserProfile profile = UserProfile.of(userAccountCreate.nickname(), null, null);
         log.info("create user account from UserAccountCreate");
 
         String username = userAccountCreate.email().split("@")[0];
         String defaultUsername = "(@)" + username;
-
         return UserAccount.builder()
                 .email(userAccountCreate.email())
                 .username(defaultUsername)
                 .password(userAccountPasswordEncoder.encode(userAccountCreate.password()))
-                .userProfile(profile)
                 .accountStatus(AccountStatus.ACTIVE)
                 .passwordStatus(PasswordStatus.STEADY)
                 .authority(Authority.USER)
                 .createdAt(LocalDateTime.now())
                 .build();
     }
+
     /**
      * 사용시 주의!
      * 계정 객체 초기화 메서드로 아래 용도외 에는 사용하지 않아야 합니다.
@@ -95,7 +92,6 @@ public final class UserAccount {
                 .email(initialize.email())
                 .username(initialize.userName())
                 .password(initialize.password())
-                .userProfile(initialize.userProfile())
                 .accountStatus(initialize.accountStatus())
                 .passwordStatus(initialize.passwordStatus())
                 .authority(initialize.authority())
@@ -113,7 +109,6 @@ public final class UserAccount {
                 .email(this.email)
                 .username(this.username)
                 .password(this.password)
-                .userProfile(this.userProfile)
                 .accountStatus(this.accountStatus)
                 .passwordStatus(this.passwordStatus)
                 .authority(this.authority)

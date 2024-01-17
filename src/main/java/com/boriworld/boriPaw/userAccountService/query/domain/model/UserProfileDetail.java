@@ -1,5 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.query.domain.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,9 @@ public class UserProfileDetail {
     private String nickname;
     private String profileImage;
     private String introduce;
+    private Integer countOfPosts;
+    private Integer countOfFollowers;
+    private Integer countOfFollows;
+
 
 }

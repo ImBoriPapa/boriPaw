@@ -1,11 +1,13 @@
 package com.boriworld.boriPaw.fakeTestComponent;
 
+import com.boriworld.boriPaw.userAccountService.command.application.FakeUserProfileRepository;
 import com.boriworld.boriPaw.userAccountService.command.application.UserAuthenticationService;
 import com.boriworld.boriPaw.userAccountService.command.application.UserAccountManagementService;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.RefreshTokenRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.EmailCertificationCodeRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
+import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserProfileRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.*;
 import com.boriworld.boriPaw.userAccountService.command.interfaces.controller.UserAccountManagementController;
 import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
@@ -37,6 +39,7 @@ public class FakeComponentContainer {
     public final AuthenticationTokenPayloadEncoder authenticationTokenPayloadEncoder;
     public final UserAuthenticationContextManager userAuthenticationContextManager;
 
+    public final UserProfileRepository userProfileRepository;
     public FakeComponentContainer() {
         this.userAccountRepository = new FakeUserAccountRepository();
         this.userAccountPasswordEncoder = new FakeUserAccountPasswordEncoder();
@@ -44,8 +47,10 @@ public class FakeComponentContainer {
         this.emailCertificationCodeGenerator = new FakeEmailCertificationCodeGenerator();
         this.emailCertificationCodeRepository = new FakeEmailCertificationCodeRepository();
         this.requestConstraintValidator = new RequestObjectConstraintValidator(validator);
+        this.userProfileRepository = new FakeUserProfileRepository();
         this.userAccountManagementService = new UserAccountManagementService(
                 this.userAccountRepository,
+                this.userProfileRepository,
                 this.userAccountPasswordEncoder,
                 this.userAccountEventPublisher,
                 Set.of(new UserAccountCreateValidator(userAccountRepository))

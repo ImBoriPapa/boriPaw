@@ -66,8 +66,8 @@ class UserAccountSmallTest {
                 () -> assertThat(userAccount.getEmail()).isEqualTo(userAccountCreate.email()),
 
                 () -> assertThat(userAccount.getPassword()).isNotEqualTo(userAccountCreate.password()),
-                () -> assertThat(userAccount.getUserProfile().getNickname()).isEqualTo(userAccountCreate.nickname()),
-                () -> assertThat(userAccount.getUserProfile().getProfileImage()).isNull(),
+//                () -> assertThat(userAccount.getUserProfile().getNickname()).isEqualTo(userAccountCreate.nickname()),
+//                () -> assertThat(userAccount.getUserProfile().getProfileImage()).isNull(),
                 () -> assertThat(userAccount.getAccountStatus()).isEqualTo(AccountStatus.ACTIVE),
                 () -> assertThat(userAccount.getPasswordStatus()).isEqualTo(PasswordStatus.STEADY),
                 () -> assertThat(userAccount.getAuthority()).isEqualTo(Authority.USER),
@@ -88,7 +88,6 @@ class UserAccountSmallTest {
         final String nickname = "boriPapa";
         final String profileImage = "imageurl";
         final String introduce = "안녕하세요";
-        final UserProfile userProfile = UserProfile.of(nickname, profileImage, introduce);
         final AccountStatus accountStatus = AccountStatus.ACTIVE;
         final PasswordStatus passwordStatus = PasswordStatus.STEADY;
         final Authority authority = Authority.USER;
@@ -101,7 +100,6 @@ class UserAccountSmallTest {
                 .email(email)
                 .userName(accountName)
                 .password(password)
-                .userProfile(userProfile)
                 .accountStatus(accountStatus)
                 .passwordStatus(passwordStatus)
                 .authority(authority)
@@ -117,8 +115,6 @@ class UserAccountSmallTest {
                 () -> assertThat(userAccount.getEmail()).isEqualTo(email),
                 () -> assertThat(userAccount.getUsername()).isEqualTo(accountName),
                 () -> assertThat(userAccount.getPassword()).isEqualTo(password),
-                () -> assertThat(userAccount.getUserProfile().getNickname()).isEqualTo(nickname),
-                () -> assertThat(userAccount.getUserProfile().getProfileImage()).isEqualTo(profileImage),
                 () -> assertThat(userAccount.getAccountStatus()).isEqualTo(accountStatus),
                 () -> assertThat(userAccount.getPasswordStatus()).isEqualTo(passwordStatus),
                 () -> assertThat(userAccount.getAuthority()).isEqualTo(authority),

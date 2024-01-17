@@ -1,6 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.application;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccountEventPublisher;
+import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserProfileRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountCreateValidator;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
@@ -25,6 +26,7 @@ class UserUserAccountManagementServiceSmallTest {
     private FakeComponentContainer componentContainer;
     private UserAccountManagementService userAccountManagementService;
     private UserAccountRepository userAccountRepository;
+    private UserProfileRepository userProfileRepository;
     private UserAccountPasswordEncoder passwordEncoder;
     private UserAccountEventPublisher publisher;
 
@@ -34,7 +36,10 @@ class UserUserAccountManagementServiceSmallTest {
         userAccountRepository = componentContainer.userAccountRepository;
         passwordEncoder = componentContainer.userAccountPasswordEncoder;
         publisher = componentContainer.userAccountEventPublisher;
-        userAccountManagementService = new UserAccountManagementService(userAccountRepository, passwordEncoder, publisher, Set.of(
+        userProfileRepository = new FakeUserProfileRepository();
+        userAccountManagementService = new UserAccountManagementService(
+                userAccountRepository, userProfileRepository,
+                passwordEncoder, publisher, Set.of(
                 new UserAccountCreateValidator(userAccountRepository)
         ));
     }

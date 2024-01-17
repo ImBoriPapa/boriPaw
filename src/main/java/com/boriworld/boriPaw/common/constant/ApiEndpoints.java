@@ -8,7 +8,7 @@ public class ApiEndpoints {
 
     //UserAccounts
     public static final String ACCOUNTS_ROOT_PATH = API_PATH + "/user-accounts";
-    public static final String GET_PROFILE = ACCOUNTS_ROOT_PATH + "/{user-accountId}/profile";
+    public static final String GET_PROFILE = ACCOUNTS_ROOT_PATH + "/{user-accountsId}/profile";
 
     //Authentication
     public static final String ME = ACCOUNTS_ROOT_PATH + "/me";

@@ -78,9 +78,7 @@ public class FollowQueryRepositoryJpaRepository implements FollowQueryRepository
                 followEntity.followedAt.as("followedAt"),
                 Projections.constructor(FollowerDetail.FollowerProfile.class,
                         userAccountEntity.userAccountId.as("userAccountId"),
-                        userAccountEntity.userName.as("username"),
-                        userAccountEntity.userProfileValue.nickname.as("nickname"),
-                        userAccountEntity.userProfileValue.profileImage.as("profileImage")
+                        userAccountEntity.userName.as("username")
                 ).as("followerProfile")
 
         );

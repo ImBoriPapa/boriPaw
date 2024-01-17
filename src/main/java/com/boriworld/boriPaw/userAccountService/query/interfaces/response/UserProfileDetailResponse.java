@@ -18,6 +18,9 @@ public class UserProfileDetailResponse {
     public String nickname;
     public String profileImage;
     public String introduce;
+    private Integer countOfPosts;
+    private Integer countOfFollowers;
+    private Integer countOfFollows;
 
     public static UserProfileDetailResponse from(UserProfileDetail detail) {
         return new UserProfileDetailResponse(
@@ -25,7 +28,10 @@ public class UserProfileDetailResponse {
                 detail.getUsername(),
                 detail.getNickname(),
                 detail.getProfileImage(),
-                detail.getIntroduce()
+                detail.getIntroduce(),
+                detail.getCountOfPosts(),
+                detail.getCountOfFollowers(),
+                detail.getCountOfFollows()
         );
     }
 }

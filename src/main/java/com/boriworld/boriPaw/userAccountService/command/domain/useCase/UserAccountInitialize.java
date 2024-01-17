@@ -12,7 +12,6 @@ public record UserAccountInitialize(
         String email,
         String userName,
         String password,
-        UserProfile userProfile,
         AccountStatus accountStatus,
         PasswordStatus passwordStatus,
         Authority authority,
