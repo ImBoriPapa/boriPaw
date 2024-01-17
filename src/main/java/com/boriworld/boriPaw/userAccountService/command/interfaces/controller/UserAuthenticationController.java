@@ -81,7 +81,7 @@ public class UserAuthenticationController {
         ResponseCookie refresh = ResponseCookie.from(AuthenticationTokenHeaderNames.REFRESH_TOKEN_COOKIE_NAME, refreshToken.getTokenString())
                 .secure(true)
                 .sameSite("None")
-                .httpOnly(true)
+                .httpOnly(false)
                 .path("/")
                 .maxAge(Duration.ofMillis(refreshToken.getTimeToLiveInMilliseconds()))
                 .build();
