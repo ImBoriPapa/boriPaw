@@ -98,7 +98,7 @@ public class UserAccountCreateRestDocsTest extends RestDocsMediumTest {
                 getDocumentResponse(),
                 requestFields(
                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호 - 최소6자리의 숫자 or 문자"),
                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")),
                 responseFields(
                         fieldWithPath("userAccountId").type(JsonFieldType.NUMBER).description("유저 계정 아이디")
