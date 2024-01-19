@@ -116,6 +116,8 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
                 status().isOk(),
                 jsonPath("$.userAccountId").exists(),
                 jsonPath("$.authority").exists(),
+                jsonPath("$.username").exists(),
+                jsonPath("$.profileImage").hasJsonPath(),
                 jsonPath("$.lastLoginAt").exists()
         );
 
@@ -200,6 +202,8 @@ public class UserAuthenticationRestDocsTest extends RestDocsMediumTest {
                 responseFields(
                         fieldWithPath("userAccountId").type(NUMBER).description("userAccount 식별 아이디"),
                         fieldWithPath("authority").type(STRING).description("권한 정보"),
+                        fieldWithPath("username").type(STRING).description("유유저 네임"),
+                        fieldWithPath("profileImage").type(STRING).description("프로필 이미지").optional(),
                         fieldWithPath("lastLoginAt").type(STRING).description("마지막 로그인 시간")
                 )
         );

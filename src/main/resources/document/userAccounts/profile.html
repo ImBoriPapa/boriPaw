@@ -458,7 +458,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/user-accounts/1/profile HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjUxODQwLCJleHAiOjE3MDU2NTI0NDB9.KHEgZkTeJNlbTCR4rNLCnft_QqcID5OJNdoHqGb2yGbeUsO1ViEjNjClrUa-0pKhh5CeiNpC2qJJ8YkQwTXSaA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjU0MDU2LCJleHAiOjE3MDU2NTQ2NTZ9.zHMTRTMFxG9SpRr64y_NY0d23OCQnrj3OO7LUocJs0xPVe6J0evKxqnkjwrRgyKMsB6dSfFeL2cEyQeVCElzkQ
 Host: server.boripaw.com</code></pre>
 </div>
 </div>
@@ -482,11 +482,11 @@ Content-Length: 253
 
 {
   "userAccountId" : 1,
-  "username" : "(@)tester",
+  "username" : "tester",
   "nickname" : "tester",
   "profileImage" : null,
   "introduce" : "자기 소개를 입력해주세요",
-  "hasFollow" : false,
+  "hasFollowing" : false,
   "countOfPosts" : 0,
   "countOfFollowers" : 0,
   "countOfFollows" : 0
@@ -535,7 +535,7 @@ Content-Length: 253
 <td class="tableblock halign-left valign-top"><p class="tableblock">introduce</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>hasFollow</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>hasFollowing</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">hasFollow</p></td>
 </tr>

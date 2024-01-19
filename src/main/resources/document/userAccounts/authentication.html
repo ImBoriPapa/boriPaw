@@ -523,8 +523,8 @@ Host: server.boripaw.com
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjUxODQzLCJleHAiOjE3MDU2NTI0NDN9.wFECbfcOuSrfZY-ITvwKHSaQ3sR0XCDPsgpDWaPaTo7zXyqCz82n9A3a4Jc381HgbRNUlUfFscqgSzouK4PtjA
-Set-Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjUxODQzLCJleHAiOjE3MDYyNTY2NDN9.tPoF_JDhdoflnHnq2v9D8CzE5XcJ5td1hLxjFH45WZmWM3RiDdo4LT4Bzb_qBOz-cFZ3gFPYnvnKzZdvb1htxQ; Path=/; Max-Age=604799; Expires=Fri, 26 Jan 2024 08:10:43 GMT; Secure; HttpOnly; SameSite=None
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjU0MDU5LCJleHAiOjE3MDU2NTQ2NTl9.3wpLrre1P61ZBPTx_-mkRkwqezc01K7opYlwXPTrK-x5jloyrSiTl6W1Jhw6CAbJ4uSjsJByI2zs4Omw9oAN5g
+Set-Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjU0MDU5LCJleHAiOjE3MDYyNTg4NTl9.y2z_AP08SCl5h2vXnWZ_Q0qD63vCdf4uKjocm57azZ7Tb4Dx9diFmf5VuUBH5AZmbL0QqRE9ek0jGYSzHYDqIQ; Path=/; Max-Age=604799; Expires=Fri, 26 Jan 2024 08:47:39 GMT; Secure; HttpOnly; SameSite=None
 Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0
@@ -609,7 +609,7 @@ Content-Length: 220
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/user-accounts/me HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjUxODQyLCJleHAiOjE3MDU2NTI0NDJ9.GCxqluFOkvSZCZVeoI5t3R6ooY6skDqwF8tBl5hNR4useWLj8rpSDphieE0hZIvwaphShX6vbmNXTucdGIt-5g
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjU0MDU4LCJleHAiOjE3MDU2NTQ2NTh9.QTYjyrbT2WUW2_KqGgvY6-B4SUtMK_Fv90EBElsJOssohc7uOA00ncHikrZ6Voi3PbwAzULBmwuTfIynzd0H-g
 Host: server.boripaw.com</code></pre>
 </div>
 </div>
@@ -629,12 +629,14 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 87
+Content-Length: 137
 
 {
   "userAccountId" : 1,
   "authority" : "USER",
-  "lastLoginAt" : "2024-01-19 17:10"
+  "username" : "tester",
+  "profileImage" : null,
+  "lastLoginAt" : "2024-01-19 17:47"
 }</code></pre>
 </div>
 </div>
@@ -663,6 +665,16 @@ Content-Length: 87
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>authority</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">권한 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>username</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유유저 네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileImage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>lastLoginAt</code></p></td>
@@ -745,7 +757,7 @@ Content-Length: 149
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/reissue HTTP/1.1
 Host: server.boripaw.com
-Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjUxODQzLCJleHAiOjE3MDYyNTY2NDN9.tPoF_JDhdoflnHnq2v9D8CzE5XcJ5td1hLxjFH45WZmWM3RiDdo4LT4Bzb_qBOz-cFZ3gFPYnvnKzZdvb1htxQ
+Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjU0MDU4LCJleHAiOjE3MDYyNTg4NTh9.HxZtUFD7r9mFrBUzKvP8WUWx5DBr-8e-D6hh3UbcBeJbbEjZGsql9giECGm4FKrDVouf9ef94xo5RAZsPhrnZQ
 Content-Type: application/x-www-form-urlencoded</code></pre>
 </div>
 </div>
@@ -755,8 +767,8 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjUxODQzLCJleHAiOjE3MDU2NTI0NDN9.wFECbfcOuSrfZY-ITvwKHSaQ3sR0XCDPsgpDWaPaTo7zXyqCz82n9A3a4Jc381HgbRNUlUfFscqgSzouK4PtjA
-Set-Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjUxODQzLCJleHAiOjE3MDYyNTY2NDN9.tPoF_JDhdoflnHnq2v9D8CzE5XcJ5td1hLxjFH45WZmWM3RiDdo4LT4Bzb_qBOz-cFZ3gFPYnvnKzZdvb1htxQ; Path=/; Max-Age=604799; Expires=Fri, 26 Jan 2024 08:10:43 GMT; Secure; HttpOnly; SameSite=None
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjU0MDU5LCJleHAiOjE3MDU2NTQ2NTl9.3wpLrre1P61ZBPTx_-mkRkwqezc01K7opYlwXPTrK-x5jloyrSiTl6W1Jhw6CAbJ4uSjsJByI2zs4Omw9oAN5g
+Set-Cookie: refresh-token=eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjU0MDU5LCJleHAiOjE3MDYyNTg4NTl9.y2z_AP08SCl5h2vXnWZ_Q0qD63vCdf4uKjocm57azZ7Tb4Dx9diFmf5VuUBH5AZmbL0QqRE9ek0jGYSzHYDqIQ; Path=/; Max-Age=604799; Expires=Fri, 26 Jan 2024 08:47:39 GMT; Secure; HttpOnly; SameSite=None
 Content-Type: application/json;charset=UTF-8
 X-Content-Type-Options: nosniff
 X-XSS-Protection: 0

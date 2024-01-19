@@ -50,7 +50,7 @@ public class UserAccountProfileDocsTest extends RestDocsMediumTest {
                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("nickname"),
                         fieldWithPath("profileImage").type(JsonFieldType.STRING).description("profileImage").optional(),
                         fieldWithPath("introduce").type(JsonFieldType.STRING).description("introduce"),
-                        fieldWithPath("hasFollow").type(JsonFieldType.BOOLEAN).description("hasFollow"),
+                        fieldWithPath("hasFollowing").type(JsonFieldType.BOOLEAN).description("hasFollow"),
                         fieldWithPath("countOfPosts").type(JsonFieldType.NUMBER).description("countOfPosts"),
                         fieldWithPath("countOfFollowers").type(JsonFieldType.NUMBER).description("countOfFollowers"),
                         fieldWithPath("countOfFollows").type(JsonFieldType.NUMBER).description("countOfFollows")

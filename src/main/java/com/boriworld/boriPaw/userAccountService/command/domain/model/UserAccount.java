@@ -66,10 +66,10 @@ public final class UserAccount {
         log.info("create user account from UserAccountCreate");
 
         String username = userAccountCreate.email().split("@")[0];
-        String defaultUsername = "(@)" + username;
+
         return UserAccount.builder()
                 .email(userAccountCreate.email())
-                .username(defaultUsername)
+                .username(username)
                 .password(userAccountPasswordEncoder.encode(userAccountCreate.password()))
                 .accountStatus(AccountStatus.ACTIVE)
                 .passwordStatus(PasswordStatus.STEADY)

@@ -9,14 +9,18 @@ import java.time.LocalDateTime;
 
 public record UserInformationResponse(Long userAccountId,
                                       Authority authority,
+                                      String username,
+                                      String profileImage,
                                       @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul") LocalDateTime lastLoginAt) {
-    public UserInformationResponse(Long userAccountId, Authority authority, LocalDateTime lastLoginAt) {
+    public UserInformationResponse(Long userAccountId, Authority authority, String username, String profileImage, LocalDateTime lastLoginAt) {
         this.userAccountId = userAccountId;
         this.authority = authority;
+        this.username = username;
+        this.profileImage = profileImage;
         this.lastLoginAt = lastLoginAt;
     }
 
     public static UserInformationResponse from(UserInformation userInformation) {
-        return new UserInformationResponse(userInformation.getUserAccountId(), userInformation.getAuthority(), userInformation.getLastLoginAt());
+        return new UserInformationResponse(userInformation.getUserAccountId(), userInformation.getAuthority(), userInformation.getUsername(), userInformation.getProfileImage(), userInformation.getLastLoginAt());
     }
 }

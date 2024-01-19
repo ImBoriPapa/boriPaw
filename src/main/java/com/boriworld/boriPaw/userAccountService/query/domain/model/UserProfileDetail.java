@@ -14,7 +14,7 @@ public class UserProfileDetail {
     private String nickname;
     private String profileImage;
     private String introduce;
-    private Boolean hasFollow;
+    private Boolean hasFollowing;
     private Integer countOfPosts;
     private Integer countOfFollowers;
     private Integer countOfFollows;

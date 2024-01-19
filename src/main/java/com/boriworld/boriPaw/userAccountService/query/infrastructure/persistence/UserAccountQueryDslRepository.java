@@ -39,10 +39,10 @@ public class UserAccountQueryDslRepository implements UserAccountQueryRepository
                 .stream()
                 .findFirst();
 
-        boolean hasFollow = false;
+        boolean hasFollowing = false;
 
         if (optionalRelationship.isEmpty()) {
-            hasFollow = false;
+            hasFollowing = false;
         }
 
         if (optionalRelationship.isPresent()) {
@@ -51,7 +51,7 @@ public class UserAccountQueryDslRepository implements UserAccountQueryRepository
             }
 
             if (optionalRelationship.get().getType() == RelationshipType.FOLLOW) {
-                hasFollow = true;
+                hasFollowing = true;
             }
         }
 
@@ -63,13 +63,14 @@ public class UserAccountQueryDslRepository implements UserAccountQueryRepository
                         userProfileEntity.nickname,
                         userProfileEntity.profileImageValue.fullPath,
                         userProfileEntity.introduce,
-                        Expressions.constant(hasFollow),
+                        Expressions.constant(hasFollowing),
                         userProfileEntity.countOfPosts,
                         userProfileEntity.countOfFollowers,
                         userProfileEntity.countOfFollows
                 ))
                 .from(userAccountEntity)
-                .leftJoin(userProfileEntity).on(userAccountEntity.userAccountId.eq(userProfileEntity.userAccountEntity.userAccountId))
+                .leftJoin(userProfileEntity)
+                .on(userAccountEntity.userAccountId.eq(userProfileEntity.userAccountEntity.userAccountId))
                 .where(userAccountEntity.userAccountId.eq(userAccountId.getId()))
                 .fetch()
                 .stream()
