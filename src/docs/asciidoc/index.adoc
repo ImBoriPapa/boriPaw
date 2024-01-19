@@ -18,7 +18,7 @@ Contact: <ImBoriPapa@gmail.com>
 . link:userAccounts/management.html[Management API, window=_blank]
 - 계정 관련 API 입니다.
 . link:userAccounts/authentication.html[Authentication API,window=_blank]
-. link:userAccounts/profile.adoc[User Profile API, window=_blank]
+. link:userAccounts/profile.html[User Profile API, window=_blank]
 
 == Follow
 
