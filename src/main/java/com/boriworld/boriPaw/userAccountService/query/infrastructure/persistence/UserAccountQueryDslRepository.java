@@ -4,7 +4,6 @@ package com.boriworld.boriPaw.userAccountService.query.infrastructure.persistenc
 import com.boriworld.boriPaw.followService.query.domain.value.Requester;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.RelationshipType;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
-import com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence.QRelationshipEntity;
 import com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence.RelationshipEntity;
 import com.boriworld.boriPaw.userAccountService.query.domain.model.UserProfileDetail;
 import com.boriworld.boriPaw.userAccountService.query.domain.repository.UserAccountQueryRepository;

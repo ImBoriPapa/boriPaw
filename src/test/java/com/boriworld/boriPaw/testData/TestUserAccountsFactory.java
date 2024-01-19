@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class TestUserAccountsFactory {
     private final UserAccountPasswordEncoder encoder;
     private final UserAccountRepository userAccountRepository;
-
     private final UserProfileRepository userProfileRepository;
     private final EntityManager em;
     public final String TESTER_EMAIL = "tester@gmail.com";
