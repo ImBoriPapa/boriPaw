@@ -8,5 +8,5 @@ import com.boriworld.boriPaw.userAccountService.query.domain.model.UserProfileDe
 import java.util.Optional;
 
 public interface UserAccountQueryRepository {
-    Optional<UserProfileDetail> findUserProfileDetailByUserAccountId(UserAccountId userAccountId);
+    Optional<UserProfileDetail> findUserProfileDetailByUserAccountId(Requester requester,UserAccountId userAccountId);
 }

@@ -18,9 +18,10 @@ import java.time.LocalDateTime;
 public class UserAccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_account_id")
     private Long userAccountId;
     private String email;
-    private String userName;
+    private String username;
     private String password;
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
@@ -32,11 +33,11 @@ public class UserAccountEntity {
     private LocalDateTime updatedAt;
     private LocalDateTime lastLoginAt;
 
-    @Builder(access = AccessLevel.PRIVATE)
-    protected UserAccountEntity(Long userAccountId, String email, String userName, String password, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
+    @Builder(access = AccessLevel.PUBLIC)
+    protected UserAccountEntity(Long userAccountId, String email, String username, String password, AccountStatus accountStatus, PasswordStatus passwordStatus, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime lastLoginAt) {
         this.userAccountId = userAccountId;
         this.email = email;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         this.accountStatus = accountStatus;
         this.passwordStatus = passwordStatus;
@@ -50,7 +51,7 @@ public class UserAccountEntity {
         return UserAccountEntity.builder()
                 .userAccountId(userAccount.getUserAccountId() == null ? null : userAccount.getUserAccountId().getId())
                 .email(userAccount.getEmail())
-                .userName(userAccount.getUsername())
+                .username(userAccount.getUsername())
                 .password(userAccount.getPassword())
                 .accountStatus(userAccount.getAccountStatus())
                 .passwordStatus(userAccount.getPasswordStatus())
@@ -62,18 +63,6 @@ public class UserAccountEntity {
     }
 
     public UserAccount toModel() {
-        UserAccountInitialize initialize = UserAccountInitialize.builder()
-                .userAccountId(UserAccountId.of(this.userAccountId))
-                .email(this.email)
-                .userName(this.userName)
-                .password(this.password)
-                .accountStatus(this.accountStatus)
-                .passwordStatus(this.passwordStatus)
-                .authority(this.authority)
-                .createdAt(this.createdAt)
-                .updatedAt(this.updatedAt)
-                .lastLoginAt(this.lastLoginAt)
-                .build();
-        return UserAccount.initialize(initialize);
+        return UserAccount.initialize(UserAccountInitialize.of(this));
     }
 }

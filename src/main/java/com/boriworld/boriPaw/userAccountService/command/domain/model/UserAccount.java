@@ -4,7 +4,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.exception.LoginFa
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountInitialize;
-import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserProfileCreate;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountLogin;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -88,16 +88,16 @@ public final class UserAccount {
      */
     public static UserAccount initialize(UserAccountInitialize initialize) {
         return UserAccount.builder()
-                .userAccountId(initialize.userAccountId())
-                .email(initialize.email())
-                .username(initialize.userName())
-                .password(initialize.password())
-                .accountStatus(initialize.accountStatus())
-                .passwordStatus(initialize.passwordStatus())
-                .authority(initialize.authority())
-                .createdAt(initialize.createdAt())
-                .updatedAt(initialize.updatedAt())
-                .lastLoginAt(initialize.lastLoginAt())
+                .userAccountId(initialize.getUserAccountId())
+                .email(initialize.getEmail())
+                .username(initialize.getUsername())
+                .password(initialize.getPassword())
+                .accountStatus(initialize.getAccountStatus())
+                .passwordStatus(initialize.getPasswordStatus())
+                .authority(initialize.getAuthority())
+                .createdAt(initialize.getCreatedAt())
+                .updatedAt(initialize.getUpdatedAt())
+                .lastLoginAt(initialize.getLastLoginAt())
                 .build();
     }
 

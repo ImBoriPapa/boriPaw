@@ -4,7 +4,8 @@ import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccou
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
-import com.boriworld.boriPaw.userAccountService.command.domain.value.UserProfile;
+import com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence.UserAccountEntity;
+
 
 import java.util.Map;
 import java.util.Optional;
@@ -19,10 +20,11 @@ public class FakeUserAccountRepository implements UserAccountRepository {
     public UserAccount save(UserAccount userAccount) {
 
         long incrementAndGet = SEQUENCE.incrementAndGet();
-        UserAccountInitialize accountInitialize = UserAccountInitialize.builder()
-                .userAccountId(UserAccountId.of(incrementAndGet))
+
+        UserAccountEntity accountEntity = UserAccountEntity.builder()
+                .userAccountId(incrementAndGet)
                 .email(userAccount.getEmail())
-                .userName(userAccount.getUsername())
+                .username(userAccount.getUsername())
                 .password(userAccount.getPassword())
                 .accountStatus(userAccount.getAccountStatus())
                 .passwordStatus(userAccount.getPasswordStatus())
@@ -31,7 +33,8 @@ public class FakeUserAccountRepository implements UserAccountRepository {
                 .updatedAt(userAccount.getUpdatedAt())
                 .build();
 
-        UserAccount initializedUserAccount = UserAccount.initialize(accountInitialize);
+
+        UserAccount initializedUserAccount = UserAccount.initialize(UserAccountInitialize.of(accountEntity));
 
         store.put(incrementAndGet, initializedUserAccount);
 
@@ -47,10 +50,10 @@ public class FakeUserAccountRepository implements UserAccountRepository {
     }
 
     @Override
-    public boolean existsByUsername(String accountName) {
+    public boolean existsByUsername(String username) {
         return store.values()
                 .stream()
-                .anyMatch(account -> account.getUsername().equals(accountName));
+                .anyMatch(account -> account.getUsername().equals(username));
     }
 
     @Override

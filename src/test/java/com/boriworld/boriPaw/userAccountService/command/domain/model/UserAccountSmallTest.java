@@ -1,15 +1,13 @@
 package com.boriworld.boriPaw.userAccountService.command.domain.model;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.exception.LoginFailException;
-import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccountLogin;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountLogin;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserAccountInitialize;
-import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.UserAccountPasswordEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import com.boriworld.boriPaw.fakeTestComponent.fakeComponents.FakeUserAccountPasswordEncoder;
-import org.assertj.core.api.AbstractThrowableAssert;
-import org.jetbrains.annotations.NotNull;
+import com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence.UserAccountEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,8 +64,6 @@ class UserAccountSmallTest {
                 () -> assertThat(userAccount.getEmail()).isEqualTo(userAccountCreate.email()),
 
                 () -> assertThat(userAccount.getPassword()).isNotEqualTo(userAccountCreate.password()),
-//                () -> assertThat(userAccount.getUserProfile().getNickname()).isEqualTo(userAccountCreate.nickname()),
-//                () -> assertThat(userAccount.getUserProfile().getProfileImage()).isNull(),
                 () -> assertThat(userAccount.getAccountStatus()).isEqualTo(AccountStatus.ACTIVE),
                 () -> assertThat(userAccount.getPasswordStatus()).isEqualTo(PasswordStatus.STEADY),
                 () -> assertThat(userAccount.getAuthority()).isEqualTo(Authority.USER),
@@ -81,24 +77,20 @@ class UserAccountSmallTest {
     @DisplayName(value = "UserAccountInitialize 로 UserAccount 를 초기화 할 수 있다.")
     void givenUserAccountInitialize_thenInitializeUserAccount() throws Exception {
         //given
-        final UserAccountId userAccountId = UserAccountId.of(123L);
+        final Long userAccountId = 123L;
         final String email = "boriPapa@gmail.com";
-        final String accountName = "username";
+        final String username = "username";
         final String password = "password1234!@";
-        final String nickname = "boriPapa";
-        final String profileImage = "imageurl";
-        final String introduce = "안녕하세요";
         final AccountStatus accountStatus = AccountStatus.ACTIVE;
         final PasswordStatus passwordStatus = PasswordStatus.STEADY;
         final Authority authority = Authority.USER;
         final LocalDateTime createdAt = LocalDateTime.now();
         final LocalDateTime updatedAt = LocalDateTime.now();
         final LocalDateTime lastLoginAt = LocalDateTime.now();
-
-        UserAccountInitialize initialize = UserAccountInitialize.builder()
+        UserAccountEntity entity = UserAccountEntity.builder()
                 .userAccountId(userAccountId)
                 .email(email)
-                .userName(accountName)
+                .username(username)
                 .password(password)
                 .accountStatus(accountStatus)
                 .passwordStatus(passwordStatus)
@@ -107,13 +99,14 @@ class UserAccountSmallTest {
                 .updatedAt(updatedAt)
                 .lastLoginAt(lastLoginAt)
                 .build();
+
         //when
-        UserAccount userAccount = UserAccount.initialize(initialize);
+        UserAccount userAccount = UserAccount.initialize(UserAccountInitialize.of(entity));
         //then
         assertAll(
-                () -> assertThat(userAccount.getUserAccountId()).isEqualTo(userAccountId),
+                () -> assertThat(userAccount.getUserAccountId().getId()).isEqualTo(userAccountId),
                 () -> assertThat(userAccount.getEmail()).isEqualTo(email),
-                () -> assertThat(userAccount.getUsername()).isEqualTo(accountName),
+                () -> assertThat(userAccount.getUsername()).isEqualTo(username),
                 () -> assertThat(userAccount.getPassword()).isEqualTo(password),
                 () -> assertThat(userAccount.getAccountStatus()).isEqualTo(accountStatus),
                 () -> assertThat(userAccount.getPasswordStatus()).isEqualTo(passwordStatus),

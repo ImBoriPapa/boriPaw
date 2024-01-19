@@ -4,9 +4,6 @@ import com.boriworld.boriPaw.common.constant.ApiEndpoints;
 
 import com.boriworld.boriPaw.followService.query.domain.value.Requester;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.UserAccountPrincipal;
-import com.boriworld.boriPaw.userAccountService.command.domain.model.Relationship;
-import com.boriworld.boriPaw.userAccountService.command.domain.model.RelationshipSubject;
-import com.boriworld.boriPaw.userAccountService.command.domain.model.RelationshipTarget;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import com.boriworld.boriPaw.userAccountService.query.application.UserAccountQueryService;
 
@@ -25,9 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class UserAccountQueryController {
+public class UserAccountProfileQueryController {
     private final UserAccountQueryService userAccountQueryService;
-
 
     @GetMapping(ApiEndpoints.GET_PROFILE)
     public ResponseEntity<UserProfileDetailResponse> getProfile(@PathVariable(value = "user-accountsId") Long userAccountId,

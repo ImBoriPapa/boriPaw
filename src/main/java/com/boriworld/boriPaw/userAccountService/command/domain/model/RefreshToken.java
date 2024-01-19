@@ -4,7 +4,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.dto.Authenticatio
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenPayloadEncoder;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.AuthenticationTokenService;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.RefreshTokenCreate;
-import com.boriworld.boriPaw.userAccountService.command.domain.useCase.RefreshTokenInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.RefreshTokenInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.*;
 import lombok.Getter;
 

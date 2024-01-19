@@ -1,0 +1,20 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= 사용자 프로필 관리 API
+
+== 프로필 조회
+
+*HTTP Method: GET*
+
+*URL* : https://server.boripaw.com/api/v1/user-accounts/+{user-accountsId}+/profile
+
+=== Request
+include::{snippets}/userAccount/profile/get-profile/http-request.adoc[]
+
+=== Response
+include::{snippets}/userAccount/profile/get-profile/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/userAccount/profile/get-profile/response-fields.adoc[]

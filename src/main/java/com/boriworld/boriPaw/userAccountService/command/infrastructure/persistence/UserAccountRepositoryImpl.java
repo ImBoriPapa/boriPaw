@@ -26,8 +26,8 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
     }
 
     @Override
-    public boolean existsByUsername(String accountName) {
-        return userAccountJpaRepository.existsByUserName(accountName);
+    public boolean existsByUsername(String username) {
+        return userAccountJpaRepository.existsByUsername(username);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.boriworld.boriPaw.userAccountService.command.infrastructure.redis;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.model.RefreshToken;
-import com.boriworld.boriPaw.userAccountService.command.domain.useCase.RefreshTokenInitialize;
+import com.boriworld.boriPaw.userAccountService.command.domain.value.RefreshTokenInitialize;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

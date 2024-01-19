@@ -11,13 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserProfileDetailResponse {
 
-    public Long userAccountId;
-
-    public String username;
-
-    public String nickname;
-    public String profileImage;
-    public String introduce;
+    private Long userAccountId;
+    private String username;
+    private String nickname;
+    private String profileImage;
+    private String introduce;
+    private boolean hasFollow;
     private Integer countOfPosts;
     private Integer countOfFollowers;
     private Integer countOfFollows;
@@ -29,6 +28,7 @@ public class UserProfileDetailResponse {
                 detail.getNickname(),
                 detail.getProfileImage(),
                 detail.getIntroduce(),
+                detail.getHasFollow(),
                 detail.getCountOfPosts(),
                 detail.getCountOfFollowers(),
                 detail.getCountOfFollows()
