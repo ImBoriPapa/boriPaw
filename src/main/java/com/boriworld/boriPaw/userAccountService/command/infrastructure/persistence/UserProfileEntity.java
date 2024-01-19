@@ -1,6 +1,5 @@
 package com.boriworld.boriPaw.userAccountService.command.infrastructure.persistence;
 
-import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserProfileInitialize;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserProfile;
 import jakarta.persistence.*;
@@ -18,7 +17,7 @@ public class UserProfileEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userProfileId;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userAccountId")
+    @JoinColumn(name = "user_account_id")
     private UserAccountEntity userAccountEntity;
     private String nickname;
     @Embedded

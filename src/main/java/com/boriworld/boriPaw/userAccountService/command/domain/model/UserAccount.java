@@ -130,4 +130,18 @@ public final class UserAccount {
         }
     }
 
+    public UserAccount changeUpdatedAt() {
+        return UserAccount.builder()
+                .userAccountId(this.userAccountId)
+                .email(this.email)
+                .username(this.username)
+                .password(this.password)
+                .accountStatus(this.accountStatus)
+                .passwordStatus(this.passwordStatus)
+                .authority(this.authority)
+                .createdAt(this.createdAt)
+                .updatedAt(this.updatedAt)
+                .lastLoginAt(LocalDateTime.now())
+                .build();
+    }
 }

@@ -19,7 +19,8 @@ public enum ProblemDefinition {
     DENIED_TOKEN("denied-token", "token-denied", HttpStatus.BAD_REQUEST, "거절된 토큰입니다."),
     EXPIRED_TOKEN("expired-token", "token-expired", HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
     ERROR_TOKEN("error-token", "token-error", HttpStatus.FORBIDDEN, "잘못된 토큰입니다."),
-    ALREADY_FOLLOW("type", "title", HttpStatus.BAD_REQUEST, "");
+    ALREADY_FOLLOW("type", "title", HttpStatus.BAD_REQUEST, ""),
+    NO_RESOURCE_UPDATE_PRIVILEGES("type", "No Resource update privileges", HttpStatus.FORBIDDEN, "해당 리소스에 수정 권한 없음");
     private final String type;
     private final String title;
     private final HttpStatus status;

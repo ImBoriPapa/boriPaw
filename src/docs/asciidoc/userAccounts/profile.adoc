@@ -11,10 +11,35 @@ endif::[]
 *URL* : https://server.boripaw.com/api/v1/user-accounts/+{user-accountsId}+/profile
 
 === Request
+
 include::{snippets}/userAccount/profile/get-profile/http-request.adoc[]
 
 === Response
+
 include::{snippets}/userAccount/profile/get-profile/http-response.adoc[]
 
 ==== Response Fields
+
 include::{snippets}/userAccount/profile/get-profile/response-fields.adoc[]
+
+== 닉네임 변경
+
+*HTTP Method: PATCH*
+
+*URL* : https://server.boripaw.com/api/v1/user-accounts/+{user-accountsId}+/profile/nickname
+
+=== Request
+
+include::{snippets}/userAccount/profile/change-nickname/http-request.adoc[]
+
+==== RequestFields
+
+include::{snippets}/userAccount/profile/change-nickname/request-body.adoc[]
+
+=== Response
+
+include::{snippets}/userAccount/profile/change-nickname/http-response.adoc[]
+
+==== Response Field
+
+include::{snippets}/userAccount/profile/change-nickname/response-fields.adoc[]

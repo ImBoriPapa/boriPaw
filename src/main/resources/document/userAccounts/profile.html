@@ -458,7 +458,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/user-accounts/1/profile HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjU0MDU2LCJleHAiOjE3MDU2NTQ2NTZ9.zHMTRTMFxG9SpRr64y_NY0d23OCQnrj3OO7LUocJs0xPVe6J0evKxqnkjwrRgyKMsB6dSfFeL2cEyQeVCElzkQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjczMzM4LCJleHAiOjE3MDU2NzM5Mzh9.AoLvqPikN8sYWh3jU9Y8KDba_wIBQDZFQjQvEm2gvRqqs-28C4Z0THf62R6y98flati9YqyF_MjrhMyIo3hGSg
 Host: server.boripaw.com</code></pre>
 </div>
 </div>
@@ -560,11 +560,95 @@ Content-Length: 253
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_닉네임_변경">닉네임 변경</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>HTTP Method: PATCH</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>URL</strong> : <a href="https://server.boripaw.com/api/v1/user-accounts/{user-accountsId}/profile/nickname" class="bare">https://server.boripaw.com/api/v1/user-accounts/{user-accountsId}/profile/nickname</a></p>
+</div>
+<div class="sect2">
+<h3 id="_request_2">Request</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /api/v1/user-accounts/1/profile/nickname HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdHkiOiJ1cmtIK1NkaU5sTzZWNXhQS1JUV2pBPT0iLCJzdWIiOiIxIiwiaWF0IjoxNzA1NjczMzM5LCJleHAiOjE3MDU2NzM5Mzl9.DhQVHey-9ZWw7s1RMhbRqbzpyJCboZij9IfT0qRzmK7NNXn8lGEcvXdD1MVkuxZ818QbGndvur-B0c3j9ahsxQ
+Content-Length: 36
+Host: server.boripaw.com
+
+{
+  "nickname" : "updatedNickname"
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_requestfields">RequestFields</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "nickname" : "updatedNickname"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_response_2">Response</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 25
+
+{
+  "userAccountId" : 1
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_field">Response Field</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userAccountId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유저 계정 식별 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-01-19 17:01:32 +0900
+Last updated 2024-01-19 23:05:39 +0900
 </div>
 </div>
 </body>

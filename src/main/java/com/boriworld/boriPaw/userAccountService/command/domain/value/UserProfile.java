@@ -7,6 +7,7 @@ import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserProfi
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.util.StringUtils;
 
 
 @Getter
@@ -55,6 +56,24 @@ public final class UserProfile {
                 .countOfPosts(initialize.getCountOfPosts())
                 .countOfFollowers(initialize.getCountOfFollowers())
                 .countOfFollows(initialize.getCountOfFollows())
+                .build();
+    }
+
+    public UserProfile updateNickname(String newNickname) {
+
+        if (!StringUtils.hasText(newNickname)) {
+            throw new RuntimeException("new nickname is null");
+        }
+
+        return UserProfile.builder()
+                .userProfileId(this.userProfileId)
+                .userAccount(this.userAccount.changeUpdatedAt())
+                .nickname(newNickname)
+                .profileImage(this.profileImage)
+                .introduce(this.introduce)
+                .countOfPosts(this.countOfPosts)
+                .countOfFollowers(this.countOfFollowers)
+                .countOfFollows(this.countOfFollows)
                 .build();
     }
 }
