@@ -6,10 +6,13 @@ public class ApiEndpoints {
     private static final String VERSION = "/v1";
     private static final String API_PATH = "/api" + VERSION;
 
-    //UserAccounts
+    //User Accounts
     public static final String ACCOUNTS_ROOT_PATH = API_PATH + "/user-accounts";
     public static final String GET_PROFILE = ACCOUNTS_ROOT_PATH + "/{user-accountsId}/profile";
+
+    //User Profile
     public static final String CHANGE_PROFILE_NICKNAME = GET_PROFILE + "/nickname";
+    public static final String CHANGE_PROFILE_INTRODUCE = GET_PROFILE + "/introduce";
 
     //Authentication
     public static final String ME = ACCOUNTS_ROOT_PATH + "/me";

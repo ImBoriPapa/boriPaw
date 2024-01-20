@@ -26,7 +26,7 @@ public class UserProfileController {
     private final RequestConstraintValidator validator;
 
     @PatchMapping(ApiEndpoints.CHANGE_PROFILE_NICKNAME)
-    public ResponseEntity changeNickname(@AuthenticationPrincipal UserAccountPrincipal principal,
+    public ResponseEntity<UserProfileUpdateResponse> changeNickname(@AuthenticationPrincipal UserAccountPrincipal principal,
                                          @RequestBody UserNicknameChangeRequest request,
                                          @PathVariable(name = "user-accountsId") Long userAccountId) {
         log.info("user profile nickname change request new nickname is {}", request.getNickname());
@@ -35,7 +35,19 @@ public class UserProfileController {
 
         validator.validate(request);
 
-        UserAccountId updated = userProfileService.updateNickname(UserAccountId.of(userAccountId), request.getNickname());
+        UserAccountId updated = userProfileService.processingUpdateNickname(UserAccountId.of(userAccountId), request.getNickname());
+
+        return ResponseEntity.ok(new UserProfileUpdateResponse(updated.getId()));
+    }
+
+    @PatchMapping(ApiEndpoints.CHANGE_PROFILE_INTRODUCE)
+    public ResponseEntity<UserProfileUpdateResponse> changeIntroduce(@AuthenticationPrincipal UserAccountPrincipal principal,
+                                          @RequestBody UserIntroduceChangeRequest request,
+                                          @PathVariable(name = "user-accountsId") Long userAccountId) {
+        log.info("user profile nickname change request new introduce is {}", request.getIntroduce());
+        validatePrivileges(principal, userAccountId);
+
+        UserAccountId updated = userProfileService.processingUpdateIntroduce(UserAccountId.of(userAccountId), request.getIntroduce());
 
         return ResponseEntity.ok(new UserProfileUpdateResponse(updated.getId()));
     }

@@ -76,4 +76,21 @@ public final class UserProfile {
                 .countOfFollows(this.countOfFollows)
                 .build();
     }
+
+    public UserProfile updateIntroduce(String newIntroduce) {
+        if (!StringUtils.hasText(newIntroduce)) {
+            throw new RuntimeException("new nickname is null");
+        }
+
+        return UserProfile.builder()
+                .userProfileId(this.userProfileId)
+                .userAccount(this.userAccount.changeUpdatedAt())
+                .nickname(this.nickname)
+                .profileImage(this.profileImage)
+                .introduce(newIntroduce)
+                .countOfPosts(this.countOfPosts)
+                .countOfFollowers(this.countOfFollowers)
+                .countOfFollows(this.countOfFollows)
+                .build();
+    }
 }

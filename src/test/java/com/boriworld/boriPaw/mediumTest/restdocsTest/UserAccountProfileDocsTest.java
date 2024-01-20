@@ -8,6 +8,7 @@ import com.boriworld.boriPaw.userAccountService.command.application.UserAuthenti
 import com.boriworld.boriPaw.userAccountService.command.application.dto.LoginProcess;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationToken;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
+import com.boriworld.boriPaw.userAccountService.command.interfaces.controller.UserIntroduceChangeRequest;
 import com.boriworld.boriPaw.userAccountService.command.interfaces.request.UserNicknameChangeRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -180,6 +181,34 @@ public class UserAccountProfileDocsTest extends RestDocsMediumTest {
                         fieldWithPath("status").type(JsonFieldType.NUMBER).description("status"),
                         fieldWithPath("detail").type(JsonFieldType.STRING).description("detail"),
                         fieldWithPath("instance").type(JsonFieldType.STRING).description("instance")
+                )
+        ));
+    }
+
+    @Test
+    @DisplayName("자기소개 수정 성공")
+    void givenNewIntroduce_thenReturn200() throws Exception {
+        //given
+        UserAccount userAccount = userAccountsFactory.initTester();
+        AuthenticationToken authenticationToken = userAuthenticationService.processLogin(new LoginProcess(userAccountsFactory.TESTER_EMAIL, userAccountsFactory.TESTER_RAW_PASSWORD));
+        UserIntroduceChangeRequest request = new UserIntroduceChangeRequest("This is new introduce");
+        //when
+        ResultActions actions = mockMvc.perform(patch(ApiEndpoints.CHANGE_PROFILE_INTRODUCE, userAccount.getUserAccountId().getId())
+                .header(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER, AuthenticationTokenHeaderNames.ACCESS_TOKEN_PREFIX + authenticationToken.accessToken().getTokenString())
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON));
+        //then
+        actions.andDo(print());
+        actions.andExpect(status().isOk());
+        //andDo
+        actions.andDo(document("userAccount/profile/change-introduce",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("introduce").type(JsonFieldType.STRING).description("변경할 닉네임")
+                ),
+                responseFields(
+                        fieldWithPath("userAccountId").type(JsonFieldType.NUMBER).description("유저 계정 식별 아이디")
                 )
         ));
     }
