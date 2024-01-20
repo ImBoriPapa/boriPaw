@@ -14,7 +14,7 @@ endif::[]
 
 include::{snippets}/userAccount/profile/get-profile/http-request.adoc[]
 
-=== Response
+=== Response : 성공
 
 include::{snippets}/userAccount/profile/get-profile/http-response.adoc[]
 
@@ -28,13 +28,15 @@ include::{snippets}/userAccount/profile/get-profile/response-fields.adoc[]
 
 *URL* : https://server.boripaw.com/api/v1/user-accounts/+{user-accountsId}+/profile/nickname
 
-=== Request
+=== Request : 성공
 
 include::{snippets}/userAccount/profile/change-nickname/http-request.adoc[]
 
 ==== RequestFields
 
-include::{snippets}/userAccount/profile/change-nickname/request-body.adoc[]
+include::{snippets}/userAccount/profile/change-nickname/request-fields.adoc[]
+
+IMPORTANT: 닉네임은 최소 4자리 이상 공백을 허용하지 않습니다.
 
 === Response
 
@@ -43,3 +45,13 @@ include::{snippets}/userAccount/profile/change-nickname/http-response.adoc[]
 ==== Response Field
 
 include::{snippets}/userAccount/profile/change-nickname/response-fields.adoc[]
+
+=== Response : 실패(해당 프로필에 유저가 아닌 유저가 변경 요청시 실패)
+
+include::{snippets}/userAccount/profile/change-nickname-fail-no-resource-update-privileges/http-response.adoc[]
+
+=== Response : 실패(새로운 닉네임이 null)
+include::{snippets}/userAccount/profile/change-nickname-fail-null-nickname/http-response.adoc[]
+
+=== Response : 실패(새로운 닉네임에 형식이 맞지 않을 경우)
+include::{snippets}/userAccount/profile/change-nickname-fail-invalid-nickname/http-response.adoc[]

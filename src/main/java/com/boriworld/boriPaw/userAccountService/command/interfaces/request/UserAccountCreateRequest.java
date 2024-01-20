@@ -23,6 +23,7 @@ public class UserAccountCreateRequest {
     @Size(min = 6, message = "비밀번호는 최소 6자 이상이어야 합니다.")
     @NotBlank(message = "비밀번호는 필수로 입력해야 합니다.")
     private String password;
+    @Size(min = 4,message = "닉네임은 최소 4자리 이상이어야 합니다.")
     @NotBlank(message = "닉네임은 필수로 입력해야 합니다.")
     private String nickname;
 

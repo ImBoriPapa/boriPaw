@@ -22,6 +22,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserAccountProfileDocsTest extends RestDocsMediumTest {
 
@@ -61,7 +62,7 @@ public class UserAccountProfileDocsTest extends RestDocsMediumTest {
     }
 
     @Test
-    @DisplayName("Patch UserProfile Nickname")
+    @DisplayName("Patch UserProfile Nickname Success Return 200")
     void 유저_닉네임_변경() throws Exception {
         //given
         UserAccount userAccount = userAccountsFactory.initTester();
@@ -87,4 +88,99 @@ public class UserAccountProfileDocsTest extends RestDocsMediumTest {
         ));
     }
 
+    @Test
+    @DisplayName("Patch UserProfile Nickname Fail No Resource 403")
+    void 유저_프로필_사용자가_아니라서_닉네임_변경_실패() throws Exception {
+        //given
+        UserAccount userAccount = userAccountsFactory.initTester();
+        AuthenticationToken authenticationToken = userAuthenticationService.processLogin(new LoginProcess(userAccountsFactory.TESTER_EMAIL, userAccountsFactory.TESTER_RAW_PASSWORD));
+        UserNicknameChangeRequest request = new UserNicknameChangeRequest("updatedNickname");
+        //when
+        ResultActions actions = mockMvc.perform(patch(ApiEndpoints.CHANGE_PROFILE_NICKNAME, userAccount.getUserAccountId().getId() + 1)
+                .header(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER, AuthenticationTokenHeaderNames.ACCESS_TOKEN_PREFIX + authenticationToken.accessToken().getTokenString())
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON));
+        //then
+        actions.andDo(print());
+        actions.andExpect(status().isForbidden());
+        //andDo
+        actions.andDo(document("userAccount/profile/change-nickname-fail-no-resource-update-privileges",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("변경할 닉네임")
+                ),
+                responseFields(
+                        fieldWithPath("type").type(JsonFieldType.STRING).description("type"),
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("title"),
+                        fieldWithPath("status").type(JsonFieldType.NUMBER).description("status"),
+                        fieldWithPath("detail").type(JsonFieldType.STRING).description("detail"),
+                        fieldWithPath("instance").type(JsonFieldType.STRING).description("instance")
+                )
+        ));
+    }
+
+    @Test
+    @DisplayName("새로운 닉네임이 null 이면 400 응답")
+    void givenNullNickname_thenReturn400() throws Exception {
+        //given
+        UserAccount userAccount = userAccountsFactory.initTester();
+        AuthenticationToken authenticationToken = userAuthenticationService.processLogin(new LoginProcess(userAccountsFactory.TESTER_EMAIL, userAccountsFactory.TESTER_RAW_PASSWORD));
+        UserNicknameChangeRequest request = new UserNicknameChangeRequest(null);
+        //when
+        ResultActions actions = mockMvc.perform(patch(ApiEndpoints.CHANGE_PROFILE_NICKNAME, userAccount.getUserAccountId().getId())
+                .header(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER, AuthenticationTokenHeaderNames.ACCESS_TOKEN_PREFIX + authenticationToken.accessToken().getTokenString())
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON));
+        //then
+        actions.andDo(print());
+        actions.andExpect(status().isBadRequest());
+        //andDo
+        actions.andDo(document("userAccount/profile/change-nickname-fail-null-nickname",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("nickname").type(JsonFieldType.NULL).description("변경할 닉네임")
+                ),
+                responseFields(
+                        fieldWithPath("type").type(JsonFieldType.STRING).description("type"),
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("title"),
+                        fieldWithPath("status").type(JsonFieldType.NUMBER).description("status"),
+                        fieldWithPath("detail").type(JsonFieldType.STRING).description("detail"),
+                        fieldWithPath("instance").type(JsonFieldType.STRING).description("instance")
+                )
+        ));
+    }
+
+    @Test
+    @DisplayName("새로운 닉네임에 형식이 맞지 않으면 400 응답")
+    void givenInvalidNickname_thenReturn400() throws Exception {
+        //given
+        UserAccount userAccount = userAccountsFactory.initTester();
+        AuthenticationToken authenticationToken = userAuthenticationService.processLogin(new LoginProcess(userAccountsFactory.TESTER_EMAIL, userAccountsFactory.TESTER_RAW_PASSWORD));
+        UserNicknameChangeRequest request = new UserNicknameChangeRequest("123");
+        //when
+        ResultActions actions = mockMvc.perform(patch(ApiEndpoints.CHANGE_PROFILE_NICKNAME, userAccount.getUserAccountId().getId())
+                .header(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER, AuthenticationTokenHeaderNames.ACCESS_TOKEN_PREFIX + authenticationToken.accessToken().getTokenString())
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON));
+        //then
+        actions.andDo(print());
+        actions.andExpect(status().isBadRequest());
+        //andDo
+        actions.andDo(document("userAccount/profile/change-nickname-fail-invalid-nickname",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("변경할 닉네임")
+                ),
+                responseFields(
+                        fieldWithPath("type").type(JsonFieldType.STRING).description("type"),
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("title"),
+                        fieldWithPath("status").type(JsonFieldType.NUMBER).description("status"),
+                        fieldWithPath("detail").type(JsonFieldType.STRING).description("detail"),
+                        fieldWithPath("instance").type(JsonFieldType.STRING).description("instance")
+                )
+        ));
+    }
 }
