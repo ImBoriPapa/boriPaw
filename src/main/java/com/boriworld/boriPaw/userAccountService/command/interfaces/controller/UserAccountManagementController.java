@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.interfaces.controller;
 
-import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
+import com.boriworld.boriPaw.common.validator.RequestBodyFieldsConstraintValidator;
 import com.boriworld.boriPaw.userAccountService.command.application.UserAccountManagementService;
 
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
@@ -22,7 +22,7 @@ import static com.boriworld.boriPaw.common.constant.ApiEndpoints.ACCOUNTS_ROOT_P
 @Slf4j
 public class UserAccountManagementController {
     private final UserAccountManagementService userAccountManagementService;
-    private final RequestConstraintValidator validator;
+    private final RequestBodyFieldsConstraintValidator validator;
 
     @PostMapping(ACCOUNTS_ROOT_PATH)
     public ResponseEntity<UserAccountCreateResponse> createUserAccount(@RequestBody UserAccountCreateRequest userAccountCreateRequest) {

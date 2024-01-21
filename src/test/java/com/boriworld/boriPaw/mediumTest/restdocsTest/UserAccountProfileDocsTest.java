@@ -13,15 +13,19 @@ import com.boriworld.boriPaw.userAccountService.command.interfaces.request.UserN
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -210,6 +214,68 @@ public class UserAccountProfileDocsTest extends RestDocsMediumTest {
                 responseFields(
                         fieldWithPath("userAccountId").type(JsonFieldType.NUMBER).description("유저 계정 식별 아이디")
                 )
+        ));
+    }
+
+    @Test
+    @DisplayName("프로필 이미지 수정 성공")
+    void givenImageFile_thenReturn200() throws Exception {
+        //given
+        UserAccount userAccount = userAccountsFactory.initTester();
+        AuthenticationToken authenticationToken = userAuthenticationService.processLogin(new LoginProcess(userAccountsFactory.TESTER_EMAIL, userAccountsFactory.TESTER_RAW_PASSWORD));
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test image content".getBytes());
+        //when
+        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.multipart(HttpMethod.PUT, ApiEndpoints.CHANGE_PROFILE_IMAGE, userAccount.getUserAccountId().getId())
+                .file(file)
+                .header(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER, AuthenticationTokenHeaderNames.ACCESS_TOKEN_PREFIX + authenticationToken.accessToken().getTokenString())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.MULTIPART_FORM_DATA));
+        //then
+        actions.andDo(print());
+        //andDo
+        actions.andDo(document("userAccount/profile/change-profile-image",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestParts(
+                        partWithName("file").description("이미지 파일")
+                ),
+                responseFields(
+                        fieldWithPath("userAccountId").type(JsonFieldType.NUMBER).description("유저 계정 식별 아이디")
+                )
+
+        ));
+    }
+
+    @Test
+    @DisplayName("프로필 이미지 수정 실패 잘못된 MultipartFile 이름")
+    void givenWrongMultipartName_thenReturn400() throws Exception {
+        //given
+        UserAccount userAccount = userAccountsFactory.initTester();
+        AuthenticationToken authenticationToken = userAuthenticationService.processLogin(new LoginProcess(userAccountsFactory.TESTER_EMAIL, userAccountsFactory.TESTER_RAW_PASSWORD));
+        MockMultipartFile file = new MockMultipartFile("wrongFileName", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test image content".getBytes());
+        //when
+        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.multipart(HttpMethod.PUT, ApiEndpoints.CHANGE_PROFILE_IMAGE, userAccount.getUserAccountId().getId())
+                .file(file)
+                .header(AuthenticationTokenHeaderNames.AUTHORIZATION_HEADER, AuthenticationTokenHeaderNames.ACCESS_TOKEN_PREFIX + authenticationToken.accessToken().getTokenString())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.MULTIPART_FORM_DATA));
+        //then
+        actions.andDo(print());
+        //andDo
+        actions.andDo(document("userAccount/profile/change-profile-image-fail-wrong-name",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestParts(
+                        partWithName("wrongFileName").description("이미지 파일")
+                ),
+                responseFields(
+                        fieldWithPath("type").type(JsonFieldType.STRING).description("type"),
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("title"),
+                        fieldWithPath("status").type(JsonFieldType.NUMBER).description("status"),
+                        fieldWithPath("detail").type(JsonFieldType.STRING).description("detail"),
+                        fieldWithPath("instance").type(JsonFieldType.STRING).description("instance")
+                )
+
         ));
     }
 }

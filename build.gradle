@@ -44,6 +44,14 @@ dependencies {
     //jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5', 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    //S3
+    implementation platform('software.amazon.awssdk:bom:2.20.56')
+    implementation "software.amazon.awssdk:aws-core"
+    implementation "software.amazon.awssdk:sdk-core"
+    implementation "software.amazon.awssdk:sts"
+    implementation 'software.amazon.awssdk:s3'
+
+
     //lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -61,6 +69,8 @@ dependencies {
     testImplementation 'org.testcontainers:mysql:1.16.0'
 	// Redis 의존성
     testImplementation "com.redis.testcontainers:testcontainers-redis-junit:1.6.4"
+    // Local Stack 의존성
+    testImplementation("org.testcontainers:localstack:1.19.0")
 	//asi
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor' // (3)
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'

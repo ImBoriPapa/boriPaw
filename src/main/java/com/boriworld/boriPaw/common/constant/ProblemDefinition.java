@@ -20,7 +20,8 @@ public enum ProblemDefinition {
     EXPIRED_TOKEN("expired-token", "token-expired", HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
     ERROR_TOKEN("error-token", "token-error", HttpStatus.FORBIDDEN, "잘못된 토큰입니다."),
     ALREADY_FOLLOW("type", "title", HttpStatus.BAD_REQUEST, ""),
-    NO_RESOURCE_UPDATE_PRIVILEGES("type", "No Resource update privileges", HttpStatus.FORBIDDEN, "해당 리소스에 수정 권한 없음");
+    NO_RESOURCE_UPDATE_PRIVILEGES("type", "No Resource update privileges", HttpStatus.FORBIDDEN, "해당 리소스에 수정 권한 없음"),
+    NOT_FOUND_MULTIPART_FILE_NAME("type", "Not found Multipart name", HttpStatus.BAD_REQUEST, "요청에 필요한 Multipart file name 을 찾을 수 없을 경우");
     private final String type;
     private final String title;
     private final HttpStatus status;

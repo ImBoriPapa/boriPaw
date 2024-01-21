@@ -13,6 +13,7 @@ public class ApiEndpoints {
     //User Profile
     public static final String CHANGE_PROFILE_NICKNAME = GET_PROFILE + "/nickname";
     public static final String CHANGE_PROFILE_INTRODUCE = GET_PROFILE + "/introduce";
+    public static final String CHANGE_PROFILE_IMAGE = GET_PROFILE + "/profile-image";
 
     //Authentication
     public static final String ME = ACCOUNTS_ROOT_PATH + "/me";

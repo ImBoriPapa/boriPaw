@@ -10,8 +10,8 @@ import com.boriworld.boriPaw.userAccountService.command.domain.event.UserAccount
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserProfileRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.service.*;
 import com.boriworld.boriPaw.userAccountService.command.interfaces.controller.UserAccountManagementController;
-import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
-import com.boriworld.boriPaw.common.validator.RequestObjectConstraintValidator;
+import com.boriworld.boriPaw.common.validator.RequestBodyFieldsConstraintValidator;
+import com.boriworld.boriPaw.common.validator.RequestObjectBodyFieldsConstraintValidator;
 import com.boriworld.boriPaw.fakeTestComponent.fakeComponents.*;
 import com.boriworld.boriPaw.userAccountService.command.interfaces.controller.UserAuthenticationController;
 import jakarta.validation.Validation;
@@ -27,7 +27,7 @@ public class FakeComponentContainer {
     public final UserAccountEventPublisher userAccountEventPublisher;
     public final EmailCertificationCodeGenerator emailCertificationCodeGenerator;
     public final EmailCertificationCodeRepository emailCertificationCodeRepository;
-    public final RequestConstraintValidator requestConstraintValidator;
+    public final RequestBodyFieldsConstraintValidator requestBodyFieldsConstraintValidator;
     public final UserAccountManagementService userAccountManagementService;
     public final UserAccountManagementController userAccountManagementController;
     public final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -46,7 +46,7 @@ public class FakeComponentContainer {
         this.userAccountEventPublisher = new FakeUserAccountEventPublisher();
         this.emailCertificationCodeGenerator = new FakeEmailCertificationCodeGenerator();
         this.emailCertificationCodeRepository = new FakeEmailCertificationCodeRepository();
-        this.requestConstraintValidator = new RequestObjectConstraintValidator(validator);
+        this.requestBodyFieldsConstraintValidator = new RequestObjectBodyFieldsConstraintValidator(validator);
         this.userProfileRepository = new FakeUserProfileRepository();
         this.userAccountManagementService = new UserAccountManagementService(
                 this.userAccountRepository,
@@ -56,7 +56,7 @@ public class FakeComponentContainer {
                 Set.of(new UserAccountCreateValidator(userAccountRepository))
         );
         refreshTokenRepository = new FakeRefreshTokenRepository();
-        userAccountManagementController = new UserAccountManagementController(userAccountManagementService, requestConstraintValidator);
+        userAccountManagementController = new UserAccountManagementController(userAccountManagementService, requestBodyFieldsConstraintValidator);
         authenticationTokenPayloadEncoder = new FakeTokenPayloadEncoder();
         userAuthenticationContextManager = new FakeUserAuthenticationContextManger();
         authenticationTokenService = new FakeAuthenticationTokenService(1000, 3000);
@@ -68,7 +68,7 @@ public class FakeComponentContainer {
                 authenticationTokenPayloadEncoder,
                 userAuthenticationContextManager,
                 userAccountEventPublisher);
-        userAuthenticationController = new UserAuthenticationController(userAuthenticationService,requestConstraintValidator);
+        userAuthenticationController = new UserAuthenticationController(userAuthenticationService, requestBodyFieldsConstraintValidator);
     }
 
 

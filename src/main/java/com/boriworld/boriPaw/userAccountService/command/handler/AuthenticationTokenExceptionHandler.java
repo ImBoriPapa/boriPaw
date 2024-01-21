@@ -1,7 +1,6 @@
 package com.boriworld.boriPaw.userAccountService.command.handler;
 
-import com.boriworld.boriPaw.common.constant.ProblemDefinition;
-import com.boriworld.boriPaw.common.exception.CustomRuntimeException;
+
 import com.boriworld.boriPaw.common.factory.ErrorResponseFactory;
 import com.boriworld.boriPaw.userAccountService.command.domain.exception.AuthenticationTokenException;
 import com.fasterxml.jackson.databind.ObjectMapper;

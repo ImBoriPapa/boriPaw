@@ -3,6 +3,7 @@ package com.boriworld.boriPaw.userAccountService.command.application;
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserAccountRepository;
 import com.boriworld.boriPaw.userAccountService.command.domain.repository.UserProfileRepository;
+import com.boriworld.boriPaw.userAccountService.command.domain.service.ProfileImageManager;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserAccountId;
 import com.boriworld.boriPaw.userAccountService.command.domain.value.UserProfile;
 import com.boriworld.boriPaw.userAccountService.query.domain.exception.ResourceNotFoundException;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -18,6 +20,7 @@ public class UserProfileService {
 
     private final UserAccountRepository userAccountRepository;
     private final UserProfileRepository userProfileRepository;
+    private final ProfileImageManager imageManager;
 
     @Transactional
     public UserAccountId addFollow() {
@@ -59,7 +62,16 @@ public class UserProfileService {
     }
 
     @Transactional
-    public UserAccountId updateProfileImage() {
-        return null;
+    public UserAccountId updateProfileImage(UserAccountId userAccountId, MultipartFile file) {
+        log.info("processing update profile image");
+
+        UserAccount userAccount = userAccountRepository.findById(userAccountId)
+                .orElseThrow(() -> ResourceNotFoundException.forMessage("유저 계정 정보를 찾을 수 없습니다."));
+        UserProfile userProfile = userProfileRepository.findByUserAccount(userAccount)
+                .orElseThrow(() -> ResourceNotFoundException.forMessage("유저 프로필 정보를 찾을 수 없습니다."));
+        UserProfile updateProfileImage = userProfile.updateProfileImage(imageManager.uploadImage(file));
+        userProfileRepository.update(updateProfileImage);
+        UserAccount updateNickname = userAccountRepository.update(updateProfileImage.getUserAccount());
+        return updateNickname.getUserAccountId();
     }
 }

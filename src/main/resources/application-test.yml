@@ -40,3 +40,10 @@ secrete:
   encoder:
     key: "asfsaklmasfapfqwpignpqgkqfkmwasdjndsjlfsdklfamklfaf3525fasfasfsafa"
     iv: "asfsaklmasfapfqwpignpqgkqfkmwasdjndsjlfsdklfamklfaffsaghadhdfhfdah"
+
+aws:
+  accessKeyId: test
+  secretKey: test
+  region: us-east-1
+  s3:
+    bucket-name: test

@@ -2,7 +2,7 @@ package com.boriworld.boriPaw.userAccountService.command.interfaces.controller;
 
 import com.boriworld.boriPaw.common.constant.ApiEndpoints;
 import com.boriworld.boriPaw.common.constant.AuthenticationTokenHeaderNames;
-import com.boriworld.boriPaw.common.validator.RequestConstraintValidator;
+import com.boriworld.boriPaw.common.validator.RequestBodyFieldsConstraintValidator;
 import com.boriworld.boriPaw.userAccountService.command.application.UserAuthenticationService;
 import com.boriworld.boriPaw.userAccountService.command.application.dto.LoginProcess;
 import com.boriworld.boriPaw.userAccountService.command.domain.dto.AuthenticationToken;
@@ -25,7 +25,7 @@ import java.util.Objects;
 @Slf4j
 public class UserAuthenticationController {
     private final UserAuthenticationService userAuthenticationService;
-    private final RequestConstraintValidator validator;
+    private final RequestBodyFieldsConstraintValidator validator;
 
     @PostMapping(ApiEndpoints.LOGIN_PATH)
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {

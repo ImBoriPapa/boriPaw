@@ -71,3 +71,21 @@ include::{snippets}/userAccount/profile/change-introduce/request-fields.adoc[]
 
 === Response : 성공
 include::{snippets}/userAccount/profile/change-introduce/http-response.adoc[]
+
+== 프로필 이미지 변경
+
+*HTTP Method: PUT*
+
+*URL* : https://server.boripaw.com/api/v1/user-accounts/+{user-accountsId}+/profile-image
+
+=== Request
+include::{snippets}/userAccount/profile/change-profile-image/http-request.adoc[]
+
+==== Request Part
+include::{snippets}/userAccount/profile/change-profile-image/request-parts.adoc[]
+
+=== Response : 성공
+include::{snippets}/userAccount/profile/change-profile-image/http-response.adoc[]
+
+=== Response : 실패(multipart name 이 file 이 아닐 경우)
+include::{snippets}/userAccount/profile/change-profile-image-fail-wrong-name/http-request.adoc[]

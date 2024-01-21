@@ -1,6 +1,6 @@
 package com.boriworld.boriPaw.common.validator;
 
-public interface RequestConstraintValidator {
+public interface RequestBodyFieldsConstraintValidator {
     /**
      * 주어진 객체의 제약 조건을 검증합니다.
      *

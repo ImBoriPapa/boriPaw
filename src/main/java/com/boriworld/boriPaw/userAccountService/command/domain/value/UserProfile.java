@@ -2,6 +2,7 @@ package com.boriworld.boriPaw.userAccountService.command.domain.value;
 
 
 import com.boriworld.boriPaw.userAccountService.command.domain.model.UserAccount;
+import com.boriworld.boriPaw.userAccountService.command.domain.useCase.ProfileImageUpdate;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserProfileCreate;
 import com.boriworld.boriPaw.userAccountService.command.domain.useCase.UserProfileInitialize;
 import lombok.AccessLevel;
@@ -88,6 +89,20 @@ public final class UserProfile {
                 .nickname(this.nickname)
                 .profileImage(this.profileImage)
                 .introduce(newIntroduce)
+                .countOfPosts(this.countOfPosts)
+                .countOfFollowers(this.countOfFollowers)
+                .countOfFollows(this.countOfFollows)
+                .build();
+    }
+
+    public UserProfile updateProfileImage(ProfileImage profileImage) {
+
+        return UserProfile.builder()
+                .userProfileId(this.userProfileId)
+                .userAccount(this.userAccount.changeUpdatedAt())
+                .nickname(this.nickname)
+                .profileImage(profileImage)
+                .introduce(this.introduce)
                 .countOfPosts(this.countOfPosts)
                 .countOfFollowers(this.countOfFollowers)
                 .countOfFollows(this.countOfFollows)

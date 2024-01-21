@@ -13,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
 import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;
@@ -21,16 +23,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-
-
+import org.testcontainers.utility.DockerImageName;
 
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-
-
 @SpringBootTest
+@Import(LocalStackConfig.class)
 @ActiveProfiles("test")
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class RequestObjectConstraintValidator implements RequestConstraintValidator {
+public class RequestObjectBodyFieldsConstraintValidator implements RequestBodyFieldsConstraintValidator {
     private final Validator validator;
 
     /**
